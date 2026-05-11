@@ -84,6 +84,10 @@ const ROUTE_PERMISSIONS = {
     "/dashboard/settings",
   ],
 
+  USER: [
+    "/dashboard/profile",
+    "/dashboard/settings",
+  ],
   HRMANAGER: [
     "/dashboard/vacancies",
     "/dashboard/vacancies/create",
