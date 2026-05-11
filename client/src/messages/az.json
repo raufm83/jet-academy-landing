@@ -1,0 +1,560 @@
+{
+  "navbar": {
+    "home": "Əsas Səhifə",
+    "courses": "Tədris Sahələri",
+    "feedbacks": "Rəylər",
+    "about": "Haqqımızda",
+    "gallery": "Dərsdən Görüntülər",
+    "useful": "Faydalı",
+    "offers": "Kampaniyalar",
+    "blog": "Bloq",
+    "news": "Xəbərlər",
+    "event": "Tədbirlər",
+    "differences": "Fərqimiz",
+    "glossary": "Texnoloji Lüğət",
+    "vacancies": "Vakansiyalar",
+    "graduates": "Məzunlar",
+    "contact": "Əlaqə",
+    "contactus": "Zəng sifarişi",
+    "closeMenu": "Menyunu bağla"
+  },
+  "hero": {
+    "welcome": "Xoş Gəlmisiniz",
+    "toJetAcademy": "JET Academy-ə",
+    "getConsult": "Tədris sahələri",
+    "description": "Burada texnologiya təhsili real praktiki bilik və bacarıqlarla birləşir. Fəaliyyətə başladığımız gündən etibarən əsas məqsədimiz yüksək keyfiyyətli, praktiki və karyera yönümlü təlim proqramları vasitəsilə növbəti nəsil IT mütəxəssislərini yetişdirməkdir.\n\nJET Academy-də biz inanırıq ki, texnologiya gələcəyin dilidir — və hər kəsin onu öyrənmək imkanı olmalıdır. Missiyamız IT təhsilini bütün yaş və təhsil səviyyələrindən olan insanlar üçün əlçatan, səmərəli və ilhamverici etməkdir."
+  },
+  "courseInfo": {
+    "title": "Tədris Sahələri",
+    "description": "JET Academy-də tədris sahələri müasir əmək bazarının tələblərinə uyğun formalaşdırılıb. Hər bir sahə üzrə proqramlar praktiki biliklərə, real layihələrə və peşəkar inkişaf imkanlarına əsaslanır",
+    "defaultSlogan": "Texnologiya dünyasına ilk addımını at!",
+    "defaultLevel": "Başlanğıc",
+    "level": "Səviyyə:",
+    "duration": "Müddət:",
+    "months": "ay",
+    "lessonPerWeek": "Həftədə",
+    "lesson": "{count, plural, one {dərs} other {dərs}}"
+  },
+  "courseInfoCP": {
+    "title": "Digər Sahələr",
+    "description": "",
+    "defaultSlogan": "Texnologiya dünyasına ilk addımını at!",
+    "defaultLevel": "Başlanğıc",
+    "level": "Səviyyə:",
+    "duration": "Müddət:",
+    "months": "ay",
+    "lesson": "{count, plural, one {dərs} other {dərs}}"
+  },
+  "about": {
+    "title": "Fərqimiz Nədir?",
+    "description": "Bizi digər kurslardan fərqləndirən əsas məqamlar ilə tanış ola bilərsiniz",
+    "points": {
+      "interactive": {
+        "title": "Müasir və Daim Yenilənən Tədris Proqramı",
+        "description": "Proqramlarımız əmək bazarının tələblərinə uyğun olaraq mütəmadi yenilənir və ən son texnologiyaları əhatə edir."
+      },
+      "experienced": {
+        "title": "Real Layihələr və Gündəlik Tapşırıqlar",
+        "description": "Hər bir kursumuz praktiki tapşırıqlar və real iş mühitində tələb olunan və ya işlənən layihələrlə zənginləşdirilmişdir."
+      },
+      "individual": {
+        "title": "Yüksək Təcrübəli və Professional Təlimçilər",
+        "description": "Sektor təcrübəsinə malik mütəxəssislər biliklərini paylaşaraq tələbələrin karyera inkişafına dəstək olurlar."
+      },
+      "future": {
+        "title": "Rahat Ofis Mühiti və Müasir Avadanlıqlarla Təminat",
+        "description": "Tədris prosesini daha səmərəli və məhsuldar edən rahat öyrənmə mühiti və texniki avadanlıqlar təqdim edirik."
+      },
+      "price": {
+        "title": "Sərfəli Qiymətə Yüksək Səviyyəli Tədris",
+        "description": "Keyfiyyətli tədrisi hər kəs üçün əlçatan etmək məqsədilə münasib qiymət siyasəti tətbiq edirik."
+      },
+      "comfort": {
+        "title": "Rahat Yerdə Yerləşən Ofis",
+        "description": "Şəhərin mərkəzində yerləşən ofisimiz nəqliyyat baxımından tələbələr üçün rahatlıq yaradır."
+      }
+    }
+  },
+  "courses": {
+    "starter": {
+      "title": "Starter Modulu",
+      "modules": {
+        "intro": {
+          "title": "Kompüter mühəndisliyinə giriş",
+          "description": "Kompüterlərin gündəlik həyatımızdakı rolu və əhəmiyyətini öyrənin. CPU, RAM, GPU kimi əsas komponentləri tanıyın.",
+          "duration": "1 ay",
+          "level": "Başlanğıc"
+        },
+        "algorithms": {
+          "title": "Alqoritmlər və qərar qəbuletmə",
+          "description": "Proqramlaşdırmanın təməlini təşkil edən alqoritmləri öyrənin. Real həyat problemlərini həll etmək üçün alqoritmik düşüncə.",
+          "duration": "1 ay",
+          "level": "Başlanğıc"
+        },
+        "scratch": {
+          "title": "Scratch ilə proqramlaşdırma",
+          "description": "Blok əsaslı proqramlaşdırma ilə kodlamanın əsaslarını öyrənin. Dəyişənlər və dövrlər ilə oyunlar yaradın.",
+          "duration": "1 ay",
+          "level": "Başlanğıc"
+        },
+        "games": {
+          "title": "Oyun hazırlama və dizayn",
+          "description": "Scratch ilə oyunlar yaradın və Figma ilə müasir dizayn prinsiplərini mənimsəyin. 3D modelləşdirməyə giriş.",
+          "duration": "1 ay",
+          "level": "Başlanğıc-Orta"
+        }
+      }
+    },
+    "programmer": {
+      "title": "Proqramçı Modulu",
+      "modules": {
+        "webIntro": {
+          "title": "Veb proqramlaşdırmaya giriş",
+          "description": "HTML-in əsaslarını öyrənin. Veb səhifələrin strukturunu yaratmaq üçün lazım olan teqləri mənimsəyin.",
+          "duration": "1 ay",
+          "level": "Orta"
+        },
+        "webDev": {
+          "title": "HTML və CSS ilə veb səhifələr",
+          "description": "CSS layouts və Flexbox ilə müasir veb səhifələr yaradın. Animasiyalar və responsiv dizaynı mənimsəyin.",
+          "duration": "1 ay",
+          "level": "Orta"
+        },
+        "JS": {
+          "title": "JavaScript Əsasları",
+          "description": "JavaScript proqramlaşdırma dilinin təməllərini öyrənin. Dəyişənlər, operatorlar, funksiyalar və OOP konsepsiyaları ilə tanış olun. Praktiki tapşırıqlar vasitəsilə mənimsənilən biliklər real layihələrdə tətbiq ediləcək.",
+          "duration": "1 ay",
+          "level": "Başlanğıc"
+        },
+        "JsDom": {
+          "title": "JavaScript DOM və Layihələr",
+          "description": "DOM manipulyasiyası, hadisə dinləyiciləri və Timer funksiyaları ilə tanış olun. To-Do tətbiqi, sayğac və rəqəmsal saat kimi real layihələr yaradın. Bootstrap 5 istifadə edərək istifadəçi interfeysi hazırlayın.",
+          "duration": "1 ay",
+          "level": "Orta"
+        }
+      }
+    },
+    "hacker": {
+      "title": "Etik Haker Modulu",
+      "modules": {
+        "python": {
+          "title": "Python və Kibertəhlükəsizlik",
+          "description": "Python-u kibertəhlükəsizlik kontekstində öyrənin. Təhlükəsizlik skriptləri və alətləri yaradın.",
+          "duration": "1 ay",
+          "level": "İrəli"
+        },
+        "network": {
+          "title": "Şəbəkə təhlükəsizliyi",
+          "description": "TCP/IP, UDP protokolları və şəbəkə təhlükəsizliyi əsaslarını öyrənin. Port skaneri alətləri yaradın.",
+          "duration": "1 ay",
+          "level": "İrəli"
+        }
+      }
+    }
+  },
+  "footer": {
+    "address": "Bakı ş., Olimpiya küçəsi 6A (Gənclik metro stansiyası, İdman Nazirliyi yaxınlığında)",
+    "workingHours": {
+      "title": "Bazar ertəsi - Şənbə Günü",
+      "hours": "09:30 - 22:00",
+      "title7": "Bazar Günü",
+      "hours7": "10:00 - 22:00"
+    },
+    "links": {
+      "courses": "Tədris Sahələri",
+      "contact": "Əlaqə",
+      "media": "Media"
+    },
+    "copyright": "Müəllif hüquqları qorunur.",
+    "tagline": "Daha parlaq gələcək üçün ilham verən təhsil",
+    "explore": "Kəşf et",
+    "resources": "Resurslar",
+    "legal": "Hüquqi məlumat",
+    "home": "Əsas səhifə",
+    "about": "Haqqımızda",
+    "courses": "Tədris Sahələri",
+    "gallery": "Dərsdən Görüntülər",
+    "blog": "Bloq",
+    "glossary": "Lüğət",
+    "news": "Xəbərlər",
+    "events": "Tədbirlər",
+    "offers": "Kampaniyalar",
+    "feedbacks": "Rəylər",
+    "graduates": "Məzunlar",
+    "projects": "Layihələr",
+    "graduatesProjects": "Məzunlar/Layihələr",
+    "noCourses": "Kurs tapılmadı",
+    "faq": "Tez-tez verilən suallar",
+    "vacancies": "Vakansiyalar",
+    "contact": "Əlaqə",
+    "privacy": "Məxfilik siyasəti",
+    "terms": "İstifadə şərtləri",
+    "cookies": "Kukilər siyasəti",
+    "newsletter": "Xəbər bülletenimizə abunə olun",
+    "newsletterDesc": "Ən son xəbərlər və təkliflərimizdən xəbərdar olun",
+    "emailPlaceholder": "E-poçt ünvanınız",
+    "subscribe": "Abunə ol"
+  },
+  "contactForm": {
+    "contactInfo": "Əlaqə məlumatları",
+    "send": "Göndər",
+    "name": "Ad",
+    "email": "E-poçt",
+    "surname": "Soyad",
+    "number": "Nömrə",
+    "message": "Mesaj",
+    "sending": "Göndərilir...",
+    "messageSent": "Mesajınız uğurla göndərildi",
+    "sendError": "Mesaj göndərilə bilmədi",
+    "unexpectedError": "Gözlənilməz xəta baş verdi",
+    "nameRequired": "Ad tələb olunur",
+    "nameOnlyLetters": "Ad yalnız hərflərdən ibarət olmalıdır",
+    "surnameRequired": "Soyad tələb olunur",
+    "surnameOnlyLetters": "Soyad yalnız hərflərdən ibarət olmalıdır",
+    "emailRequired": "Email tələb olunur",
+    "invalidEmail": "Email formatı düzgün deyil",
+    "numberRequired": "Nömrə tələb olunur",
+    "invalidNumber": "Nömrə formatı düzgün deyil",
+    "messageRequired": "Mesaj tələb olunur"
+  },
+  "feedbacks": {
+    "title": "Tələbələrimizin Rəyləri",
+    "seeAll": "Hamısına bax",
+    "description": ""
+  },
+  "gallery": {
+    "title": "Dərslərimizdən Görüntülər",
+    "seeAll": "Hamısına bax",
+    "description": ""
+  },
+  "blogs": {
+    "title": "Bloq və Media",
+    "seeAll": "Hamısına bax",
+    "description": "Son yeniliklər, faydalı bloqlar, kampaniyalar və xəbərləri burada izləyin"
+  },
+  "aboutPage": {
+    "introduction": {
+      "title": "Haqqımızda",
+      "description1": "2021-ci ildən fəaliyyət göstərən JET Academy qısa müddət ərzində ölkənin texnologiya təhsili sahəsində etibarlı və nəticəyönümlü tədris mərkəzlərindən birinə çevrilmişdir. Bu günə qədər yüzlərlə tələbənin karyera yoluna real töhfə verərək onların əmək bazarında rəqabət qabiliyyətli mütəxəssis kimi formalaşmasına dəstək olmuşuq.Bizim yanaşmamız yalnız nəzəri biliklərlə məhdudlaşmır. Tədris prosesində tələbələr real alətlər, aktual texnologiyalar və praktik layihələr üzərində işləyərək iş mühitinə uyğun bacarıqlar qazanırlar. Məqsədimiz – öyrənilən biliklərin dərhal tətbiq oluna biləcəyi, ölçülə bilən nəticələr verən təhsil təqdim etməkdir.",
+      "description2": "JET Academy-də təlimlər qısa müddətli, intensiv və fokuslanmış proqramlar şəklində hazırlanır. Bu format iştirakçılara vaxt itirmədən, birbaşa nəticəyə yönəlmiş şəkildə bilik və bacarıqlar əldə etməyə imkan yaradır.",
+      "description3": "Proqramlarımız əmək bazarının cari tələblərinə uyğun olaraq daim yenilənir və sahəsində təcrübəli, aktiv çalışan mütəxəssislər tərəfindən tədris olunur. Tədris metodologiyamız beynəlxalq standartlara əsaslanır və tələbələrə real iş mühiti simulyasiyası ilə praktiki təcrübə qazandırır.Bununla yanaşı, biz yalnız təhsil verməklə kifayətlənmirik. Məzunlarımızın karyera inkişafını dəstəkləmək üçün onları tərəfdaş şirkətlərlə əlaqələndirir, iş imkanlarına çıxışlarını asanlaşdırır və peşəkar inkişaf yolunda onları müşayiət edirik. JET Academy — bilikdən nəticəyə gedən yolun ünvanıdır."
+    },
+    "mission": {
+      "sectionTitle": "Missiyamız və Vizyonumuz",
+      "title": "Missiya",
+      "description": "Missiyamız müasir texnologiyalar, peşəkar təlimçilər və təcrübəyə əsaslanan tədris metodları ilə hər kəs üçün əlçatan, maraqlı və effektiv IT təhsili təqdim etmək, tənqidi düşüncə, yaradıcılıq və texniki bacarıqları inkişaf etdirməklə texnologiya sahəsində ixtisaslı mütəxəssislər yetişdirməkdir."
+    },
+    "vision": {
+      "title": "Vizyon",
+      "description": "Vizyonumuz rəqəmsal dövrün gələcək liderlərini formalaşdıracaq, innovativ düşüncəli və problem həll etmə bacarıqlarına sahib bir nəsil yetişdirməyə dəstək olmaqdır. Bunun üçün beynəlxalq səviyyəli, texnologiya əsaslı təhsil təqdim edərək gənclərin bilik və bacarıqlarını inkişaf etdirməyi hədəfləyirik."
+    },
+    "stats": {
+      "teachingArea": "Tədris sahəsi",
+      "graduatesLabel": "Məzun sayı",
+      "groupsLabel": "Aktiv qrup sayı",
+      "studentsLabel": "Tələbə sayı"
+    },
+    "team": {
+      "title": "Təlimçi Heyəti",
+      "description": "JET Academy-nin bütün təlimçiləri öz sahəsində yüksək təcrübəyə malik, pedaqoji bacarıqları ilə seçilən peşəkar mütəxəssislərdir"
+    }
+  },
+  "contact": {
+    "sending": "Göndərilir...",
+    "messageSent": "Mesajınız uğurla göndərildi",
+    "sendError": "Mesaj göndərilə bilmədi",
+    "unexpectedError": "Gözlənilməz xəta baş verdi",
+    "hero": {
+      "title": "Bizimlə Əlaqə Saxlayın",
+      "description": "Suallarınız və ya təklifləriniz varsa, bizimlə əlaqə saxlamaqdan çəkinməyin"
+    },
+    "title": "Qeydiyyatdan keçin",
+    "description": "Formu doldurun və sizinlə ən qısa zamanda əlaqə saxlayacağıq",
+    "form": {
+      "title": "Zəng üçün formu doldurun",
+      "copyright": "Müəllif hüquqları qorunur.",
+      "contactTitle": "Tədris sahələrimiz haqqında məlumat almaq üçün qeydiyyatdan keçin",
+      "description": "Formu doldurun və sizinlə ən qısa zamanda əlaqə saxlayacağıq.",
+      "sending": "Göndərilir...",
+      "adviceOption": "Məsləhət almaq istəyirəm",
+      "course": {
+        "label": "Tədris sahəsi",
+        "placeholder": "Tədris sahəsini seçin",
+        "required": "Tədris sahəsi seçimi məcburidir"
+      },
+      "registration": {
+        "title": "Qeydiyyat Formu",
+        "description": "Zəhmət olmasa formu doldurun, mütəxəssislərimiz ən qısa zaman ərzində sizinlə əlaqə saxlayacaqlar"
+      },
+      "name": {
+        "label": "Ad",
+        "placeholder": "Adınızı daxil edin",
+        "required": "Ad tələb olunur",
+        "minLength": "Ad ən azı 2 simvol olmalıdır",
+        "invalid": "Yalnız hərf və boşluq qəbul edilir"
+      },
+      "surname": {
+        "label": "Soyad",
+        "placeholder": "Soyadınızı daxil edin",
+        "required": "Soyad tələb olunur",
+        "minLength": "Soyad ən azı 2 simvol olmalıdır",
+        "invalid": "Yalnız hərf və boşluq qəbul edilir"
+      },
+      "phoneNumber": {
+        "label": "Telefon nömrəsi",
+        "placeholder": "Telefon nömrənizi daxil edin",
+        "required": "Telefon nömrəsi tələb olunur"
+      },
+      "mailAddress": {
+        "label": "E-poçt ünvanı",
+        "placeholder": "E-poçt ünvanınızı daxil edin",
+        "required": "E-poçt ünvanı tələb olunur"
+      },
+      "courseInterest": {
+        "label": "Maraqlandığınız sahəni seçin",
+        "placeholder": "Bir sahə seçin",
+        "required": "Sahə seçimi tələb olunur",
+        "options": {
+          "frontend": "Front-End Developer",
+          "python": "Python Back-End Developer",
+          "java": "Java Back-End Developer",
+          "fullstack": "Full-Stack Developer",
+          "helpdesk": "IT Help Desk",
+          "cybersecurity": "Kibertəhlükəsizlik",
+          "office": "Ofis Proqramları",
+          "english": "İngilis dili",
+          "notSure": " Əmin deyiləm"
+        }
+      },
+      "messageSent": "Sizin sorğunuzu qəbul etdik və ən qısa zamanda sizinlə əlaqə saxlayacağıq!",
+      "number": {
+        "label": "Telefon",
+        "placeholder": "Telefon nömrənizi daxil edin",
+        "required": "Telefon nömrəsi tələb olunur",
+        "invalid": "Düzgün telefon nömrəsi daxil edin"
+      },
+      "submit": "Göndər",
+      "captchaLabel": "Təsdiq: Aşağıdakı məsələni həll edin",
+      "captchaInvalid": "Cavab səhvdir, yenidən yoxlayın.",
+      "captchaRequired": "Zəhmət olmasa CAPTCHA-nı düzgün həll edin."
+    },
+    "info": {
+      "phone": "Telefon",
+      "email": "E-poçt",
+      "whatsapp": "WhatsApp",
+      "address1": "Ünvan",
+      "addressg": "Ünvan"
+    }
+  },
+  "singleCoursePage": {
+    "courseDescription": "Kurs Haqqında",
+    "courseModules": "Kurs Modulları",
+    "whoIsEligibleToEnroll": "Kursa kimlər qoşula bilər ?",
+    "teachers": "Təlimçi Heyəti",
+    "teachersDescription": "JET Academy-nin bütün təlimçiləri öz sahəsində yüksək təcrübəyə malik, pedaqoji bacarıqları ilə seçilən peşəkar mütəxəssislərdir",
+    "enroll": "Qeydiyyatdan keç",
+    "contactFormTitle": "Tədris sahələrimiz barədə məlumat almaq üçün qeydiyyatdan keçin"
+  },
+  "coursesPage": {
+    "title": "Tədris Sahələri",
+    "description": "JET Academy-də tədris sahələri müasir əmək bazarının tələblərinə uyğun formalaşdırılıb. Hər bir sahə üzrə proqramlar praktiki biliklərə, real layihələrə və peşəkar inkişaf imkanlarına əsaslanır",
+    "metaTitle": "Tədris Sahələri | JET Academy",
+    "metaDescription": "JET Academy-də tədris sahələri müasir əmək bazarının tələblərinə uyğun formalaşdırılıb. Hər bir sahə üzrə proqramlar praktiki biliklərə, real layihələrə və peşəkar",
+    "searchPlaceholder": "Kurs axtarın...",
+    "filters": "Filterlər",
+    "level": "Səviyyə",
+    "lessonPerWeek": "Həftədə",
+    "lesson": "{count, plural, one {dərs} other {dərs}}",
+    "duration": "Müddət:",
+    "tags": "Teqlər",
+    "resetFilters": "Filterləri sıfırla",
+    "noCoursesFound": "Axtarışınıza uyğun kurs tapılmadı.",
+    "changeCriteria": "Zəhmət olmasa filterləri sıfırlayın və ya axtarış meyarlarını dəyişdirin."
+  },
+  "Metadata": {
+    "title": "IT və Proqramlaşdırma Kursları | JET Academy",
+    "titleTemplate": "%s",
+    "whats": "nədir?",
+    "description": "IT və Proqramlaşdırma Kursları: Frontend proqlamlaşdırma kursu, Backend proqlamlaşdırma kursu, Fullstack proqlamlaşdırma kursu, Python kursu, Java kursu",
+    "keywords": "IT kursları, IT kursu, proqramlaşdırma kursları, proqramlaşdırma kursu, Front-End kursu, Back-End kursu, Data Analitika kursu, Python kursu, Java kursu, JavaScript kursu, Next js kursu, React kursu, kibertəhlükəsizlik kursu, IT təhsili, IT kursları Bakı",
+    "ogTitle": "IT və Proqramlaşdırma Kursları | JET Academy",
+    "ogDescription": "Karyera yolunuza bizimlə başlayın - JET Academy-nin praktiki kursları ilə proqramlaşdırma və müxtəlif IT sahələrində biliklər qazanın.",
+    "ogImageAlt": "JET Academy - Peşəkar IT və Proqramlaşdırma Kursları",
+    "aboutPageTitle": "Haqqımızda | JET Academy",
+    "contactPageTitle": "Əlaqə | JET Academy",
+    "galleryPageTitle": "Dərsdən Görüntülər | JET Academy",
+    "feedbacksPageTitle": "Tələbə Rəyləri | JET Academy",
+    "feedbacksPageDescription": "Tələbələrimizin JET Academy-də qazandıqları bilik və bacarıqlar barədə paylaşdıqları real hekayələr",
+    "glossaryPageTitle": "Texnoloji Lüğət | JET Academy",
+    "glossaryTermsPageTitle": "Bütün Terminlər | JET Academy",
+    "glossaryTermsLetterPageTitle": "\"{letter}\" ilə başlayan terminlər | JET Academy",
+    "glossaryCategoryDescription": "JET Academy texnoloji lüğətində {category} kateqoriyasına aid terminlər",
+    "glossaryTermDefaultDescription": "Texnoloji terminlər haqqında məlumat",
+    "glossarySearchDescription": "JET Academy texnoloji lüğətində axtarış edin",
+    "glossarySearchResultsTitle": "\"{query}\" üçün axtarış nəticələri | JET Academy",
+    "glossarySearchPageTitle": "Axtarış | JET Academy"
+  },
+  "postsPage": {
+    "pageTitle": "Blog və Media",
+    "pageDescription": "Ən son məqalələrimiz, xəbərlərimiz və tədbirlərimizlə tanış olun",
+    "allPosts": "Hamısı",
+    "blog": "Bloq",
+    "news": "Xəbərlər",
+    "event": "Tədbirlər",
+    "eventMetaTitle": "Tədbirlər",
+    "newsMetaTitle": "Xəbərlər",
+    "offers": "Kampaniyalar",
+    "metaTitle": "Bütün xəbərlər",
+    "metaDescription": "JET Academy-də keçirilən kurslar, tədbirlər və layihələr haqqında ən son xəbərlar və məqalələr.",
+    "readMore": "Daha çox oxu",
+    "eventDateLabel": "Tarix",
+    "expiryDateLabel": "Bitmə Tarixi",
+    "noPostsFound": "Post tapılmadı",
+    "noEventsFound": "Burada tədbir tapılmadı",
+    "tryDifferentFilters": "Amma olacaq!",
+    "offersMetaTitle": "Kampaniyalar | JET Academy",
+    "offersMetaDescription": "JET Academy-nin xüsusi təklifləri və kampaniyaları",
+    "offersDescription": "Xüsusi təkliflər və endirim kampaniyaları ilə tanış olun",
+    "noActiveCampaignsLine1": "Hal-hazırda heç bir",
+    "noActiveCampaignsLine2": "aktiv kampaniya yoxdur",
+    "eventMetaDescription": "JET Academy-da keçirilən və gələcək tədbirləri kəşf edin",
+    "eventDescription": "JET Academy-da keçirilən və gələcək tədbirləri kəşf edin",
+    "blogMetaTitle": "Bloq Məqalələri | JET Academy",
+    "blogMetaDescription": "Ən son bloq məqalələrimizi və fikirlərimizi oxuyun",
+    "blogDescription": "Ən son bloq məqalələrimizi və fikirlərimizi oxuyun",
+    "postsFilteredByTag": "«{tag}» mövzusu ilə əlaqəli məqalələr",
+    "upcoming": "Gələcək",
+    "past": "Keçmiş",
+    "all": "Hamısı"
+  },
+  "blogPage": {
+    "pageTitle": "Bloq",
+    "pageDescription": "Texnologiya və təhsil haqqında maraqlı məqalələr",
+    "allPosts": "Bütün xəbərlər",
+    "event": "Tədbirlər",
+    "news": "Xəbərlər",
+    "blog": "Bloq",
+    "offers": "Kampaniyalar",
+    "metaTitle": "Bloq | JET Academy",
+    "metaDescription": "Texnologiya və təhsil haqqında maraqlı məqalələr və yeniliklər",
+    "readMore": "Daha çox oxu",
+    "noPostsFound": "Post tapılmadı",
+    "tryDifferentFilters": "Amma olacaqlar!"
+  },
+  "singlePostPage": {
+    "postTypeLabel": "Post növü",
+    "postType": {
+      "blog": "Bloq",
+      "news": "Xəbər",
+      "event": "Tədbir",
+      "offers": "Kampaniya",
+      "default": "Post"
+    },
+    "dateLabel": "Tarix",
+    "eventDateLabel": "Tarix",
+    "eventTimeLabel": "Saat",
+    "expiryDateLabel": "Bitmə Tarixi",
+    "tagsLabel": "Teqlər",
+    "relatedPosts": "Digər Postlar"
+  },
+  "glossary": {
+    "whats": "nədir?",
+    "title": "Texnoloji Lüğət",
+    "subtitle": "IT və proqramlaşdırma terminləri lüğəti",
+    "searchPlaceholder": "Termin axtar...",
+    "allTermsText": "Bütün terminlərə bax",
+    "categoriesTitle": "Kateqoriyalar",
+    "termsText": "termin",
+    "emptyText": "Heç bir kateqoriya tapılmadı",
+    "terms": {
+      "title": "Bütün terminlər",
+      "categoryText": "Kateqoriya",
+      "emptyText": "Uyğun termin tapılmadı",
+      "searchPlaceholder": "Termin axtar...",
+      "allText": "Hamısı",
+      "description": "JET Academy texnoloji lüğətində bütün IT terminləri"
+    },
+    "term": {
+      "categoryText": "Kateqoriya",
+      "relatedTermsText": "Əlaqəli terminlər",
+      "ctaTitle": "Sizə tanış olmayan sözlə qarşılaşdınız?",
+      "ctaDescription": "IT sahəsini dərindən öyrənmək istəyirsiniz? Kurslarımız haqqında ətraflı məlumat alın ",
+      "loadingPdf": "Hazırlanır..."
+    },
+    "search": {
+      "title": "Axtarış",
+      "titleWithQuery": "\"{query}\" üçün axtarış nəticələri",
+      "categoryText": "Kateqoriya",
+      "emptyText": "Axtarışınıza uyğun termin tapılmadı",
+      "searchPlaceholder": "Termin axtar...",
+      "description": "JET Academy texnoloji lüğətində axtarış edin"
+    },
+    "category": {
+      "title": "{category} kateqoriyası",
+      "categoryText": "Kateqoriya",
+      "emptyText": "Bu kateqoriyada termin tapılmadı",
+      "searchPlaceholder": "Termin axtar..."
+    },
+    "pagination": {
+      "previous": "Əvvəlki",
+      "next": "Sonrakı"
+    }
+  },
+  "home": "Əsas Səhifə",
+  "breadcrumbs": {
+    "course": "Kurs",
+    "courses": "Kurslar",
+    "about-us": "Haqqımızda",
+    "contact": "Əlaqə",
+    "contact-us": "Əlaqə",
+    "team": "Komanda",
+    "news": "Xəbərlər",
+    "category": "Kateqoriyalar",
+    "offers": "Kampaniyalar",
+    "event": "Tədbirlər",
+    "blog": "Bloq",
+    "glossary": "Texnoloji Lüğət",
+    "feedbacks": "Rəylər",
+    "vacancies": "Vakansiyalar",
+    "graduates": "Məzunlar",
+    "gallery": "Qalereya"
+  },
+  "vacancies": {
+    "title": "Vakansiyalar",
+    "description": "Komandamıza qoşulmaq istəyirsiniz? Aktiv vakansiyalarımızla tanış olun və müraciət edin!",
+    "metaTitle": "Vakansiyalar | JET Academy",
+    "metaDescription": "JET Academy-də karyera imkanları və aktiv vakansiyalar.",
+    "titlePrefix": "Vakansiya:",
+    "applyNow": "Daha ətraflı",
+    "noVacancies": "Hal-hazırda aktiv vakansiya yoxdur.",
+    "emptyTitle": "Hal-hazırda aktiv vakansiya yoxdur",
+    "emptyLine1": "Komandamıza qoşulmaq istəyirsinizsə, bu səhifəni izləməyə davam edin.",
+    "emptyLine2": "Yeni mövqelər elan olunduğu kimi burada görünəcək.",
+    "backToList": "Vakansiyalara qayıt",
+    "badgeLabel": "Vakansiya",
+    "deadlineLabel": "Son tarix",
+    "regimeLabel": "Rejim",
+    "experienceLabel": "Təcrübə",
+    "requirementsTitle": "Namizədə Tələblər",
+    "workConditionsTitle": "İş şəraiti",
+    "cvCtaBefore": "Əgər öz namizədliyinizi bu vakansiya üçün uyğun hesab edirsinizsə, zəhmət olmasa CV-nizi və əlavə məlumatları",
+    "cvCtaAfter": " ünvanına göndərin və məktubun başlığında \"{vacancyName}\" yazmağı unutmayın.",
+    "careerEmail": "career@jetacademy.az"
+  },
+  "faq": {
+    "title": "Tez-tez verilən suallar",
+    "description": "Bizə tez-tez verilən suallar və onların cavabları ilə aşağıda tanış ola bilərsiniz.",
+    "metaTitle": "FAQ | JET Academy",
+    "metaDescription": "JET Academy haqqında ən çox verilən suallar və cavabları."
+  },
+  "graduates": {
+    "title": "Məzunlarımızın Uğur Hekayələri",
+    "description": "JET Academy məzunlarının real uğur hekayələri ilə tanış olun",
+    "metaTitle": "Məzunlar | JET Academy",
+    "metaDescription": "JET Academy məzunlarının uğur hekayələri — real nəticələr, real insanlar.",
+    "noGraduates": "Hazırda məzun hekayəsi yoxdur.",
+    "watchVideo": "Videoya bax",
+    "readStory": "Hekayəni oxu",
+    "seeAll": "Hamısına bax"
+  }
+}

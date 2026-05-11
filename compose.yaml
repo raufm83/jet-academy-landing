@@ -1,0 +1,48 @@
+services:
+  client:
+    build:
+      context: ./client
+      dockerfile: Dockerfile
+      args:
+        - NEXTAUTH_SECRET=${NEXTAUTH_SECRET}
+        - NEXTAUTH_URL=${NEXTAUTH_URL}
+        - NEXT_PUBLIC_API_URL=${NEXT_PUBLIC_API_URL}
+        - NEXT_PUBLIC_CDN_URL=${NEXT_PUBLIC_CDN_URL}
+        - NEXT_PUBLIC_APP_URL=${NEXT_PUBLIC_APP_URL}
+        - DATABASE_URL=${DATABASE_URL}
+    container_name: next-app-acad
+    restart: always
+    ports:
+      - "3030:3000"
+    environment:
+      - NEXTAUTH_SECRET=${NEXTAUTH_SECRET}
+      - NEXTAUTH_URL=${NEXTAUTH_URL}
+      - DATABASE_URL=${DATABASE_URL}
+    networks:
+      - jetschool
+      - mongo_mongodb_network
+    deploy:
+      resources:
+        limits:
+          memory: 1G
+        reservations:
+          memory: 512M
+  api:
+    build: ./api
+    container_name: nest-app-acad
+    restart: always
+    ports:
+      - "3031:3002"
+    env_file:
+      - .env
+    volumes:
+      - ~/uploads-acad:/app/uploads-acad
+    networks:
+      - jetschool
+      - mongo_mongodb_network
+
+networks:
+  jetschool:
+    driver: bridge
+  mongo_mongodb_network:
+    external: true

@@ -1,0 +1,203 @@
+"use client";
+import { EligibilityFormInputs } from "@/types/course";
+import { getIcon } from "@/utils/icon";
+import { Button, Card, Input, Textarea } from "@nextui-org/react";
+import { motion } from "framer-motion";
+import { MdDescription, MdTitle } from "react-icons/md";
+import React, { useState } from "react";
+
+interface EligibilityFormProps {
+  mode: "create" | "edit";
+  onSubmit: (data: EligibilityFormInputs) => Promise<void>;
+  register: any;
+  errors: any;
+  isSubmitting: boolean;
+  handleSubmit: any;
+  router: any;
+  defaultIconValue?: string;
+}
+export default function EligibilityForm({
+  mode,
+  onSubmit,
+  register,
+  errors,
+  isSubmitting,
+  handleSubmit,
+  router,
+  defaultIconValue = "",
+}: EligibilityFormProps) {
+  const [iconPreview, setIconPreview] = useState(defaultIconValue);
+  const PreviewIcon = getIcon(iconPreview);
+
+  return (
+    <div className="p-6 min-h-screen w-full flex items-center justify-center">
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5 }}
+        className="w-full"
+      >
+        <Card className="w-full max-w-xl p-6 bg-white shadow-lg mx-auto">
+          <div className="text-center mb-8">
+            <motion.h1
+              className="text-2xl font-bold text-black"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 0.2 }}
+            >
+              {mode === "create" ? "Yeni Tələb Yarat" : "Tələbə Düzəliş Et"}
+            </motion.h1>
+          </div>
+
+          <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+            <div className="space-y-2">
+              <Input
+                type="text"
+                label="Başlıq (AZ)"
+                variant="bordered"
+                startContent={<MdTitle className="text-gray-400" />}
+                isDisabled={isSubmitting}
+                {...register("title.az", {
+                  required: "Başlıq tələb olunur",
+                  minLength: {
+                    value: 3,
+                    message: "Başlıq ən azı 3 simvol olmalıdır",
+                  },
+                })}
+                isInvalid={!!errors.title?.az}
+                errorMessage={errors.title?.az?.message}
+                classNames={{
+                  input: "bg-transparent",
+                  inputWrapper: [
+                    "bg-white border-2 hover:border-primary focus:border-primary",
+                  ],
+                }}
+              />
+            </div>
+
+            <div className="space-y-2">
+              <Input
+                type="text"
+                label="Title (EN)"
+                variant="bordered"
+                startContent={<MdTitle className="text-gray-400" />}
+                isDisabled={isSubmitting}
+                {...register("title.en", {
+                  required: "Title is required",
+                  minLength: {
+                    value: 3,
+                    message: "Title must be at least 3 characters",
+                  },
+                })}
+                isInvalid={!!errors.title?.en}
+                errorMessage={errors.title?.en?.message}
+                classNames={{
+                  input: "bg-transparent",
+                  inputWrapper: [
+                    "bg-white border-2 hover:border-primary focus:border-primary",
+                  ],
+                }}
+              />
+            </div>
+
+            <div className="space-y-2">
+              <Textarea
+                label="Təsvir (AZ)"
+                variant="bordered"
+                startContent={<MdDescription className="text-gray-400" />}
+                isDisabled={isSubmitting}
+                {...register("description.az", {
+                  required: "Təsvir tələb olunur",
+                })}
+                isInvalid={!!errors.description?.az}
+                errorMessage={errors.description?.az?.message}
+                classNames={{
+                  input: "bg-transparent",
+                  inputWrapper: [
+                    "bg-white border-2 hover:border-primary focus:border-primary",
+                  ],
+                }}
+              />
+            </div>
+
+            <div className="space-y-2">
+              <Textarea
+                label="Description (EN)"
+                variant="bordered"
+                startContent={<MdDescription className="text-gray-400" />}
+                isDisabled={isSubmitting}
+                {...register("description.en", {
+                  required: "Description required",
+                })}
+                isInvalid={!!errors.description?.en}
+                errorMessage={errors.description?.en?.message}
+                classNames={{
+                  input: "bg-transparent",
+                  inputWrapper: [
+                    "bg-white border-2 hover:border-primary focus:border-primary",
+                  ],
+                }}
+              />
+            </div>
+
+            <div className="space-y-2">
+              <Input
+                type="text"
+                label="İkon adı (məs: MdSchool, FaUser, RiBriefcaseLine)"
+                placeholder="MdSchool"
+                variant="bordered"
+                startContent={
+                  <div className="bg-jsyellow text-white p-1 rounded-full flex items-center justify-center">
+                    <PreviewIcon className="w-4 h-4" />
+                  </div>
+                }
+                isDisabled={isSubmitting}
+                {...register("icon", {
+                  required: "İkon tələb olunur",
+                  onChange: (e: React.ChangeEvent<HTMLInputElement>) => setIconPreview(e.target.value),
+                })}
+                isInvalid={!!errors.icon}
+                errorMessage={errors.icon?.message}
+                classNames={{
+                  input: "bg-transparent",
+                  inputWrapper: [
+                    "bg-white border-2 hover:border-primary focus:border-primary",
+                  ],
+                }}
+              />
+              <p className="text-xs text-gray-400 pl-1">
+                react-icons adını daxil edin. Dəstəklənən kitabxanalar: Md, Fa, Fi, Bi, Hi, Ri, Bs, Lu, Ai, Si, Io, Io5, Go, Gi, Ti, Gr, Cg, Pi, Rx, Tb
+              </p>
+            </div>
+
+            <div className="flex justify-end space-x-4">
+              <Button
+                onClick={() => router.back()}
+                variant="light"
+                className="text-gray-600"
+                size="lg"
+              >
+                Ləğv et
+              </Button>
+              <Button
+                type="submit"
+                className="bg-jsyellow text-white hover:bg-jsyellow/90 disabled:opacity-50"
+                size="lg"
+                isLoading={isSubmitting}
+                disabled={isSubmitting}
+              >
+                {mode === "create"
+                  ? isSubmitting
+                    ? "Yaradılır..."
+                    : "Yarat"
+                  : isSubmitting
+                  ? "Yenilənir..."
+                  : "Yenilə"}
+              </Button>
+            </div>
+          </form>
+        </Card>
+      </motion.div>
+    </div>
+  );
+}

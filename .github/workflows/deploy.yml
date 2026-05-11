@@ -1,0 +1,76 @@
+name: Deploy to Droplet
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    name: Deploy Full Stack Application
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Setup SSH
+        run: |
+          mkdir -p ~/.ssh
+          echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_ci
+          chmod 600 ~/.ssh/id_ci
+          ssh-keyscan -H ${{ secrets.DROPLET_HOST }} >> ~/.ssh/known_hosts
+
+      - name: Deploy Application
+        run: |
+          ssh -o ServerAliveInterval=30 -o ServerAliveCountMax=120 -o TCPKeepAlive=yes -i ~/.ssh/id_ci ${{ secrets.DROPLET_USER }}@${{ secrets.DROPLET_HOST }} <<'EOF'
+          set -e
+
+          cd /root/jetacademy
+
+          echo "🔄 Pulling latest changes..."
+          git fetch origin main
+          git reset --hard origin/main
+
+          echo "📁 Ensuring uploads directory exists..."
+          mkdir -p ~/uploads-acad
+
+          cd /root/jetacademy
+
+          echo "🔧 Optimizing system for deployment..."
+          # Clear Docker cache to free up space
+          docker system prune -f || true
+
+          # Check available memory
+          echo "💾 Available memory:"
+          free -h
+
+          # Ensure swap is available for builds
+          if [ ! -f /swapfile ]; then
+            echo "🔄 Creating swap file for build process..."
+            sudo fallocate -l 2G /swapfile || sudo dd if=/dev/zero of=/swapfile bs=1M count=2048
+            sudo chmod 600 /swapfile
+            sudo mkswap /swapfile
+            sudo swapon /swapfile
+            echo '/swapfile none swap sw 0 0' | sudo tee -a /etc/fstab
+          else
+            sudo swapon /swapfile || true
+          fi
+
+          echo "🔨 Building and starting backend API..."
+          docker compose build --no-cache api
+          docker compose up -d api
+
+          echo "📁 Verifying uploads are mounted..."
+          echo "Uploads directory contents:"
+          ls -la ~/uploads-acad/ || echo "Uploads directory is empty or doesn't exist"
+          echo "Uploads in container:"
+          docker exec nest-app ls -la /app/uploads-acad/ || echo "No uploads directory in container"
+
+          echo "🔨 Building and starting frontend..."
+          # Set Docker BuildKit for optimized builds
+          export DOCKER_BUILDKIT=1
+          export COMPOSE_DOCKER_CLI_BUILD=1
+
+          docker compose build --no-cache client
+          docker compose up -d client
+
+          echo "✅ Deployment complete!"
+          EOF

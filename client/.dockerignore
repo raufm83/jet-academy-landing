@@ -1,0 +1,17 @@
+# Host artifacts must not overwrite `npm ci` in the image (wrong arch / huge tree / OOM)
+node_modules
+.next
+out
+.turbo
+
+.git
+.gitignore
+.env*.local
+*.log
+npm-debug.log*
+
+# Docs and IDE (smaller build context = faster `COPY . .`)
+README.md
+*.md
+.vscode
+.idea

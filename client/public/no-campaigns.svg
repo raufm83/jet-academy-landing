@@ -1,0 +1,29 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300" fill="none">
+  <!-- Background circle -->
+  <circle cx="200" cy="140" r="110" fill="#FEF7EB"/>
+  <!-- Gift box body -->
+  <rect x="140" y="140" width="120" height="80" rx="8" fill="#FCAE1E" opacity="0.25" stroke="#FCAE1E" stroke-width="2"/>
+  <!-- Gift box lid -->
+  <rect x="132" y="124" width="136" height="24" rx="6" fill="#FCAE1E" opacity="0.35" stroke="#FCAE1E" stroke-width="2"/>
+  <!-- Ribbon vertical -->
+  <rect x="193" y="124" width="14" height="96" fill="#FCAE1E" opacity="0.5"/>
+  <!-- Ribbon horizontal -->
+  <rect x="140" y="148" width="120" height="14" fill="#FCAE1E" opacity="0.5"/>
+  <!-- Bow left -->
+  <ellipse cx="186" cy="118" rx="18" ry="14" fill="#FCAE1E" opacity="0.45" transform="rotate(-20 186 118)"/>
+  <!-- Bow right -->
+  <ellipse cx="214" cy="118" rx="18" ry="14" fill="#FCAE1E" opacity="0.45" transform="rotate(20 214 118)"/>
+  <!-- Bow center -->
+  <circle cx="200" cy="124" r="8" fill="#FCAE1E" opacity="0.6"/>
+  <!-- Sparkle left -->
+  <path d="M105 100 L108 92 L111 100 L108 108 Z" fill="#FCAE1E" opacity="0.5"/>
+  <path d="M100 100 L108 97 L116 100 L108 103 Z" fill="#FCAE1E" opacity="0.5"/>
+  <!-- Sparkle right -->
+  <path d="M289 80 L292 72 L295 80 L292 88 Z" fill="#FCAE1E" opacity="0.5"/>
+  <path d="M284 80 L292 77 L300 80 L292 83 Z" fill="#FCAE1E" opacity="0.5"/>
+  <!-- Sparkle top -->
+  <path d="M240 65 L242 59 L244 65 L242 71 Z" fill="#FCAE1E" opacity="0.4"/>
+  <path d="M236 65 L242 63 L248 65 L242 67 Z" fill="#FCAE1E" opacity="0.4"/>
+  <!-- Dashed circle (empty state frame) -->
+  <circle cx="200" cy="140" r="95" stroke="#FCAE1E" stroke-width="1.75" stroke-dasharray="8 6" fill="none" opacity="0.45"/>
+</svg>

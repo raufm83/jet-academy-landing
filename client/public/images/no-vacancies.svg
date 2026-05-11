@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300" fill="none">
+  <circle cx="200" cy="150" r="118" fill="#FEF7EB"/>
+  <circle cx="200" cy="150" r="102" stroke="#FCAE1E" stroke-width="1.75" stroke-dasharray="8 6" fill="none" opacity="0.5"/>
+  <!-- Briefcase body -->
+  <rect x="118" y="118" width="164" height="112" rx="14" fill="#FCAE1E" opacity="0.22" stroke="#FCAE1E" stroke-width="2"/>
+  <rect x="118" y="118" width="164" height="36" rx="10" fill="#FCAE1E" opacity="0.32" stroke="#FCAE1E" stroke-width="1.5"/>
+  <path d="M168 118 V98 C168 88 176 80 186 80 H214 C224 80 232 88 232 98 V118" stroke="#FCAE1E" stroke-width="2.5" fill="none" opacity="0.85"/>
+  <rect x="186" y="72" width="28" height="14" rx="4" fill="#FCAE1E" opacity="0.55"/>
+  <!-- Document lines -->
+  <rect x="248" y="96" width="72" height="96" rx="8" fill="white" stroke="#FCAE1E" stroke-width="2" opacity="0.95"/>
+  <rect x="260" y="112" width="48" height="6" rx="2" fill="#FCAE1E" opacity="0.35"/>
+  <rect x="260" y="128" width="40" height="6" rx="2" fill="#FCAE1E" opacity="0.28"/>
+  <rect x="260" y="144" width="52" height="6" rx="2" fill="#FCAE1E" opacity="0.28"/>
+  <rect x="260" y="160" width="36" height="6" rx="2" fill="#FCAE1E" opacity="0.22"/>
+  <!-- Accent corner -->
+  <path d="M90 168 L102 156 L114 168 L102 180 Z" fill="#FCAE1E" opacity="0.4"/>
+  <path d="M302 132 L312 122 L322 132 L312 142 Z" fill="#FCAE1E" opacity="0.35"/>
+</svg>

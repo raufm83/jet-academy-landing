@@ -1,0 +1,120 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+@layer base {
+  @keyframes fade-up {
+    from {
+      opacity: 0;
+      transform: translateY(1rem);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  @keyframes scroll-tags {
+    0% {
+      transform: translateX(0%);
+    }
+    100% {
+      transform: translateX(-50%);
+    }
+  }
+  .scrolling-tags {
+    animation: scroll-tags 15s linear infinite;
+  }
+  .scrolling-tags:hover {
+    animation-play-state: paused;
+  }
+  .place-card {
+    display: none !important;
+  }
+  /* scroll behavior smooth */
+
+  /* *,
+  body,
+  html {
+    scroll-behavior: smooth !important;
+  } */
+}
+
+.nprogress {
+}
+
+.ql-editor img {
+  max-width: 100%;
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+/* Dashboard Quill (layout: main.bg-gray-100): link + palitra — preflight və NextUI ilə toqquşmanın qarşısı */
+main.bg-gray-100 .ql-snow .ql-editor a {
+  color: #1560bd;
+  text-decoration: underline;
+}
+main.bg-gray-100 .ql-snow .ql-editor .ql-color-white {
+  color: #fff !important;
+}
+main.bg-gray-100 .ql-snow .ql-editor .ql-color-red {
+  color: #e60000 !important;
+}
+main.bg-gray-100 .ql-snow .ql-editor .ql-color-orange {
+  color: #f90 !important;
+}
+main.bg-gray-100 .ql-snow .ql-editor .ql-color-yellow {
+  color: #ff0 !important;
+}
+main.bg-gray-100 .ql-snow .ql-editor .ql-color-green {
+  color: #008a00 !important;
+}
+main.bg-gray-100 .ql-snow .ql-editor .ql-color-blue {
+  color: #06c !important;
+}
+main.bg-gray-100 .ql-snow .ql-editor .ql-color-purple {
+  color: #93f !important;
+}
+main.bg-gray-100 .ql-snow .ql-editor .ql-bg-black {
+  background-color: #000 !important;
+}
+main.bg-gray-100 .ql-snow .ql-editor .ql-bg-red {
+  background-color: #e60000 !important;
+}
+main.bg-gray-100 .ql-snow .ql-editor .ql-bg-orange {
+  background-color: #f90 !important;
+}
+main.bg-gray-100 .ql-snow .ql-editor .ql-bg-yellow {
+  background-color: #ff0 !important;
+}
+main.bg-gray-100 .ql-snow .ql-editor .ql-bg-green {
+  background-color: #008a00 !important;
+}
+main.bg-gray-100 .ql-snow .ql-editor .ql-bg-blue {
+  background-color: #06c !important;
+}
+main.bg-gray-100 .ql-snow .ql-editor .ql-bg-purple {
+  background-color: #93f !important;
+}
+
+.post-body img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
+
+/* Post (Quill): redaktor yeni sətr / boş abzas üçün <p><br></p> yaza bilər; yalnız
+   "prose" abzas margini ilə birləşəndə frondda boşluq çox görünürdü — boş cərgələri
+   redaktora yaxınlaşdırırıq. "contents" artıq işlənmir, segment qutusu blok qalır. */
+.post-body-quill p:has(> br:only-child) {
+  margin-top: 0.35em;
+  margin-bottom: 0.35em;
+  min-height: 0.4em;
+}
+
+.post-body-quill p:empty {
+  margin: 0;
+  min-height: 0;
+  padding: 0;
+}
+
+

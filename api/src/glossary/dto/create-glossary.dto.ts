@@ -1,0 +1,68 @@
+import { ApiProperty } from '@nestjs/swagger';
+import { Transform } from 'class-transformer';
+import {
+  IsString,
+  IsBoolean,
+  IsOptional,
+  IsArray,
+  IsMongoId,
+} from 'class-validator';
+
+export class CreateGlossaryDto {
+  @ApiProperty({ example: 'Veb sayt' })
+  @IsString()
+  'term[az]': string;
+
+  @ApiProperty({ example: 'Website' })
+  @IsString()
+  'term[en]': string;
+
+  @ApiProperty({
+    example:
+      'İnternetdə yerləşdirilmiş, bir-biri ilə əlaqəli veb səhifələr toplusu.',
+  })
+  @IsString()
+  'definition[az]': string;
+
+  @ApiProperty({
+    example: 'A collection of related web pages hosted on the Internet.',
+  })
+  @IsString()
+  'definition[en]': string;
+
+  @ApiProperty({ example: 'veb-sayt' })
+  @IsString()
+  'slug[az]': string;
+
+  @ApiProperty({ example: 'website' })
+  @IsString()
+  'slug[en]': string;
+
+  @ApiProperty({ example: '60d21b4667d0d8992e610c01', required: false })
+  @IsOptional()
+  @IsMongoId()
+  categoryId?: string;
+
+  @ApiProperty({
+    example: { az: ['veb', 'internet'], en: ['web', 'internet'] },
+    required: false,
+  })
+  @IsOptional()
+  tags?: { az?: string[]; en?: string[] };
+
+  @ApiProperty({
+    example: ['60d21b4667d0d8992e610c02', '60d21b4667d0d8992e610c03'],
+    required: false,
+    type: [String],
+  })
+  @IsOptional()
+  @IsArray()
+  @IsMongoId({ each: true })
+  relatedTerms?: string[];
+
+  @ApiProperty({ required: false, default: false })
+  @IsOptional()
+  @IsBoolean()
+  @Transform(({ value }) => value === 'true')
+  published?: boolean;
+}
