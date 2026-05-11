@@ -34,7 +34,6 @@ interface ISingleCoursePageProps {
   };
 }
 
-/** API bəzən title/description/newTags üçün null qaytarır; ru üçün az/en fallback */
 function courseLangKey(locale: string): "az" | "en" {
   return locale.startsWith("en") ? "en" : "az";
 }
