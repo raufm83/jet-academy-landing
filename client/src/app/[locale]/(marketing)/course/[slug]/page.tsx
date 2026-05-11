@@ -122,6 +122,7 @@ export default async function SingleCoursePage({
     const courseDesc = htmlToDescription(
       pickCourseDescription(data.description, locale)
     );
+
     
     const schema = coursePageGraph({
       name: courseTitle,
