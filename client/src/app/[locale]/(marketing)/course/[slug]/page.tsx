@@ -135,6 +135,7 @@ export default async function SingleCoursePage({
       tags: pickCourseTags(data.newTags, locale),
     });
 
+    
     return (
    <BreadcrumbContextWrapper title={courseTitle}>
         <JsonLd data={schema} />
