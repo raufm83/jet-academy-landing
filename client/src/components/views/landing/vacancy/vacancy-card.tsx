@@ -70,7 +70,8 @@ function normalizeEmploymentType(value?: string | null): string {
 export default function VacancyCard({ vacancy, locale }: VacancyCardProps) {
   const t = useTranslations("vacancies");
   const normalizedLocale: "az" | "en" = locale === "en" ? "en" : "az";
-  const title = vacancy.title[locale] || vacancy.title.az;
+  const vacancyName = vacancy.title[locale] || vacancy.title.az;
+  const title = t("cardTitle", { name: vacancyName });
   const description = vacancy.description[locale] || vacancy.description.az;
   const slug = pickSlug(vacancy, locale);
   const cleanDescription = stripHtml(description);

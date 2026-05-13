@@ -53,11 +53,15 @@ function defaultValidThrough(datePosted: string): string {
 
 export async function generateMetadata({ params }: VacancySinglePageProps): Promise<Metadata> {
   const locale = params.locale as Locale;
-  const vacancy = await getVacancyDetail(params.slug);
+  const [vacancy, t] = await Promise.all([
+    getVacancyDetail(params.slug),
+    getTranslations("vacancies"),
+  ]);
 
   if (!vacancy) return { title: "Not Found" };
 
-  const title = vacancy.title[locale] || vacancy.title.az;
+  const vacancyName = vacancy.title[locale] || vacancy.title.az;
+  const title = t("cardTitle", { name: vacancyName });
   const description = htmlToDescription(vacancy.description[locale] || vacancy.description.az);
 
   const baseUrl = process.env.NEXT_PUBLIC_APP_URL || "https://jetacademy.az";
@@ -88,7 +92,8 @@ export default async function VacancySinglePage({ params }: VacancySinglePagePro
 
   if (!vacancy) notFound();
 
-  const title = vacancy.title[locale] || vacancy.title.az;
+  const vacancyName = vacancy.title[locale] || vacancy.title.az;
+  const title = t("cardTitle", { name: vacancyName });
   const description = vacancy.description[locale] || vacancy.description.az;
   const requirementsHtml = pickMultilingualHtml(vacancy.requirements, locale);
   const workConditionsHtml = pickMultilingualHtml(
@@ -123,7 +128,7 @@ export default async function VacancySinglePage({ params }: VacancySinglePagePro
   const jobPostingSchema = {
     "@context": "https://schema.org/",
     "@type": "JobPosting",
-    title,
+    title: vacancyName,
     description,
     datePosted: vacancy.createdAt,
     validThrough,
@@ -250,7 +255,7 @@ export default async function VacancySinglePage({ params }: VacancySinglePagePro
                   >
                     {careerEmail}
                   </a>{" "}
-                  {t("cvCtaAfter", { vacancyName: title })}
+                  {t("cvCtaAfter", { vacancyName })}
                 </p>
               </footer>
             </article>

@@ -525,6 +525,7 @@
     "metaTitle": "Vakansiyalar | JET Academy",
     "metaDescription": "JET Academy-də karyera imkanları və aktiv vakansiyalar.",
     "titlePrefix": "Vakansiya:",
+    "cardTitle": "{name} vakansiyası",
     "applyNow": "Daha ətraflı",
     "noVacancies": "Hal-hazırda aktiv vakansiya yoxdur.",
     "emptyTitle": "Hal-hazırda aktiv vakansiya yoxdur",

@@ -524,6 +524,7 @@
     "metaTitle": "Vacancies | JET Academy",
     "metaDescription": "Career opportunities and active vacancies at JET Academy.",
     "titlePrefix": "Vacancy:",
+    "cardTitle": "{name} vacancy",
     "applyNow": "More details",
     "noVacancies": "No active vacancies at the moment.",
     "emptyTitle": "No open vacancies right now",
