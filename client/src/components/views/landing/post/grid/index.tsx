@@ -47,7 +47,9 @@ export default function PostGrid({
         <h3 className="text-xl font-medium text-gray-600 mb-2">
           {type === "EVENT" ? t("noEventsFound") : t("noPostsFound")}
         </h3>
-        <p className="text-gray-500">{t("tryDifferentFilters")}</p>
+        {type !== "EVENT" && (
+          <p className="text-gray-500">{t("tryDifferentFilters")}</p>
+        )}
       </div>
     );
   }
