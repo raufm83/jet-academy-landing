@@ -196,19 +196,19 @@ export default async function VacancySinglePage({ params }: VacancySinglePagePro
                 </h1>
               </header>
 
-              <div className="flex flex-col gap-5 border-b border-neutral-200 bg-white px-5 py-5 sm:flex-row sm:flex-wrap sm:items-center sm:justify-between sm:gap-6 sm:px-8 sm:py-6">
-                <div className="flex min-w-0 items-center gap-3 sm:max-w-[33%] sm:flex-1">
+              <div className="flex flex-col divide-y divide-neutral-300 border-b border-neutral-200 bg-white sm:flex-row sm:divide-x sm:divide-y-0 sm:divide-neutral-300">
+                <div className="flex min-w-0 flex-1 items-center gap-3 px-5 py-5 sm:px-6 sm:py-6 md:px-8">
                   <MdCalendarToday
                     className="shrink-0 text-2xl text-jsyellow"
                     aria-hidden
                   />
                   <p className="text-sm font-semibold text-[#1F2937]">{deadlineText}</p>
                 </div>
-                <div className="flex min-w-0 items-center gap-3 sm:max-w-[33%] sm:flex-1">
+                <div className="flex min-w-0 flex-1 items-center gap-3 px-5 py-5 sm:px-6 sm:py-6 md:px-8">
                   <MdWorkOutline className="shrink-0 text-2xl text-jsyellow" aria-hidden />
                   <p className="text-sm font-semibold text-[#1F2937]">{employmentType}</p>
                 </div>
-                <div className="flex min-w-0 items-center gap-3 sm:max-w-[33%] sm:flex-1">
+                <div className="flex min-w-0 flex-1 items-center gap-3 px-5 py-5 sm:px-6 sm:py-6 md:px-8">
                   <MdTrendingUp className="shrink-0 text-2xl text-jsyellow" aria-hidden />
                   <p className="text-sm font-semibold text-[#1F2937]">{experienceText}</p>
                 </div>

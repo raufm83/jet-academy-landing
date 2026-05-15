@@ -1,13 +1,16 @@
 "use client";
-import { useState, useCallback, useEffect } from "react";
+import { useState, useCallback, useEffect, useMemo } from "react";
 import {
   Button,
+  Input,
   Modal,
   ModalBody,
   ModalContent,
   ModalFooter,
   ModalHeader,
   Pagination,
+  Select,
+  SelectItem,
   Table,
   TableBody,
   TableCell,
@@ -27,6 +30,7 @@ import {
   MdEdit,
   MdCalendarMonth,
   MdAccessTime,
+  MdSearch,
 } from "react-icons/md";
 import { toast } from "sonner";
 import api from "@/utils/api/axios";
@@ -36,16 +40,20 @@ import Link from "next/link";
 import { PostType, Role } from "@/types/enums";
 import { useSession } from "next-auth/react";
 
+const ALL_CATEGORIES = "all";
+
 export default function PostsPage() {
   const router = useRouter();
   const { data: session, status: sessionStatus } = useSession();
-  const isAuthor = (session?.user as any)?.role === Role.AUTHOR;
+  const isAuthor = (session?.user as { role?: string })?.role === Role.AUTHOR;
   const [posts, setPosts] = useState<Post[]>([]);
   const [totalPosts, setTotalPosts] = useState(0);
   const [page, setPage] = useState(1);
   const [rowsPerPage] = useState(5);
   const [loading, setLoading] = useState(true);
-  const [selectedPostType, setSelectedPostType] = useState<PostType | null>(null);
+  const [categoryFilter, setCategoryFilter] = useState<string>(ALL_CATEGORIES);
+  const [searchInput, setSearchInput] = useState("");
+  const [search, setSearch] = useState("");
 
   const {
     isOpen: isDeleteOpen,
@@ -55,25 +63,45 @@ export default function PostsPage() {
 
   const [selectedPost, setSelectedPost] = useState<Post | null>(null);
 
-  const filterButtons = isAuthor
-    ? [
-        { label: "Bütün postlar", value: null },
-        { label: "Bloqlar", value: PostType.BLOG },
-      ]
-    : [
-        { label: "Bütün postlar", value: null },
-        { label: "Bloqlar", value: PostType.BLOG },
-        { label: "Kampaniyalar", value: PostType.OFFERS },
-        { label: "Xəbərlər", value: PostType.NEWS },
-        { label: "Tədbirlər", value: PostType.EVENT },
-      ];
+  const categoryOptions = useMemo(
+    () =>
+      isAuthor
+        ? [{ key: ALL_CATEGORIES, label: "Bütün bloqlar" }]
+        : [
+            { key: ALL_CATEGORIES, label: "Bütün kateqoriyalar" },
+            { key: PostType.BLOG, label: "Bloqlar" },
+            { key: PostType.OFFERS, label: "Kampaniyalar" },
+            { key: PostType.NEWS, label: "Xəbərlər" },
+            { key: PostType.EVENT, label: "Tədbirlər" },
+          ],
+    [isAuthor]
+  );
+
+  useEffect(() => {
+    const handle = setTimeout(() => setSearch(searchInput.trim()), 350);
+    return () => clearTimeout(handle);
+  }, [searchInput]);
+
+  useEffect(() => {
+    setPage(1);
+  }, [categoryFilter, search]);
 
   const fetchPosts = useCallback(async () => {
     try {
       setLoading(true);
+      const params = new URLSearchParams({
+        page: String(page),
+        limit: String(rowsPerPage),
+        includeUnpublished: "true",
+      });
+
+      if (search) {
+        params.set("search", search);
+      }
+
       if (isAuthor) {
         const { data } = await api.get<PostsResponse>(
-          `/posts/my?page=${page}&limit=${rowsPerPage}&includeUnpublished=true`
+          `/posts/my?${params.toString()}`
         );
         const items = data?.items ?? [];
         const metaTotal = data?.meta?.total ?? 0;
@@ -83,19 +111,14 @@ export default function PostsPage() {
         if (page > lastPage) setPage(lastPage);
         return;
       }
-      const params = new URLSearchParams({
-        page: String(page),
-        limit: String(rowsPerPage),
-        includeUnpublished: "true",
-        includeBlogs: "true",
-      });
 
-      if (selectedPostType) {
-        params.set("postType", selectedPostType);
+      params.set("includeBlogs", "true");
+
+      if (categoryFilter && categoryFilter !== ALL_CATEGORIES) {
+        params.set("postType", categoryFilter);
       }
 
-      const url = `/posts?${params.toString()}`;
-      const { data } = await api.get<PostsResponse>(url);
+      const { data } = await api.get<PostsResponse>(`/posts?${params.toString()}`);
       const items = data?.items ?? [];
       const metaTotal = data?.meta?.total ?? 0;
       const lastPage = Math.max(1, Math.ceil(metaTotal / rowsPerPage) || 1);
@@ -108,14 +131,13 @@ export default function PostsPage() {
     } finally {
       setLoading(false);
     }
-  }, [page, rowsPerPage, isAuthor, selectedPostType]);
+  }, [page, rowsPerPage, isAuthor, categoryFilter, search]);
 
   useEffect(() => {
     if (sessionStatus === "loading") return;
     fetchPosts();
   }, [sessionStatus, fetchPosts]);
 
-  /** Cari səhifə ümumi səhifə sayından böyükdürsə (filter/sil sonrası) düzəlt */
   useEffect(() => {
     const last = Math.max(1, Math.ceil((totalPosts || 0) / rowsPerPage));
     if (page > last) setPage(last);
@@ -124,11 +146,6 @@ export default function PostsPage() {
   const handleDelete = (post: Post) => {
     setSelectedPost(post);
     onDeleteOpen();
-  };
-
-  const handleFilterChange = (postType: PostType | null) => {
-    setPage(1);
-    setSelectedPostType(postType);
   };
 
   const confirmDelete = async () => {
@@ -149,7 +166,6 @@ export default function PostsPage() {
 
   const handleStatusChange = async (post: Post, isSelected: boolean) => {
     try {
-      // Optimistic update
       setPosts((prevPosts) =>
         prevPosts.map((p) =>
           p.id === post.id ? { ...p, published: isSelected } : p
@@ -162,7 +178,6 @@ export default function PostsPage() {
     } catch (error) {
       console.error("Status dəyişdirilmədi:", error);
       toast.error("Statusu dəyişmək mümkün olmadı");
-      // Revert on error
       setPosts((prevPosts) =>
         prevPosts.map((p) =>
           p.id === post.id ? { ...p, published: !isSelected } : p
@@ -181,17 +196,22 @@ export default function PostsPage() {
     { name: "ƏMƏLİYYATLAR", uid: "actions" },
   ];
 
-  /** NextUI Pagination `total` 0 olduqda xəta verir; boş siyahıda ən azı 1 səhifə */
   const totalPages = Math.max(1, Math.ceil((totalPosts || 0) / rowsPerPage));
 
   const renderCell = (post: Post, columnKey: string) => {
     switch (columnKey) {
       case "title":
         return (
-          <div className="flex flex-col">
-            <p className="text-bold text-small">{post.title.az}</p>
-            <p className="text-tiny text-default-400">{post.title.en}</p>
-          </div>
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5 }}
+          >
+            <div className="flex flex-col">
+              <p className="text-bold text-small">{post.title.az}</p>
+              <p className="text-tiny text-default-400">{post.title.en}</p>
+            </div>
+          </motion.div>
         );
 
       case "content":
@@ -214,8 +234,8 @@ export default function PostsPage() {
               post.postType === PostType.BLOG
                 ? "primary"
                 : post.postType === PostType.NEWS
-                ? "success"
-                : "warning"
+                  ? "success"
+                  : "warning"
             }
             size="sm"
             variant="flat"
@@ -223,12 +243,12 @@ export default function PostsPage() {
             {post.postType === PostType.BLOG
               ? "Bloq"
               : post.postType === PostType.NEWS
-              ? "Xəbər"
-              : post.postType === PostType.EVENT
-              ? "Tədbir"
-              : post.postType === PostType.OFFERS
-              ? "Kampaniya"
-              : "Bilinmir"}
+                ? "Xəbər"
+                : post.postType === PostType.EVENT
+                  ? "Tədbir"
+                  : post.postType === PostType.OFFERS
+                    ? "Kampaniya"
+                    : "Bilinmir"}
           </Chip>
         );
 
@@ -337,27 +357,40 @@ export default function PostsPage() {
           </div>
         </div>
 
-        <div className="flex flex-wrap gap-3 mb-6">
-          {filterButtons.map((filter) => {
-            const isActive = selectedPostType === filter.value;
-
-            return (
-              <Button
-                key={filter.value}
-                variant={isActive ? "solid" : "bordered"}
-                color={isActive ? "warning" : "default"}
-                className={
-                  isActive
-                    ? "bg-jsyellow text-white border-jsyellow"
-                    : "border-gray-300 text-default-700"
-                }
-                onClick={() => handleFilterChange(filter.value)}
-              >
-                {filter.label}
-              </Button>
-            );
-          })}
-        </div>
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5 }}
+          className="flex flex-col md:flex-row gap-3 mb-6"
+        >
+          {!isAuthor && (
+            <Select
+              label="Kateqoriya"
+              size="sm"
+              variant="bordered"
+              className="md:max-w-xs"
+              selectedKeys={[categoryFilter]}
+              onChange={(e) =>
+                setCategoryFilter(e.target.value || ALL_CATEGORIES)
+              }
+            >
+              {categoryOptions.map((opt) => (
+                <SelectItem key={opt.key} value={opt.key}>
+                  {opt.label}
+                </SelectItem>
+              ))}
+            </Select>
+          )}
+          <Input
+            size="sm"
+            variant="bordered"
+            placeholder="Başlığa görə axtar..."
+            startContent={<MdSearch className="text-gray-400" size={18} />}
+            value={searchInput}
+            onChange={(e) => setSearchInput(e.target.value)}
+            className="md:max-w-sm"
+          />
+        </motion.div>
 
         <Table
           aria-label="Postlar cədvəli"
@@ -387,7 +420,7 @@ export default function PostsPage() {
           </TableHeader>
           <TableBody
             items={posts}
-            loadingContent={<div>Yüklənir...</div>}
+            loadingContent={<motion.div>Yüklənir...</motion.div>}
             loadingState={loading ? "loading" : "idle"}
             emptyContent={<div>Post tapılmadı</div>}
           >
@@ -402,31 +435,31 @@ export default function PostsPage() {
             )}
           </TableBody>
         </Table>
-
-        <Modal isOpen={isDeleteOpen} onClose={onDeleteClose}>
-          <ModalContent>
-            {(onClose) => (
-              <>
-                <ModalHeader>Postu Sil</ModalHeader>
-                <ModalBody>
-                  <p>
-                    &quot;{selectedPost?.title.az}&quot; postunu silmək
-                    istədiyinizə əminsiniz?
-                  </p>
-                </ModalBody>
-                <ModalFooter>
-                  <Button variant="light" onPress={onClose}>
-                    Ləğv et
-                  </Button>
-                  <Button color="danger" onPress={confirmDelete}>
-                    Sil
-                  </Button>
-                </ModalFooter>
-              </>
-            )}
-          </ModalContent>
-        </Modal>
       </motion.div>
+
+      <Modal isOpen={isDeleteOpen} onClose={onDeleteClose}>
+        <ModalContent>
+          {(onClose) => (
+            <>
+              <ModalHeader>Postu Sil</ModalHeader>
+              <ModalBody>
+                <p>
+                  &quot;{selectedPost?.title.az}&quot; postunu silmək
+                  istədiyinizə əminsiniz?
+                </p>
+              </ModalBody>
+              <ModalFooter>
+                <Button variant="light" onPress={onClose}>
+                  Ləğv et
+                </Button>
+                <Button color="danger" onPress={confirmDelete}>
+                  Sil
+                </Button>
+              </ModalFooter>
+            </>
+          )}
+        </ModalContent>
+      </Modal>
     </div>
   );
 }

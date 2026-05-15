@@ -423,6 +423,8 @@
     "blogMetaDescription": "Read our latest blog articles and insights",
     "blogDescription": "Read our latest blog articles and insights",
     "postsFilteredByTag": "Articles related to «{tag}»",
+    "postsFilteredBySearch": "Search results for «{query}»",
+    "blogSearchPlaceholder": "Search blog posts by title...",
     "upcoming": "Upcoming",
     "past": "Past",
     "all": "All"

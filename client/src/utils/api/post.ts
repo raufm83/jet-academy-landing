@@ -122,7 +122,17 @@ export async function getAllPosts({
   eventStatus,
   authorId,
   tag,
-}: any): Promise<PostsResponse> {
+  search,
+}: {
+  page: number;
+  limit: number;
+  postType?: PostType;
+  includeBlogs?: boolean;
+  eventStatus?: string;
+  authorId?: string;
+  tag?: string;
+  search?: string;
+}): Promise<PostsResponse> {
   try {
     let url = `/posts?limit=${limit}&page=${page}&includeBlogs=${includeBlogs}`;
 
@@ -141,6 +151,10 @@ export async function getAllPosts({
 
     if (tag && String(tag).trim()) {
       url += `&tag=${encodeURIComponent(String(tag).trim())}`;
+    }
+
+    if (search && String(search).trim()) {
+      url += `&search=${encodeURIComponent(String(search).trim())}`;
     }
 
     const { data } = await api.get(url);

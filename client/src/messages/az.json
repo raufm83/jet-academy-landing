@@ -423,6 +423,8 @@
     "blogMetaDescription": "Ən son bloq məqalələrimizi və fikirlərimizi oxuyun",
     "blogDescription": "Ən son bloq məqalələrimizi və fikirlərimizi oxuyun",
     "postsFilteredByTag": "«{tag}» mövzusu ilə əlaqəli məqalələr",
+    "postsFilteredBySearch": "«{query}» üzrə axtarış nəticələri",
+    "blogSearchPlaceholder": "Bloq başlığına görə axtarın...",
     "upcoming": "Gələcək",
     "past": "Keçmiş",
     "all": "Hamısı"

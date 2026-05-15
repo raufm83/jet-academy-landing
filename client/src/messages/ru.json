@@ -377,6 +377,8 @@
     "noEventsFound": "В ближайшие дни мероприятий не ожидается.",
     "tryDifferentFilters": "Скоро появятся!",
     "postsFilteredByTag": "Статьи по теме «{tag}»",
+    "postsFilteredBySearch": "Результаты поиска «{query}»",
+    "blogSearchPlaceholder": "Поиск по заголовку блога...",
     "noActiveCampaignsLine1": "Сейчас нет активных акций.",
     "noActiveCampaignsLine2": "Новые предложения появятся здесь после публикации."
   },

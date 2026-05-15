@@ -1,9 +1,11 @@
 import PostGrid from "@/components/views/landing/post/grid";
 import PostFilters from "@/components/views/landing/post/filters";
+import PostSearch from "@/components/views/landing/post/post-search";
 import { Locale } from "@/i18n/request";
 import { PostType } from "@/types/enums";
 import { getAllPosts } from "@/utils/api/post";
 import { Metadata } from "next";
+import { Suspense } from "react";
 import { getTranslations } from "next-intl/server";
 import { resolvePageMeta } from "@/utils/api/page-meta";
 import { buildAlternates } from "@/utils/seo";
@@ -19,6 +21,7 @@ interface PostsPageProps {
     page?: string;
     limit?: string;
     tag?: string;
+    q?: string;
   };
 }
 
@@ -55,10 +58,10 @@ export async function generateMetadata({
       description: resolvedMeta.description,
     },
     robots: {
-      index: !searchParams.page && !searchParams.limit,
+      index: !searchParams.page && !searchParams.limit && !searchParams.q,
       follow: true,
       googleBot: {
-        index: !searchParams.page && !searchParams.limit,
+        index: !searchParams.page && !searchParams.limit && !searchParams.q,
         follow: true,
         "max-snippet": -1,
         "max-image-preview": "large",
@@ -78,6 +81,8 @@ export default async function BlogPage({
   const type = PostType.BLOG;
   const tag =
     typeof searchParams.tag === "string" ? searchParams.tag.trim() : undefined;
+  const searchQuery =
+    typeof searchParams.q === "string" ? searchParams.q.trim() : undefined;
 
   const [postsData, t] = await Promise.all([
     getAllPosts({
@@ -86,6 +91,7 @@ export default async function BlogPage({
       postType: type,
       includeBlogs: true,
       tag,
+      search: searchQuery,
     }),
     getTranslations({ locale, namespace: "postsPage" }),
   ]);
@@ -114,6 +120,7 @@ export default async function BlogPage({
 
   const qs = new URLSearchParams();
   if (tag) qs.set("tag", tag);
+  if (searchQuery) qs.set("q", searchQuery);
   const paginationBaseUrl = `/blog${qs.toString() ? `?${qs}` : ""}`;
 
   return (
@@ -129,6 +136,17 @@ export default async function BlogPage({
           </p>
         ) : null}
       </div>
+
+      <Suspense
+        fallback={
+          <div className="mb-8 h-14 max-w-3xl mx-auto rounded-full bg-gray-100 animate-pulse" />
+        }
+      >
+        <PostSearch
+          placeholderText={t("blogSearchPlaceholder")}
+          initialQuery={searchQuery ?? ""}
+        />
+      </Suspense>
 
       <PostFilters type={type} t={t} />
 
