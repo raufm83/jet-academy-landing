@@ -1,12 +1,14 @@
 import PostGrid from "@/components/views/landing/post/grid";
 import PostFilters from "@/components/views/landing/post/filters";
 import BlogCategoryFilter from "@/components/views/landing/post/blog-category-filter";
+import PostSearch from "@/components/views/landing/post/post-search";
 import { BLOG_CATEGORY_UNCATEGORIZED } from "@/data/blog-category";
 import { Locale } from "@/i18n/request";
 import { PostType } from "@/types/enums";
 import { getAllPosts } from "@/utils/api/post";
 import { getBlogCategoriesOrdered } from "@/utils/api/blog-category";
 import { Metadata } from "next";
+import { Suspense } from "react";
 import { getTranslations } from "next-intl/server";
 import { resolvePageMeta } from "@/utils/api/page-meta";
 import { buildAlternates } from "@/utils/seo";
@@ -23,6 +25,7 @@ interface PostsPageProps {
     limit?: string;
     tag?: string;
     category?: string;
+    q?: string;
   };
 }
 
@@ -40,6 +43,13 @@ export async function generateMetadata({
   const description =
     t("blogMetaDescription") || "Ən son bloq məqalələrimizi və fikirlərimizi oxuyun";
   const resolvedMeta = await resolvePageMeta("blog", locale, title, description);
+
+  const noFacet =
+    !searchParams.page &&
+    !searchParams.limit &&
+    !searchParams.tag &&
+    !searchParams.category &&
+    !searchParams.q;
 
   return {
     title: resolvedMeta.title,
@@ -59,18 +69,10 @@ export async function generateMetadata({
       description: resolvedMeta.description,
     },
     robots: {
-      index:
-        !searchParams.page &&
-        !searchParams.limit &&
-        !searchParams.tag &&
-        !searchParams.category,
+      index: noFacet,
       follow: true,
       googleBot: {
-        index:
-          !searchParams.page &&
-          !searchParams.limit &&
-          !searchParams.tag &&
-          !searchParams.category,
+        index: noFacet,
         follow: true,
         "max-snippet": -1,
         "max-image-preview": "large",
@@ -95,6 +97,8 @@ export default async function BlogPage({
       ? searchParams.category.trim()
       : "";
   const blogCategoryQuery = categoryRaw || undefined;
+  const searchQuery =
+    typeof searchParams.q === "string" ? searchParams.q.trim() : undefined;
 
   const [postsData, t, categories] = await Promise.all([
     getAllPosts({
@@ -104,6 +108,7 @@ export default async function BlogPage({
       includeBlogs: true,
       tag,
       blogCategoryId: blogCategoryQuery,
+      search: searchQuery,
     }),
     getTranslations({ locale, namespace: "postsPage" }),
     getBlogCategoriesOrdered(),
@@ -134,6 +139,7 @@ export default async function BlogPage({
   const qs = new URLSearchParams();
   if (tag) qs.set("tag", tag);
   if (categoryRaw) qs.set("category", categoryRaw);
+  if (searchQuery) qs.set("q", searchQuery);
   const paginationBaseUrl = `/blog${qs.toString() ? `?${qs}` : ""}`;
 
   const categoryLower = categoryRaw.toLowerCase();
@@ -142,19 +148,26 @@ export default async function BlogPage({
     categoryRaw && categoryLower === BLOG_CATEGORY_UNCATEGORIZED
       ? t("postsFilteredBlogUncategorized")
       : categoryMatch
-        ? (locale === "en"
+        ? locale === "en"
           ? categoryMatch.name.en || categoryMatch.name.az
-          : categoryMatch.name.az || categoryMatch.name.en)
+          : categoryMatch.name.az || categoryMatch.name.en
         : "";
 
   let headingMain: string;
-  if (tag) headingMain = t("postsFilteredByTag", { tag });
-  else if (categoryRaw) {
+  if (tag) {
+    headingMain = t("postsFilteredByTag", { tag });
+  } else if (searchQuery) {
+    headingMain = t("postsFilteredBySearch", { query: searchQuery });
+  } else if (categoryRaw) {
     headingMain =
       categoryLower === BLOG_CATEGORY_UNCATEGORIZED
         ? categoryTitle
         : categoryTitle || t("blog");
-  } else headingMain = t("blog");
+  } else {
+    headingMain = t("blog");
+  }
+
+  const showDefaultDescription = !tag && !categoryRaw && !searchQuery;
 
   return (
     <div className="container py-20">
@@ -163,12 +176,23 @@ export default async function BlogPage({
         <h1 className="text-2xl sm:text-3xl md:text-4xl [@media(min-width:3500px)]:!text-5xl font-bold mb-4">
           {headingMain}
         </h1>
-        {!tag && !categoryRaw ? (
+        {showDefaultDescription ? (
           <p className="text-gray-600 max-w-2xl mx-auto">
             {t("blogDescription")}
           </p>
         ) : null}
       </div>
+
+      <Suspense
+        fallback={
+          <div className="mb-8 h-14 max-w-3xl mx-auto rounded-full bg-gray-100 animate-pulse" />
+        }
+      >
+        <PostSearch
+          placeholderText={t("blogSearchPlaceholder")}
+          initialQuery={searchQuery ?? ""}
+        />
+      </Suspense>
 
       <PostFilters type={type} t={t} />
 

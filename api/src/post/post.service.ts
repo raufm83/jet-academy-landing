@@ -10,6 +10,7 @@ import { CreatePostDto } from './dto/create-post.dto';
 import { UpdatePostDto } from './dto/update-post.dto';
 import * as path from 'path';
 import { slugifyText } from 'src/utils/slugify';
+import { jsonBilingualContains } from 'src/common/json-bilingual-search';
 
 @Injectable()
 export class PostService {
@@ -473,6 +474,7 @@ export class PostService {
     userRole?: Role,
     tag?: string | null,
     blogCategoryId?: string | null,
+    search?: string | null,
   ) {
     try {
       const skip = (page - 1) * limit;
@@ -534,7 +536,8 @@ export class PostService {
       await this.updateEventStatuses();
 
       const tagTrim = tag?.trim();
-      if (tagTrim) {
+      const searchTrim = search?.trim();
+      if (tagTrim || searchTrim) {
         const allItems = await this.prisma.post.findMany({
           where: whereClause,
           orderBy:
@@ -550,9 +553,15 @@ export class PostService {
             },
           },
         });
-        const filtered = allItems.filter((p) =>
-          this.postHasTag(p.tags, tagTrim),
-        );
+        let filtered = allItems;
+        if (tagTrim) {
+          filtered = filtered.filter((p) => this.postHasTag(p.tags, tagTrim));
+        }
+        if (searchTrim) {
+          filtered = filtered.filter((p) =>
+            jsonBilingualContains(p.title as Prisma.JsonValue, searchTrim),
+          );
+        }
         const total = filtered.length;
         const items = filtered
           .slice(skip, skip + +limit)
@@ -948,6 +957,7 @@ export class PostService {
     userRole?: Role,
     tag?: string | null,
     blogCategoryId?: string | null,
+    search?: string | null,
   ) {
     if (userRole === Role.AUTHOR && type !== PostType.BLOG) {
       return {
@@ -971,6 +981,7 @@ export class PostService {
       userRole,
       tag,
       blogCategoryId,
+      search,
     );
   }
 

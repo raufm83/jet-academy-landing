@@ -1,5 +1,7 @@
 import PostGrid from "@/components/views/landing/post/grid";
 import PostFilters from "@/components/views/landing/post/filters";
+import EventFilters from "@/components/views/landing/post/filters/EventFilters";
+import { Suspense } from "react";
 import { Locale } from "@/i18n/request";
 import { PostType } from "@/types/enums";
 import { getAllPosts } from "@/utils/api/post";
@@ -117,7 +119,7 @@ export default async function EventsPage({
 
   const qs = new URLSearchParams();
   if (tag) qs.set("tag", tag);
-  if (eventStatus && eventStatus !== "ALL") qs.set("eventStatus", eventStatus);
+  if (eventStatus) qs.set("eventStatus", eventStatus);
   const paginationBaseUrl = `/events${qs.toString() ? `?${qs}` : ""}`;
 
   return (
@@ -135,6 +137,10 @@ export default async function EventsPage({
       </div>
 
       <PostFilters type={type} t={t} />
+
+      <Suspense fallback={null}>
+        <EventFilters />
+      </Suspense>
 
       <PostGrid
         posts={posts}

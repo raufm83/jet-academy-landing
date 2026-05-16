@@ -192,6 +192,18 @@ export class PostController {
     description: 'Filter posts by author ID',
     example: '507f1f77bcf86cd799439011',
   })
+  @ApiQuery({
+    name: 'search',
+    required: false,
+    type: String,
+    description: 'Search posts by title (az/en/ru)',
+  })
+  @ApiQuery({
+    name: 'blogCategoryId',
+    required: false,
+    type: String,
+    description: 'Filter BLOG posts by category id or uncategorized',
+  })
   @ApiResponse({
     status: 200,
     description: 'List of posts retrieved successfully',
@@ -208,6 +220,7 @@ export class PostController {
     @Query('authorId') authorId?: string,
     @Query('tag') tag?: string,
     @Query('blogCategoryId') blogCategoryId?: string,
+    @Query('search') search?: string,
     @Request() req?: { user?: { id: string; role: string } },
   ) {
     const user = req?.user;
@@ -224,6 +237,7 @@ export class PostController {
       user?.role as Role,
       tag,
       blogCategoryId,
+      search,
     );
   }
 
@@ -263,6 +277,18 @@ export class PostController {
       'Whether to include unpublished posts (requires admin/author role)',
     example: false,
   })
+  @ApiQuery({
+    name: 'search',
+    required: false,
+    type: String,
+    description: 'Search posts by title (az/en/ru)',
+  })
+  @ApiQuery({
+    name: 'blogCategoryId',
+    required: false,
+    type: String,
+    description: 'Filter BLOG posts by category id or uncategorized',
+  })
   @ApiResponse({
     status: 200,
     description: 'List of posts retrieved successfully',
@@ -275,6 +301,7 @@ export class PostController {
     @Query('eventStatus') eventStatus?: string,
     @Query('tag') tag?: string,
     @Query('blogCategoryId') blogCategoryId?: string,
+    @Query('search') search?: string,
     @Request() req?: { user?: { id: string; role: string } },
   ) {
     const user = req?.user;
@@ -288,6 +315,7 @@ export class PostController {
       user?.role as Role,
       tag,
       blogCategoryId,
+      search,
     );
   }
 
@@ -303,6 +331,7 @@ export class PostController {
   @ApiQuery({ name: 'page', required: false, type: Number, example: 1 })
   @ApiQuery({ name: 'limit', required: false, type: Number, example: 10 })
   @ApiQuery({ name: 'includeUnpublished', required: false, type: Boolean, example: true })
+  @ApiQuery({ name: 'search', required: false, type: String })
   @ApiResponse({ status: 200, description: "Author's blog posts" })
   @ApiResponse({ status: 401, description: 'Unauthorized' })
   @ApiResponse({ status: 403, description: 'Forbidden - AUTHOR role required' })
@@ -312,6 +341,7 @@ export class PostController {
     @Query('limit', new ParseIntPipe({ optional: true })) limit = 10,
     @Query('includeUnpublished', new ParseBoolPipe({ optional: true }))
     includeUnpublished = true,
+    @Query('search') search?: string,
   ) {
     return this.postService.findAll(
       page,
@@ -324,6 +354,7 @@ export class PostController {
       Role.AUTHOR,
       undefined,
       undefined,
+      search,
     );
   }
 
