@@ -14,10 +14,7 @@ export class CourseService {
   ): T {
     const raw = course?.imageUrl;
     if (typeof raw !== 'string' || !raw) return course;
-    const fixed = raw.replace(
-      /^(https?:\/\/[^/]+)\/api(\/uploads\/)/i,
-      '$1$2',
-    );
+    const fixed = raw.replace(/^(https?:\/\/[^/]+)\/api(\/uploads\/)/i, '$1$2');
     if (fixed === raw) return course;
     return { ...course, imageUrl: fixed };
   }
@@ -123,17 +120,15 @@ export class CourseService {
    * Qeyd: MongoDB + Prisma-da `[order, createdAt]` birləşik orderBy bəzən yalnız ikinci sahəni tətbiq edir;
    * ona görə əvvəlcə yalnız `order` ilə sıralayırıq, eyni dəyərləri burada ardıcıllıqla möhkəmləndiririk.
    */
-  private buildOrderBy(_sortOrder?: string): Prisma.CourseOrderByWithRelationInput {
+  private buildOrderBy(): Prisma.CourseOrderByWithRelationInput {
     return { order: Prisma.SortOrder.desc };
   }
 
   /** Eyni `order` dəyəri olan kurslar üçün ikinci dərəcəli sıra (yalnız siyahı üzərində). */
-  private tieBreakCourses<T extends { order?: number | null; createdAt?: Date }>(
-    items: T[],
-    sortOrder?: string,
-  ): T[] {
-    const createdDir =
-      sortOrder === 'desc' ? -1 : 1;
+  private tieBreakCourses<
+    T extends { order?: number | null; createdAt?: Date },
+  >(items: T[], sortOrder?: string): T[] {
+    const createdDir = sortOrder === 'desc' ? -1 : 1;
     return [...items].sort((a, b) => {
       const oa = Number(a.order ?? 0);
       const ob = Number(b.order ?? 0);
@@ -153,7 +148,7 @@ export class CourseService {
     try {
       const skip = (page - 1) * limit;
       const whereClause = includeUnpublished ? {} : { published: true };
-      const orderBy = this.buildOrderBy(sortOrder);
+      const orderBy = this.buildOrderBy();
 
       const [total, items] = await Promise.all([
         this.prisma.course.count({
@@ -200,7 +195,7 @@ export class CourseService {
     try {
       const skip = (page - 1) * limit;
       const whereClause = includeUnpublished ? {} : { published: true };
-      const orderBy = this.buildOrderBy(sortOrder);
+      const orderBy = this.buildOrderBy();
 
       const [total, items] = await Promise.all([
         this.prisma.course.count({

@@ -50,8 +50,10 @@ COPY --from=builder /app/node_modules/.prisma ./node_modules/.prisma
 # Generate Prisma client in production
 RUN npx prisma generate
 
-# Expose port 3001
-EXPOSE 3001
+ENV PORT=3002
+ENV NODE_ENV=production
+
+EXPOSE 3002
 
 # Start the application
 CMD ["npm", "run", "start:prod"]

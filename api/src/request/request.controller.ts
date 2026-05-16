@@ -138,12 +138,10 @@ export class RequestController {
       throw new BadRequestException('Invalid request');
     }
     this.verifyMathCaptcha(createRequestDto);
-    const {
-      captchaA: _captchaA,
-      captchaB: _captchaB,
-      captchaAnswer: _captchaAnswer,
-      ...rest
-    } = createRequestDto;
+    const rest = { ...createRequestDto };
+    delete rest.captchaA;
+    delete rest.captchaB;
+    delete rest.captchaAnswer;
     return this.requestService.createRequest(rest);
   }
 

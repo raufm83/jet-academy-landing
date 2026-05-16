@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsNotEmpty, IsString, IsOptional, IsObject } from 'class-validator';
+import { IsOptional } from 'class-validator';
 
 export class CreateGalleryDto {
   @ApiProperty({

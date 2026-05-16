@@ -45,6 +45,7 @@ import { BlogCategoryModule } from './blog-category/blog-category.module';
       serveStaticOptions: {
         index: false,
         setHeaders: (res, path, stat) => {
+          void stat;
           // CORS headers for static files
           res.set('Access-Control-Allow-Origin', '*');
           res.set('Access-Control-Allow-Methods', 'GET, HEAD, OPTIONS');

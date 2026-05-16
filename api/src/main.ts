@@ -9,8 +9,6 @@ import { HttpAdapterHost } from '@nestjs/core';
 import {
   setCorsHeaders,
   CorsExceptionFilter,
-  ALLOWED_ORIGINS,
-  DEFAULT_ORIGIN,
   isAllowedOrigin,
 } from './filters/cors-exception.filter';
 
@@ -23,29 +21,39 @@ async function bootstrap() {
   app.useGlobalFilters(new CorsExceptionFilter(httpAdapterHost));
 
   // CORS – hər sorğuda cavab göndərilməmişdən əvvəl header-lar təyin olunur
-  app.use((req: express.Request, res: express.Response, next: express.NextFunction) => {
-    setCorsHeaders(res, req);
-
-    // Ensure CORS headers are sent with every response (even on error)
-    const originalWriteHead = res.writeHead.bind(res);
-    (res as any).writeHead = function (statusCode: number, arg2?: string | object, arg3?: object) {
+  app.use(
+    (
+      req: express.Request,
+      res: express.Response,
+      next: express.NextFunction,
+    ) => {
       setCorsHeaders(res, req);
-      if (arg3 !== undefined) {
-        return originalWriteHead(statusCode, arg2 as string, arg3);
-      }
-      if (typeof arg2 === 'object' && arg2 !== null) {
-        return originalWriteHead(statusCode, arg2);
-      }
-      return originalWriteHead(statusCode, arg2 as string);
-    };
 
-    if (req.method === 'OPTIONS') {
-      res.sendStatus(204);
-      return;
-    }
+      // Ensure CORS headers are sent with every response (even on error)
+      const originalWriteHead = res.writeHead.bind(res);
+      (res as any).writeHead = function (
+        statusCode: number,
+        arg2?: string | object,
+        arg3?: object,
+      ) {
+        setCorsHeaders(res, req);
+        if (arg3 !== undefined) {
+          return originalWriteHead(statusCode, arg2 as string, arg3);
+        }
+        if (typeof arg2 === 'object' && arg2 !== null) {
+          return originalWriteHead(statusCode, arg2);
+        }
+        return originalWriteHead(statusCode, arg2 as string);
+      };
 
-    next();
-  });
+      if (req.method === 'OPTIONS') {
+        res.sendStatus(204);
+        return;
+      }
+
+      next();
+    },
+  );
 
   // Body parser limitləri - 50MB
   app.use(express.json({ limit: '50mb' }));
