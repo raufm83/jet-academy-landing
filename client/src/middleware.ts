@@ -97,9 +97,6 @@ const ROUTE_PERMISSIONS = {
     "/dashboard/vacancies/edit",
     "/dashboard/settings",
   ],
-
-  /** Normal istifadəçilər üçün ayrıca dashboard məkanı təyin edilməyib */
-  USER: [],
 };
 
 const AUTH_SECRET = process.env.NEXTAUTH_SECRET;
