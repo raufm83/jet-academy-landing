@@ -265,6 +265,47 @@ export class PostService {
     return date > now ? EventStatus.UPCOMING : EventStatus.PAST;
   }
 
+  /** BLOG tipi üçün: boş ⇒ kateqoriya yox; əks halda mövcud id tələb olunur */
+  private async resolveBlogCategoryForCreate(
+    postType: PostType,
+    raw: unknown,
+  ): Promise<string | undefined> {
+    if (postType !== PostType.BLOG) return undefined;
+    const s = typeof raw === 'string' ? raw.trim() : '';
+    if (!s) return undefined;
+    const cat = await this.prisma.blogCategory.findUnique({
+      where: { id: s },
+      select: { id: true },
+    });
+    if (!cat) {
+      throw new BadRequestException('Invalid blogCategoryId');
+    }
+    return s;
+  }
+
+  /**
+   * PATCH: göndərilməyibsə undefined; göndərilib boşdtsa və ya növ BLOG deyilsə null; əks halda mövcud id.
+   */
+  private async resolveBlogCategoryForUpdate(
+    dto: UpdatePostDto,
+    effectivePostType: PostType,
+  ): Promise<string | null | undefined> {
+    const hasProp = Object.prototype.hasOwnProperty.call(dto, 'blogCategoryId');
+    if (!hasProp) return undefined;
+    if (effectivePostType !== PostType.BLOG) return null;
+    const raw = dto.blogCategoryId;
+    const s = raw === undefined || raw === null ? '' : String(raw).trim();
+    if (!s) return null;
+    const cat = await this.prisma.blogCategory.findUnique({
+      where: { id: s },
+      select: { id: true },
+    });
+    if (!cat) {
+      throw new BadRequestException('Invalid blogCategoryId');
+    }
+    return s;
+  }
+
   constructor(private prisma: PrismaService) { }
 
   async create(
@@ -288,6 +329,8 @@ export class PostService {
           ? { ...createPostDto, postType: PostType.BLOG as any }
           : createPostDto;
       const processedData = this.processMultilingualFields(dto);
+      const blogCatRaw = processedData.blogCategoryId;
+      delete processedData.blogCategoryId;
 
       const azPath = createPostDto.imageUrlAz
         ? this.getRelativeImagePath(createPostDto.imageUrlAz)
@@ -358,7 +401,14 @@ export class PostService {
         );
       }
 
+      const effectivePostType = dto.postType ?? PostType.BLOG;
+      const blogCategoryIdResolved = await this.resolveBlogCategoryForCreate(
+        effectivePostType,
+        blogCatRaw,
+      );
+
       const created = await this.prisma.post.create({
+        // `prisma generate` çalışana qədər köhnə client bu sahə üçün `never` verə bilər
         data: {
           title,
           content,
@@ -378,10 +428,13 @@ export class PostService {
             : undefined,
           imageAlt: processedData.imageAlt ?? undefined,
           tags: Array.isArray(processedData.tags) ? processedData.tags : [],
+          ...(blogCategoryIdResolved
+            ? { blogCategoryId: blogCategoryIdResolved }
+            : {}),
           author: {
             connect: { id: authorId },
           },
-        },
+        } as unknown as Parameters<typeof this.prisma.post.create>[0]["data"],
       });
       return this.normalizeImageUrl(created);
     } catch (error) {
@@ -419,6 +472,7 @@ export class PostService {
     authorId?: string,
     userRole?: Role,
     tag?: string | null,
+    blogCategoryId?: string | null,
   ) {
     try {
       const skip = (page - 1) * limit;
@@ -463,6 +517,17 @@ export class PostService {
       // But if userRole is AUTHOR, we already filtered above, so skip here
       if (authorId && userRole !== Role.AUTHOR) {
         whereClause = { ...whereClause, authorId };
+      }
+
+      const catFilterRaw =
+        typeof blogCategoryId === 'string' ? blogCategoryId.trim() : '';
+      if (catFilterRaw && postType === PostType.BLOG) {
+        const catLower = catFilterRaw.toLowerCase();
+        if (catLower === 'uncategorized' || catLower === 'none') {
+          whereClause = { ...whereClause, blogCategoryId: null };
+        } else {
+          whereClause = { ...whereClause, blogCategoryId: catFilterRaw };
+        }
       }
 
       await this.updateOfferStatuses();
@@ -732,6 +797,11 @@ export class PostService {
       let eventStatus = updatePostDto.eventStatus || existingPost.eventStatus;
       const postType = updatePostDto.postType || existingPost.postType;
 
+      const blogCatMutation = await this.resolveBlogCategoryForUpdate(
+        updatePostDto,
+        postType,
+      );
+
       if (
         postType === PostType.OFFERS &&
         (updatePostDto.offerEndDate ||
@@ -768,6 +838,12 @@ export class PostService {
         ...imageData,
         eventStatus: eventStatus,
       };
+
+      if (postType !== PostType.BLOG) {
+        updateData.blogCategoryId = null;
+      } else if (blogCatMutation !== undefined) {
+        updateData.blogCategoryId = blogCatMutation;
+      }
 
       const updated = await this.prisma.post.update({
         where: { id },
@@ -871,6 +947,7 @@ export class PostService {
     authorId?: string,
     userRole?: Role,
     tag?: string | null,
+    blogCategoryId?: string | null,
   ) {
     if (userRole === Role.AUTHOR && type !== PostType.BLOG) {
       return {
@@ -893,6 +970,7 @@ export class PostService {
       authorId,
       userRole,
       tag,
+      blogCategoryId,
     );
   }
 

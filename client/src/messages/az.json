@@ -425,7 +425,9 @@
     "postsFilteredByTag": "«{tag}» mövzusu ilə əlaqəli məqalələr",
     "upcoming": "Gələcək",
     "past": "Keçmiş",
-    "all": "Hamısı"
+    "all": "Hamısı",
+    "blogCategoryUncategorized": "Kateqoriyasız",
+    "postsFilteredBlogUncategorized": "Kateqoriyasız yazılar"
   },
   "blogPage": {
     "pageTitle": "Bloq",

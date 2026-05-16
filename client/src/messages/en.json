@@ -424,7 +424,9 @@
     "postsFilteredByTag": "Articles related to «{tag}»",
     "upcoming": "Upcoming",
     "past": "Past",
-    "all": "All"
+    "all": "All",
+    "blogCategoryUncategorized": "Uncategorized",
+    "postsFilteredBlogUncategorized": "Uncategorized posts"
   },
   "blogPage": {
     "pageTitle": "Blog",

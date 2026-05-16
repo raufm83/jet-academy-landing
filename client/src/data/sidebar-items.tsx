@@ -2,7 +2,6 @@ import { Role } from "@/types/enums";
 import { Session } from "next-auth";
 import {
   MdBook,
-  MdDashboard,
   MdOutlineMessage,
   MdPeople,
   MdPeopleAlt,
@@ -19,6 +18,7 @@ import {
   MdSchool,
   MdHome,
   MdArticle,
+  MdBookmarks,
 } from "react-icons/md";
 
 export interface MenuItem {
@@ -28,24 +28,16 @@ export interface MenuItem {
 }
 
 export function getMenuItems(session: Session | null): MenuItem[] {
-  const baseMenuItemsStart: MenuItem[] = [
-    {
-      name: "İdarə paneli",
-      icon: <MdDashboard size={24} />,
-      path: "/dashboard",
-    },
-  ];
-
   const staffMenuItems: MenuItem[] = [
-    {
-      name: "Tələbə Rəyləri",
-      icon: <MdBook size={24} />,
-      path: "/dashboard/student-projects",
-    },
     {
       name: "Sorğular",
       icon: <MdOutlineMessage size={24} />,
       path: "/dashboard/requests",
+    },
+    {
+      name: "Tələbə Rəyləri",
+      icon: <MdBook size={24} />,
+      path: "/dashboard/student-projects",
     },
     // exams
     {
@@ -61,6 +53,11 @@ export function getMenuItems(session: Session | null): MenuItem[] {
   ];
 
   const adminMenuItems: MenuItem[] = [
+    {
+      name: "Sorğular",
+      icon: <MdOutlineMessage size={24} />,
+      path: "/dashboard/requests",
+    },
     {
       name: "İstifadəçilər",
       icon: <MdPeople size={24} />,
@@ -102,6 +99,11 @@ export function getMenuItems(session: Session | null): MenuItem[] {
       path: "/dashboard/posts",
     },
     {
+      name: "Bloq kateqoriyaları",
+      icon: <MdBookmarks size={24} />,
+      path: "/dashboard/blog-categories",
+    },
+    {
       name: "Tələblər",
       icon: <MdShield size={24} />,
       path: "/dashboard/eligibilities",
@@ -110,11 +112,6 @@ export function getMenuItems(session: Session | null): MenuItem[] {
       name: "Modullar",
       icon: <MdViewModule size={24} />,
       path: "/dashboard/modules",
-    },
-    {
-      name: "Sorğular",
-      icon: <MdOutlineMessage size={24} />,
-      path: "/dashboard/requests",
     },
     {
       name: "Qalereya",
@@ -182,6 +179,11 @@ export function getMenuItems(session: Session | null): MenuItem[] {
       name: "Xəbərlər",
       icon: <MdPostAdd size={24} />,
       path: "/dashboard/posts",
+    },
+    {
+      name: "Bloq kateqoriyaları",
+      icon: <MdBookmarks size={24} />,
+      path: "/dashboard/blog-categories",
     },
     {
       name: "Qalereya",
@@ -262,7 +264,6 @@ export function getMenuItems(session: Session | null): MenuItem[] {
   const isHrManager = session?.user?.role === Role.HRMANAGER;
 
   return [
-    ...(isHrManager ? [] : baseMenuItemsStart),
     ...(session?.user?.role === Role.ADMIN ? adminMenuItems : []),
     ...(session?.user?.role === Role.CRMOPERATOR ? CRMOperatorMenuItems : []),
     ...(session?.user?.role === Role.CONTENTMANAGER

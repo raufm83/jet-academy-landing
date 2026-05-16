@@ -207,6 +207,7 @@ export class PostController {
     @Query('eventStatus') eventStatus = null,
     @Query('authorId') authorId?: string,
     @Query('tag') tag?: string,
+    @Query('blogCategoryId') blogCategoryId?: string,
     @Request() req?: { user?: { id: string; role: string } },
   ) {
     const user = req?.user;
@@ -222,6 +223,7 @@ export class PostController {
       effectiveAuthorId,
       user?.role as Role,
       tag,
+      blogCategoryId,
     );
   }
 
@@ -272,6 +274,7 @@ export class PostController {
     @Query('includeUnpublished') includeUnpublished = false,
     @Query('eventStatus') eventStatus?: string,
     @Query('tag') tag?: string,
+    @Query('blogCategoryId') blogCategoryId?: string,
     @Request() req?: { user?: { id: string; role: string } },
   ) {
     const user = req?.user;
@@ -284,6 +287,7 @@ export class PostController {
       user?.id,
       user?.role as Role,
       tag,
+      blogCategoryId,
     );
   }
 
@@ -318,6 +322,7 @@ export class PostController {
       undefined,
       req.user.id,
       Role.AUTHOR,
+      undefined,
       undefined,
     );
   }

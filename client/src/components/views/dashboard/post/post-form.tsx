@@ -23,6 +23,7 @@ import dynamic from "next/dynamic";
 import Image from "next/image";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { uploadContentImage } from "@/utils/api/post";
+import api from "@/utils/api/axios";
 import {
   getContentImageAbsoluteUrl,
   getPostTagFormValues,
@@ -102,6 +103,9 @@ export default function PostForm({
   const [contentAz, setContentAz] = useState("");
   const [contentEn, setContentEn] = useState("");
   const [tagPairs, setTagPairs] = useState<TagPair[]>([]);
+  const [blogCategories, setBlogCategories] = useState<
+    Array<{ id: string; name: { az: string; en: string } }>
+  >([]);
 
   // Wrapper div refs — used to locate the .ql-container in the DOM via querySelector,
   // which lets us call Quill.find() without relying on next/dynamic ref forwarding.
@@ -155,6 +159,32 @@ export default function PostForm({
   const postType = watch("postType", PostType.BLOG);
   const isOffer = !isAuthor && postType === PostType.OFFERS;
   const isPublished = watch("published", false);
+
+  const blogCatSelectItems = useMemo(
+    () => [
+      { id: "__none__", title: "Kateqoriya seçilməyib" },
+      ...blogCategories.map((c) => ({
+        id: c.id,
+        title: c.name?.az || c.name?.en || c.id,
+      })),
+    ],
+    [blogCategories]
+  );
+
+  useEffect(() => {
+    let cancel = false;
+    api
+      .get<Array<{ id: string; name: { az: string; en: string } }>>(
+        "/blog-categories"
+      )
+      .then(({ data }) => {
+        if (!cancel && Array.isArray(data)) setBlogCategories(data);
+      })
+      .catch(() => {});
+    return () => {
+      cancel = true;
+    };
+  }, []);
 
   const insertContentImage = useCallback(
     async (e: React.ChangeEvent<HTMLInputElement>, lang: "az" | "en") => {
@@ -747,6 +777,46 @@ export default function PostForm({
                 </Select>
               )}
             </div>
+
+            {(isAuthor || postType === PostType.BLOG) && (
+              <div className="space-y-2">
+                <Select
+                  label="Bloq kateqoriyası"
+                  variant="bordered"
+                  items={blogCatSelectItems}
+                  disallowEmptySelection
+                  selectedKeys={
+                    new Set([
+                      watch("blogCategoryId")?.trim()
+                        ? watch("blogCategoryId")!.trim()
+                        : "__none__",
+                    ])
+                  }
+                  onSelectionChange={(keys) => {
+                    const keysArr = [...keys];
+                    const k = typeof keysArr[0] === "string" ? keysArr[0] : "";
+                    setValue(
+                      "blogCategoryId",
+                      !k || k === "__none__" ? "" : k,
+                      { shouldDirty: true, shouldValidate: true }
+                    );
+                  }}
+                  isDisabled={isSubmitting}
+                  classNames={{
+                    trigger:
+                      "bg-white border-2 hover:border-primary focus:border-primary",
+                    value: "bg-transparent",
+                  }}
+                  description="Vacib deyil — boş buraxılsa bloq ümumi siyahıda göstərilir."
+                >
+                  {(item) => (
+                    <SelectItem key={item.id} textValue={item.title}>
+                      {item.title}
+                    </SelectItem>
+                  )}
+                </Select>
+              </div>
+            )}
 
             <div className="space-y-4">
               <div className="space-y-2">

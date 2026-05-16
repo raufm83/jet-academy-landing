@@ -47,6 +47,7 @@ export default function EditPostPage({ params }: { params: { id: string } }) {
       eventStatus: undefined,
       offerStartDate: undefined,
       offerEndDate: undefined,
+      blogCategoryId: "",
     },
   });
 
@@ -90,6 +91,7 @@ export default function EditPostPage({ params }: { params: { id: string } }) {
               ? data.offerEndDate
               : new Date(data.offerEndDate).toISOString()
             : undefined,
+          blogCategoryId: data.blogCategoryId ?? "",
         });
 
         const base = (process.env.NEXT_PUBLIC_CDN_URL || process.env.NEXT_PUBLIC_API_URL || "").replace(/\/api\/?$/, "").replace(/\/+$/, "");
@@ -180,6 +182,17 @@ export default function EditPostPage({ params }: { params: { id: string } }) {
         const imageFile =
           data.image instanceof File ? data.image : data.image?.[0];
         if (imageFile) formData.append("image", imageFile);
+      }
+
+      const effectivePostTypeEdit =
+        (session?.user as any)?.role === Role.AUTHOR
+          ? PostType.BLOG
+          : data.postType;
+      if (effectivePostTypeEdit === PostType.BLOG) {
+        formData.append(
+          "blogCategoryId",
+          data.blogCategoryId?.trim() ?? ""
+        );
       }
 
       const response = await api.patch(`/posts/${params.id}`, formData);

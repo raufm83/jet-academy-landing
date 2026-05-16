@@ -57,6 +57,8 @@ export interface Post {
   updatedAt: string;
   offerStartDate?: Date | string;
   offerEndDate?: Date | string;
+  /** BLOQ üçün mövcud kateqoriya id (SSR API-dən) */
+  blogCategoryId?: string | null;
 }
 
 export interface PostFormInputs {
@@ -77,6 +79,8 @@ export interface PostFormInputs {
   eventStatus?: EventStatus;
   offerStartDate?: string;
   offerEndDate?: string;
+  /** Bloq kateqoriyası Mongo id; boş — kateqoriya seçilməyib */
+  blogCategoryId?: string;
 }
 
 export interface PostsResponse {

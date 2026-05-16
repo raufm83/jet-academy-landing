@@ -39,6 +39,7 @@ export default function CreatePostPage() {
       eventStatus: undefined,
       offerStartDate: undefined,
       offerEndDate: undefined,
+      blogCategoryId: "",
     },
   });
 
@@ -100,6 +101,14 @@ export default function CreatePostPage() {
         "tags",
         JSON.stringify(data.tags ?? { az: [], en: [] })
       );
+
+      const effectivePostType = isAuthor ? PostType.BLOG : data.postType;
+      if (effectivePostType === PostType.BLOG && data.blogCategoryId?.trim()) {
+        formData.append(
+          "blogCategoryId",
+          data.blogCategoryId.trim()
+        );
+      }
 
       if (data.postType === PostType.EVENT) {
         if (data.eventDate) formData.append("eventDate", data.eventDate);

@@ -53,6 +53,14 @@ export class CreatePostDto {
   slug: MultilingualField;
 
   @ApiProperty({
+    description: 'Blog category Mongo ObjectId (BLOG posts only)',
+    required: false,
+  })
+  @IsString()
+  @IsOptional()
+  blogCategoryId?: string;
+
+  @ApiProperty({
     description: 'Whether the post is published',
     required: false,
     default: false,

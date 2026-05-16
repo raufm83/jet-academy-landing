@@ -376,8 +376,11 @@
     "noPostsFound": "Посты не найдены",
     "tryDifferentFilters": "Скоро появятся!",
     "postsFilteredByTag": "Статьи по теме «{tag}»",
+    "all": "Все",
     "noActiveCampaignsLine1": "Сейчас нет активных акций.",
-    "noActiveCampaignsLine2": "Новые предложения появятся здесь после публикации."
+    "noActiveCampaignsLine2": "Новые предложения появятся здесь после публикации.",
+    "blogCategoryUncategorized": "Без категории",
+    "postsFilteredBlogUncategorized": "Записи без категории"
   },
   "blogPage": {
     "pageTitle": "Блог",

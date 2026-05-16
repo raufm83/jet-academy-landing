@@ -72,6 +72,9 @@ model Post {
   author    User     @relation(fields: [authorId], references: [id], onDelete: Cascade)
   postType  PostType @default(BLOG)
 
+  blogCategoryId String?       @db.ObjectId
+  blogCategory   BlogCategory? @relation(fields: [blogCategoryId], references: [id], onDelete: SetNull)
+
   eventDate   DateTime?
   eventStatus EventStatus?
 
@@ -85,6 +88,19 @@ model Post {
   @@index([authorId])
   @@index([postType])
   @@index([eventStatus])
+  @@index([blogCategoryId])
+}
+
+/// Bloq üçün kateqoriyalar (marketinq /bloq filteri üçün).
+model BlogCategory {
+  id        String            @id @default(auto()) @map("_id") @db.ObjectId
+  name      MultilingualText
+  sortOrder Int               @default(0)
+  posts     Post[]
+  createdAt DateTime          @default(now())
+  updatedAt DateTime          @updatedAt
+
+  @@index([sortOrder])
 }
 
 model PageMeta {

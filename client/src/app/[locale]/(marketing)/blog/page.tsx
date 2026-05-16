@@ -1,8 +1,11 @@
 import PostGrid from "@/components/views/landing/post/grid";
 import PostFilters from "@/components/views/landing/post/filters";
+import BlogCategoryFilter from "@/components/views/landing/post/blog-category-filter";
+import { BLOG_CATEGORY_UNCATEGORIZED } from "@/data/blog-category";
 import { Locale } from "@/i18n/request";
 import { PostType } from "@/types/enums";
 import { getAllPosts } from "@/utils/api/post";
+import { getBlogCategoriesOrdered } from "@/utils/api/blog-category";
 import { Metadata } from "next";
 import { getTranslations } from "next-intl/server";
 import { resolvePageMeta } from "@/utils/api/page-meta";
@@ -19,6 +22,7 @@ interface PostsPageProps {
     page?: string;
     limit?: string;
     tag?: string;
+    category?: string;
   };
 }
 
@@ -55,10 +59,18 @@ export async function generateMetadata({
       description: resolvedMeta.description,
     },
     robots: {
-      index: !searchParams.page && !searchParams.limit,
+      index:
+        !searchParams.page &&
+        !searchParams.limit &&
+        !searchParams.tag &&
+        !searchParams.category,
       follow: true,
       googleBot: {
-        index: !searchParams.page && !searchParams.limit,
+        index:
+          !searchParams.page &&
+          !searchParams.limit &&
+          !searchParams.tag &&
+          !searchParams.category,
         follow: true,
         "max-snippet": -1,
         "max-image-preview": "large",
@@ -78,16 +90,23 @@ export default async function BlogPage({
   const type = PostType.BLOG;
   const tag =
     typeof searchParams.tag === "string" ? searchParams.tag.trim() : undefined;
+  const categoryRaw =
+    typeof searchParams.category === "string"
+      ? searchParams.category.trim()
+      : "";
+  const blogCategoryQuery = categoryRaw || undefined;
 
-  const [postsData, t] = await Promise.all([
+  const [postsData, t, categories] = await Promise.all([
     getAllPosts({
       page,
       limit,
       postType: type,
       includeBlogs: true,
       tag,
+      blogCategoryId: blogCategoryQuery,
     }),
     getTranslations({ locale, namespace: "postsPage" }),
+    getBlogCategoriesOrdered(),
   ]);
 
   const { items: posts, meta } = postsData;
@@ -114,16 +133,37 @@ export default async function BlogPage({
 
   const qs = new URLSearchParams();
   if (tag) qs.set("tag", tag);
+  if (categoryRaw) qs.set("category", categoryRaw);
   const paginationBaseUrl = `/blog${qs.toString() ? `?${qs}` : ""}`;
+
+  const categoryLower = categoryRaw.toLowerCase();
+  const categoryMatch = categories.find((c) => c.id === categoryRaw);
+  const categoryTitle =
+    categoryRaw && categoryLower === BLOG_CATEGORY_UNCATEGORIZED
+      ? t("postsFilteredBlogUncategorized")
+      : categoryMatch
+        ? (locale === "en"
+          ? categoryMatch.name.en || categoryMatch.name.az
+          : categoryMatch.name.az || categoryMatch.name.en)
+        : "";
+
+  let headingMain: string;
+  if (tag) headingMain = t("postsFilteredByTag", { tag });
+  else if (categoryRaw) {
+    headingMain =
+      categoryLower === BLOG_CATEGORY_UNCATEGORIZED
+        ? categoryTitle
+        : categoryTitle || t("blog");
+  } else headingMain = t("blog");
 
   return (
     <div className="container py-20">
       <JsonLd data={schema} />
       <div className="mb-12 text-center">
         <h1 className="text-2xl sm:text-3xl md:text-4xl [@media(min-width:3500px)]:!text-5xl font-bold mb-4">
-          {tag ? t("postsFilteredByTag", { tag }) : t("blog")}
+          {headingMain}
         </h1>
-        {!tag ? (
+        {!tag && !categoryRaw ? (
           <p className="text-gray-600 max-w-2xl mx-auto">
             {t("blogDescription")}
           </p>
@@ -131,6 +171,15 @@ export default async function BlogPage({
       </div>
 
       <PostFilters type={type} t={t} />
+
+      <BlogCategoryFilter
+        locale={locale}
+        categories={categories}
+        activeCategory={categoryRaw}
+        tag={tag}
+        tAll={t("all")}
+        tUncategorized={t("blogCategoryUncategorized")}
+      />
 
       <PostGrid
         posts={posts}

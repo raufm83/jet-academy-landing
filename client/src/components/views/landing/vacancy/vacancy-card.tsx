@@ -151,8 +151,9 @@ export default function VacancyCard({ vacancy, locale }: VacancyCardProps) {
               className="shrink-0 text-xl text-jsyellow"
               aria-hidden
             />
-            <p className="min-w-0 text-xs font-semibold leading-tight text-[#374151] sm:text-sm">
-              {experienceText || "—"}
+            <p className="flex min-w-0 flex-1 items-baseline gap-2 text-xs font-semibold leading-tight text-[#374151] sm:text-sm">
+              <span className="shrink-0">Təcrübə :</span>
+              <span className="min-w-0">{experienceText || "—"}</span>
             </p>
           </div>
         </div>

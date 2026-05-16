@@ -151,10 +151,10 @@ export default async function VacancySinglePage({ params }: VacancySinglePagePro
     <BreadcrumbContextWrapper title={title}>
       <JsonLd data={jobPostingSchema} />
 
-      <div className="w-full min-w-0 bg-transparent">
-        <section className="w-full min-w-0 pb-16 pt-6 sm:pb-20 sm:pt-8 md:pt-10">
+      <div className="w-full min-w-0 bg-transparent -mt-4 pt-2 sm:pt-2.5 md:pt-3">
+        <section className="w-full min-w-0 pb-16 sm:pb-20 pt-0">
           <div className="container mx-auto px-4 sm:px-6 md:px-8 lg:px-12 xl:px-16 2xl:px-20 [@media(min-width:2500px)]:px-24">
-            <div className="mx-auto mb-6 w-full max-w-4xl">
+            <div className="mx-auto mb-4 w-full max-w-4xl sm:mb-5">
               <Breadcrumbs dynamicTitle={title} />
             </div>
 
@@ -191,21 +191,34 @@ export default async function VacancySinglePage({ params }: VacancySinglePagePro
                 </h1>
               </header>
 
-              <div className="flex flex-col gap-5 border-b border-neutral-200 bg-white px-5 py-5 sm:flex-row sm:flex-wrap sm:items-center sm:justify-between sm:gap-6 sm:px-8 sm:py-6">
-                <div className="flex min-w-0 items-center gap-3 sm:max-w-[33%] sm:flex-1">
+              <div className="flex flex-col border-b border-neutral-200 bg-white sm:flex-row">
+                <div className="flex min-h-[4.75rem] flex-1 flex-row flex-wrap items-center justify-center gap-3 border-b border-neutral-200 px-5 py-4 sm:min-h-[5.75rem] sm:border-b-0 sm:border-r sm:px-4 sm:py-6">
                   <MdCalendarToday
                     className="shrink-0 text-2xl text-jsyellow"
                     aria-hidden
                   />
-                  <p className="text-sm font-semibold text-[#1F2937]">{deadlineText}</p>
+                  <p className="text-center text-sm font-semibold text-[#1F2937]">
+                    {deadlineText}
+                  </p>
                 </div>
-                <div className="flex min-w-0 items-center gap-3 sm:max-w-[33%] sm:flex-1">
-                  <MdWorkOutline className="shrink-0 text-2xl text-jsyellow" aria-hidden />
-                  <p className="text-sm font-semibold text-[#1F2937]">{employmentType}</p>
+                <div className="flex min-h-[4.75rem] flex-1 flex-row flex-wrap items-center justify-center gap-3 border-b border-neutral-200 px-5 py-4 sm:min-h-[5.75rem] sm:border-b-0 sm:border-r sm:px-4 sm:py-6">
+                  <MdWorkOutline
+                    className="shrink-0 text-2xl text-jsyellow"
+                    aria-hidden
+                  />
+                  <p className="max-w-[14rem] text-center text-sm font-semibold leading-snug text-[#1F2937] sm:max-w-[12rem]">
+                    {employmentType}
+                  </p>
                 </div>
-                <div className="flex min-w-0 items-center gap-3 sm:max-w-[33%] sm:flex-1">
-                  <MdTrendingUp className="shrink-0 text-2xl text-jsyellow" aria-hidden />
-                  <p className="text-sm font-semibold text-[#1F2937]">{experienceText}</p>
+                <div className="flex min-h-[4.75rem] flex-1 flex-row flex-wrap items-center justify-center gap-3 px-5 py-4 sm:min-h-[5.75rem] sm:px-4 sm:py-6">
+                  <MdTrendingUp
+                    className="shrink-0 text-2xl text-jsyellow"
+                    aria-hidden
+                  />
+                  <p className="flex max-w-[16rem] flex-wrap items-center justify-center gap-x-1.5 text-center text-sm font-semibold text-[#1F2937]">
+                    <span className="shrink-0">Təcrübə :</span>
+                    <span>{experienceText}</span>
+                  </p>
                 </div>
               </div>
 

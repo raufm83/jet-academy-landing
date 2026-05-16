@@ -60,6 +60,9 @@ const ROUTE_PERMISSIONS = {
     "/dashboard/posts",
     "/dashboard/posts/create",
     "/dashboard/posts/edit",
+    "/dashboard/blog-categories",
+    "/dashboard/blog-categories/create",
+    "/dashboard/blog-categories/edit",
     "/dashboard/team",
     "/dashboard/team/create",
     "/dashboard/team/edit",
@@ -90,6 +93,9 @@ const ROUTE_PERMISSIONS = {
     "/dashboard/vacancies/edit",
     "/dashboard/settings",
   ],
+
+  /** Normal istifadəçilər üçün ayrıca dashboard məkanı təyin edilməyib */
+  USER: [],
 };
 
 const AUTH_SECRET = process.env.NEXTAUTH_SECRET;

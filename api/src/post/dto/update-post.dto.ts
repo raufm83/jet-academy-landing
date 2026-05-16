@@ -33,6 +33,15 @@ class MultilingualFieldUpdate {
 
 export class UpdatePostDto {
   @ApiProperty({
+    description:
+      'Blog category id, or omit; empty clears category (BLOG posts only)',
+    required: false,
+  })
+  @IsString()
+  @IsOptional()
+  blogCategoryId?: string;
+
+  @ApiProperty({
     description: 'Title of the post (multilingual)',
     type: MultilingualFieldUpdate,
     required: false,
