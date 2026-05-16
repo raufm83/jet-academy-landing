@@ -263,6 +263,7 @@ export function getMenuItems(session: Session | null): MenuItem[] {
 
   const isHrManager = session?.user?.role === Role.HRMANAGER;
 
+  
   return [
     ...(session?.user?.role === Role.ADMIN ? adminMenuItems : []),
     ...(session?.user?.role === Role.CRMOPERATOR ? CRMOperatorMenuItems : []),
