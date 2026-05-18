@@ -16,6 +16,8 @@ import { collectionPageGraph, SITE } from "@/data/site-schema";
 import JsonLd from "@/components/seo/json-ld";
 import FaqSection from "@/components/views/landing/faq/faq-section";
 
+export const dynamic = "force-dynamic";
+
 interface PostsPageProps {
   params: {
     locale: string;
@@ -201,8 +203,8 @@ export default async function BlogPage({
         categories={categories}
         activeCategory={categoryRaw}
         tag={tag}
-        tAll={t("all")}
-        tUncategorized={t("blogCategoryUncategorized")}
+        title={t("categoriesTitle")}
+        allLabel={t("all")}
       />
 
       <PostGrid

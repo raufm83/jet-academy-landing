@@ -383,7 +383,8 @@
     "noActiveCampaignsLine1": "Сейчас нет активных акций.",
     "noActiveCampaignsLine2": "Новые предложения появятся здесь после публикации.",
     "blogCategoryUncategorized": "Без категории",
-    "postsFilteredBlogUncategorized": "Записи без категории"
+    "postsFilteredBlogUncategorized": "Записи без категории",
+    "categoriesTitle": "Категории"
   },
   "blogPage": {
     "pageTitle": "Блог",

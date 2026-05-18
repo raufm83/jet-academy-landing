@@ -429,7 +429,8 @@
     "past": "Past",
     "all": "All",
     "blogCategoryUncategorized": "Uncategorized",
-    "postsFilteredBlogUncategorized": "Uncategorized posts"
+    "postsFilteredBlogUncategorized": "Uncategorized posts",
+    "categoriesTitle": "Categories"
   },
   "blogPage": {
     "pageTitle": "Blog",

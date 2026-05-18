@@ -429,7 +429,8 @@
     "past": "Keçmiş",
     "all": "Hamısı",
     "blogCategoryUncategorized": "Kateqoriyasız",
-    "postsFilteredBlogUncategorized": "Kateqoriyasız yazılar"
+    "postsFilteredBlogUncategorized": "Kateqoriyasız yazılar",
+    "categoriesTitle": "Kateqoriyalar"
   },
   "blogPage": {
     "pageTitle": "Bloq",

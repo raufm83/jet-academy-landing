@@ -89,7 +89,8 @@ export default async function EventsPage({
       limit,
       postType: type,
       includeBlogs: true,
-      eventStatus: !eventStatus || eventStatus === "ALL" ? (eventStatus === "ALL" ? undefined : "UPCOMING") : eventStatus,
+      eventStatus:
+        eventStatus && eventStatus !== "ALL" ? eventStatus : undefined,
       tag,
     }),
     getTranslations({ locale, namespace: "postsPage" }),
@@ -119,7 +120,7 @@ export default async function EventsPage({
 
   const qs = new URLSearchParams();
   if (tag) qs.set("tag", tag);
-  if (eventStatus) qs.set("eventStatus", eventStatus);
+  if (eventStatus && eventStatus !== "ALL") qs.set("eventStatus", eventStatus);
   const paginationBaseUrl = `/events${qs.toString() ? `?${qs}` : ""}`;
 
   return (

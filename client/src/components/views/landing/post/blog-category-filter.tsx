@@ -2,8 +2,7 @@
 
 import type { BlogCategory } from "@/types/blog-category";
 import { Link } from "@/i18n/routing";
-import { BLOG_CATEGORY_UNCATEGORIZED } from "@/data/blog-category";
-
+import { Locale } from "@/i18n/request";
 function buildBlogQuery(category?: string, tag?: string) {
   const q = new URLSearchParams();
   if (tag?.trim()) q.set("tag", tag.trim());
@@ -12,13 +11,20 @@ function buildBlogQuery(category?: string, tag?: string) {
   return s ? `?${s}` : "";
 }
 
+function categoryLabel(category: BlogCategory, locale: Locale): string {
+  if (locale === "en" || locale === "ru") {
+    return category.name.en || category.name.az;
+  }
+  return category.name.az || category.name.en;
+}
+
 interface BlogCategoryFilterProps {
-  locale: string;
+  locale: Locale;
   categories: BlogCategory[];
   activeCategory?: string;
   tag?: string;
-  tAll: string;
-  tUncategorized: string;
+  title: string;
+  allLabel: string;
 }
 
 export default function BlogCategoryFilter({
@@ -26,57 +32,42 @@ export default function BlogCategoryFilter({
   categories,
   activeCategory = "",
   tag,
-  tAll,
-  tUncategorized,
+  title,
+  allLabel,
 }: BlogCategoryFilterProps) {
-  const labelLocale = locale === "en" ? "en" : locale === "ru" ? "en" : "az";
-
-  const itemClass = (active: boolean) =>
-    [
-      "inline-flex items-center rounded-full px-4 py-2 text-sm font-medium transition-colors",
-      active
-        ? "bg-jsyellow text-white shadow-sm"
-        : "bg-gray-100 text-jsblack hover:bg-jsyellow/15",
-    ].join(" ");
-
   if (categories.length === 0) {
     return null;
   }
 
+  const pillClass = (active: boolean) =>
+    [
+      "rounded-full px-4 py-2 text-sm font-medium transition-all",
+      active
+        ? "bg-jsyellow text-white shadow-sm"
+        : "bg-jsyellow/10 text-jsblack hover:bg-jsyellow/20",
+    ].join(" ");
+
   const qsAll = buildBlogQuery(undefined, tag);
-  const qsUn = buildBlogQuery(BLOG_CATEGORY_UNCATEGORIZED, tag);
 
   return (
-    <div className="w-full mb-10">
-      <h2 className="mb-3 text-center text-xl font-bold text-jsblack sm:text-2xl md:text-3xl">
-        {locale === "az"
-          ? "Kateqoriyalar"
-          : locale === "ru"
-            ? "Категории"
-            : "Categories"}
-      </h2>
-      <div className="flex flex-wrap justify-center gap-2 px-2">
-        <Link href={`/blog${qsAll}`} className={itemClass(!activeCategory)}>
-          {tAll}
+    <div className="mb-10 w-full px-4">
+      <p className="mb-3 text-center text-xl font-semibold tracking-wide text-jsblack sm:text-2xl">
+        {title}
+      </p>
+      <div className="mx-auto flex max-w-4xl flex-wrap justify-center gap-2">
+        <Link href={`/blog${qsAll}`} className={pillClass(!activeCategory)}>
+          {allLabel}
         </Link>
-        <Link
-          href={`/blog${qsUn}`}
-          className={
-            itemClass(activeCategory.toLowerCase() === BLOG_CATEGORY_UNCATEGORIZED)
-          }
-        >
-          {tUncategorized}
-        </Link>
-        {categories.map((c) => {
-          const qs = buildBlogQuery(c.id, tag);
-          const active = activeCategory === c.id;
-          const title =
-            labelLocale === "en"
-              ? c.name.en || c.name.az
-              : c.name.az || c.name.en;
+        {categories.map((category) => {
+          const qs = buildBlogQuery(category.id, tag);
+          const isActive = activeCategory === category.id;
           return (
-            <Link key={c.id} href={`/blog${qs}`} className={itemClass(active)}>
-              {title}
+            <Link
+              key={category.id}
+              href={`/blog${qs}`}
+              className={pillClass(isActive)}
+            >
+              {categoryLabel(category, locale)}
             </Link>
           );
         })}
