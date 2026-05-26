@@ -12,9 +12,7 @@ import axios, { AxiosError } from "axios";
 import api from "@/utils/api/axios";
 import Select from "@/components/ui/select";
 import { MdClose, MdOutlineCheck } from "react-icons/md";
-import SimpleCaptcha, {
-  type SimpleCaptchaContext,
-} from "@/components/shared/simple-captcha";
+// CAPTCHA removed - no import needed
 
 type CourseItem = { id: string; title?: Record<string, string> };
 type FormValues = RequestFormInputs & { website?: string };
@@ -25,9 +23,7 @@ const ContactFormForSingle = () => {
   const locale = useLocale() as Locale;
   const { isSpam, honeypotName } = useSpamProtection();
   const [success, setSuccess] = useState(false);
-  const [captchaValid, setCaptchaValid] = useState(false);
-  const [captchaContext, setCaptchaContext] = useState<SimpleCaptchaContext>();
-  const [captchaKey, setCaptchaKey] = useState(0);
+  // CAPTCHA state removed
   const [courseOptions, setCourseOptions] = useState<
     { value: string; label: string }[]
   >([]);
@@ -87,16 +83,10 @@ const ContactFormForSingle = () => {
   }, [courseOptions, selectedCourseId]);
 
   const onSubmit: SubmitHandler<FormValues> = async (data) => {
-    if (!captchaValid || !captchaContext) {
-      toast.error(t("captchaRequired") || "Zəhmət olmasa CAPTCHA-nı düzgün həll edin.");
-      return;
-    }
+
     if (isSpam(data)) {
       setSuccess(true);
       reset({ childAge: 12, childLanguage: Language.AZ, courseId: ADVICE_VALUE as any, website: "" });
-      setCaptchaKey((k) => k + 1);
-      setCaptchaValid(false);
-      setCaptchaContext(undefined);
       return;
     }
     try {
@@ -106,27 +96,19 @@ const ContactFormForSingle = () => {
         name: data.name?.trim(),
         surname: data.surname?.trim(),
         number: data.number?.trim(),
-        // Backend DTO məcburilər:
         childAge: Number(data.childAge) || 12,
         childLanguage: data.childLanguage || Language.AZ,
-        captchaA: captchaContext.a,
-        captchaB: captchaContext.b,
-        captchaAnswer: Number(captchaContext.answer),
-        // Kurs seçimi haqqında info JSON-a düşür
         additionalInfo: isAdvice
           ? { kind: "advice" }
           : {
-              kind: "course",
-              courseId: data.courseId,
-              courseTitle: selectedCourseTitle,
-            },
+            kind: "course",
+            courseId: data.courseId,
+            courseTitle: selectedCourseTitle,
+          },
       };
 
       await api.post("/requests", payload);
       reset({ childAge: 12, childLanguage: Language.AZ, courseId: ADVICE_VALUE as any });
-      setCaptchaKey((k) => k + 1);
-      setCaptchaValid(false);
-      setCaptchaContext(undefined);
       setSuccess(true);
     } catch (err) {
       console.error("Error sending message:", err);
@@ -257,7 +239,6 @@ const ContactFormForSingle = () => {
             />
           </div>
 
-          {/* Gizli sahələr (backend tələb edir) */}
           <input type="hidden" {...register("childAge")} />
           <input type="hidden" {...register("childLanguage")} />
           <input
@@ -269,17 +250,6 @@ const ContactFormForSingle = () => {
             {...register(honeypotName as keyof FormValues)}
           />
 
-          <SimpleCaptcha
-            key={captchaKey}
-            label={t("captchaLabel")}
-            errorText={t("captchaInvalid")}
-            onChange={(valid, context) => {
-              setCaptchaValid(valid);
-              setCaptchaContext(context);
-            }}
-          />
-
-          {/* Göndər düyməsi */}
           <div>
             <motion.button
               type="submit"

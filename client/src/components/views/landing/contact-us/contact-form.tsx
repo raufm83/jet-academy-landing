@@ -12,9 +12,7 @@ import api from "@/utils/api/axios";
 import Select from "@/components/ui/select";
 import { MdClose, MdOutlineCheck } from "react-icons/md";
 import { Locale } from "@/i18n/request";
-import SimpleCaptcha, {
-  type SimpleCaptchaContext,
-} from "@/components/shared/simple-captcha";
+
 
 type CourseItem = { id: string; title?: Record<string, string> };
 const ADVICE_VALUE = "__advice__";
@@ -27,9 +25,9 @@ const ContactForm = () => {
   const locale = useLocale() as Locale;
   const { isSpam, honeypotName } = useSpamProtection();
   const [success, setSuccess] = useState(false);
-  const [captchaValid, setCaptchaValid] = useState(false);
-  const [captchaContext, setCaptchaContext] = useState<SimpleCaptchaContext>();
-  const [captchaKey, setCaptchaKey] = useState(0);
+  
+  
+  
   const [courseOptions, setCourseOptions] = useState<
     { value: string; label: string }[]
   >([]);
@@ -89,16 +87,9 @@ const ContactForm = () => {
   }, [courseOptions, selectedCourseId]);
 
   const onSubmit: SubmitHandler<FormValues> = async (data) => {
-    if (!captchaValid || !captchaContext) {
-      toast.error(t("captchaRequired") || "Zəhmət olmasa CAPTCHA-nı düzgün həll edin.");
-      return;
-    }
     if (isSpam(data)) {
       setSuccess(true);
       reset({ childAge: 17, childLanguage: Language.AZ, courseId: ADVICE_VALUE as any, website: "" });
-      setCaptchaKey((k) => k + 1);
-      setCaptchaValid(false);
-      setCaptchaContext(undefined);
       return;
     }
     try {
@@ -110,9 +101,6 @@ const ContactForm = () => {
         number: data.number?.trim(),
         childAge: Number(data.childAge),
         childLanguage: data.childLanguage || Language.AZ,
-        captchaA: captchaContext.a,
-        captchaB: captchaContext.b,
-        captchaAnswer: Number(captchaContext.answer),
         additionalInfo: isAdvice
           ? { kind: "advice" }
           : {
@@ -124,9 +112,6 @@ const ContactForm = () => {
 
       await api.post("/requests", payload);
       reset({ childAge: 17, childLanguage: Language.AZ, courseId: ADVICE_VALUE as any });
-      setCaptchaKey((k) => k + 1);
-      setCaptchaValid(false);
-      setCaptchaContext(undefined);
       setSuccess(true);
     } catch (err) {
       console.error("Error sending message:", err);
@@ -143,10 +128,9 @@ const ContactForm = () => {
     setValue("courseId" as any, String(value), { shouldValidate: true });
   };
 
-  // Sadece harf ve boşluk kabul eden handler
+  
   const handleNameInput = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
-    // Sadece harf, boşluk ve Azerbaycan alfabesi karakterleri
     const filtered = value.replace(/[^a-zA-ZəğıöüçşƏĞIÖÜÇŞ\s]/g, '');
     if (value !== filtered) {
       e.target.value = filtered;
@@ -164,7 +148,7 @@ const ContactForm = () => {
         whileInView={{ opacity: 1 }}
         viewport={{ once: true }}
       >
-        {/* Ad */}
+        
         <div className="space-y-2">
           <input
             type="text"
@@ -185,7 +169,7 @@ const ContactForm = () => {
           {errors.name && <p className="text-red-500 text-sm pl-2">{errors.name.message}</p>}
         </div>
 
-        {/* Soyad */}
+        
         <div className="space-y-2">
           <input
             type="text"
@@ -206,7 +190,7 @@ const ContactForm = () => {
           {errors.surname && <p className="text-red-500 text-sm pl-2">{errors.surname.message}</p>}
         </div>
 
-        {/* Telefon */}
+        
         <div className="space-y-2">
           <input
             type="tel"
@@ -225,7 +209,7 @@ const ContactForm = () => {
           {errors.number && <p className="text-red-500 text-sm pl-2">{errors.number.message}</p>}
         </div>
 
-        {/* Kurs seçimi */}
+        
         <Select
           options={courseOptions}
           error={errors.courseId as any}
@@ -245,16 +229,6 @@ const ContactForm = () => {
           {...register(honeypotName as keyof FormValues)}
         />
 
-        <SimpleCaptcha
-          key={captchaKey}
-          label={t("captchaLabel")}
-          errorText={t("captchaInvalid")}
-          onChange={(valid, context) => {
-            setCaptchaValid(valid);
-            setCaptchaContext(context);
-          }}
-        />
-
         <motion.button
           type="submit"
           className="w-full bg-jsyellow text-white font-semibold py-4 px-8 
@@ -268,7 +242,7 @@ const ContactForm = () => {
         </motion.button>
       </motion.form>
 
-      {/* Uğur modalı */}
+      
       <AnimatePresence>
         {success && (
           <motion.div

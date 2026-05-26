@@ -12,9 +12,6 @@ import axios, { AxiosError } from "axios";
 import api from "@/utils/api/axios";
 import Select from "@/components/ui/select";
 import { MdClose, MdOutlineCheck } from "react-icons/md";
-import SimpleCaptcha, {
-  type SimpleCaptchaContext,
-} from "@/components/shared/simple-captcha";
 
 type CourseItem = { id: string; title?: Record<string, string> };
 type FormValues = RequestFormInputs & { website?: string };
@@ -25,9 +22,6 @@ const ContactFormForBlog = () => {
   const locale = useLocale() as Locale;
   const { isSpam, honeypotName } = useSpamProtection();
   const [success, setSuccess] = useState(false);
-  const [captchaValid, setCaptchaValid] = useState(false);
-  const [captchaContext, setCaptchaContext] = useState<SimpleCaptchaContext>();
-  const [captchaKey, setCaptchaKey] = useState(0);
   const [courseOptions, setCourseOptions] = useState<
     { value: string; label: string }[]
   >([]);
@@ -86,16 +80,9 @@ const ContactFormForBlog = () => {
   }, [courseOptions, selectedCourseId]);
 
   const onSubmit: SubmitHandler<FormValues> = async (data) => {
-    if (!captchaValid || !captchaContext) {
-      toast.error(t("captchaRequired") || "Zəhmət olmasa CAPTCHA-nı düzgün həll edin.");
-      return;
-    }
     if (isSpam(data)) {
       setSuccess(true);
       reset({ childAge: 12, childLanguage: Language.AZ, website: "" });
-      setCaptchaKey((k) => k + 1);
-      setCaptchaValid(false);
-      setCaptchaContext(undefined);
       return;
     }
     try {
@@ -109,9 +96,6 @@ const ContactFormForBlog = () => {
         // Backend DTO məcburilər:
         childAge: Number(data.childAge) || 12,
         childLanguage: data.childLanguage || Language.AZ,
-        captchaA: captchaContext.a,
-        captchaB: captchaContext.b,
-        captchaAnswer: Number(captchaContext.answer),
 
         // Kurs seçiminə dair info: JSON-a düşür
         additionalInfo: isAdvice
@@ -125,9 +109,6 @@ const ContactFormForBlog = () => {
 
       await api.post("/requests", payload);
       reset({ childAge: 12, childLanguage: Language.AZ, courseId: ADVICE_VALUE });
-      setCaptchaKey((k) => k + 1);
-      setCaptchaValid(false);
-      setCaptchaContext(undefined);
       setSuccess(true);
     } catch (err) {
       console.error("Error sending message:", err);
@@ -234,7 +215,7 @@ const ContactFormForBlog = () => {
           {errors.number && <p className="text-red-500 text-sm pl-2">{errors.number.message}</p>}
         </div>
 
-        {/* Kurs seçimi — siyahının ilkində “Məsləhət almaq istəyirəm” */}
+        {/* Kurs seçimi — siyahının ilkində "Məsləhət almaq istəyirəm" */}
         <Select
           label={t("course.label") ?? "Kurs seçimi"}
           options={courseOptions}
@@ -256,16 +237,6 @@ const ContactFormForBlog = () => {
           aria-hidden
           className="absolute opacity-0 pointer-events-none h-0 w-0"
           {...register(honeypotName as keyof FormValues)}
-        />
-
-        <SimpleCaptcha
-          key={captchaKey}
-          label={t("captchaLabel")}
-          errorText={t("captchaInvalid")}
-          onChange={(valid, context) => {
-            setCaptchaValid(valid);
-            setCaptchaContext(context);
-          }}
         />
 
         {/* Göndər düyməsi */}

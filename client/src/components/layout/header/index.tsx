@@ -10,16 +10,17 @@ import Logo from "./logo";
 import NavLink from "./nav-link";
 import Button from "@/components/ui/button";
 import LanguageSwitcher from "@/components/shared/language-switcher";
-import { useContactModal } from "@/hooks/useContactModal";
+
 import { getNavLinks } from "@/data/navlinks";
 import { usePathname } from "@/i18n/routing";
+import { useContactModal } from "@/hooks/useContactModal";
 import { usePublicSectionVisibility } from "@/hooks/use-public-section-visibility";
 
 export default function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   /** Hydration: server və ilk klient renderi eyni olsun — mount olana qədər filtr tətbiq olunmur */
   const [navReady, setNavReady] = useState(false);
-  const { toggle } = useContactModal();
+
   const t = useTranslations("navbar");
   const locale = useLocale();
   const sectionVis = usePublicSectionVisibility();
@@ -35,6 +36,7 @@ export default function Header() {
     locale,
   );
   const path = usePathname();
+  const { toggle: toggleContact } = useContactModal();
 
   useEffect(() => {
     setNavReady(true);
@@ -92,20 +94,15 @@ export default function Header() {
                 />
               </li>
             ))}
+              <Button
+                onClick={() => { setIsMenuOpen(false); toggleContact(); }}
+                icon={<HiOutlinePhone size={18} />}
+                className="font-medium text-xs sm:text-sm [@media(min-width:2500px)]:!text-2xl lg:text-sm xl:text-base h-8 sm:h-9 lg:h-9 xl:h-10 2xl:h-12 px-2 sm:px-3 lg:px-3 xl:px-5 2xl:px-6 bg-jsyellow hover:bg-jsyellow/90 text-white hover:text-white"
+                text={t("contactus")}
+              />
           </ul>
 
-          <div className="flex shrink-0 items-center gap-1.5 sm:gap-2 lg:gap-2 xl:gap-3">
-            <LanguageSwitcher />
-            <Button
-              onClick={() => {
-                setIsMenuOpen(false);
-                toggle();
-              }}
-              icon={<HiOutlinePhone size={18} />}
-              className="font-medium text-xs sm:text-sm [@media(min-width:2500px)]:!text-2xl lg:text-sm xl:text-base h-8 sm:h-9 lg:h-9 xl:h-10 2xl:h-12 px-2 sm:px-3 lg:px-3 xl:px-5 2xl:px-6 bg-jsyellow hover:bg-jsyellow/90 text-white hover:text-white"
-              text={t("contactus")}
-            />
-          </div>
+
         </div>
 
         <div className="flex items-center gap-2 lg:hidden relative z-50 shrink-0">
@@ -161,17 +158,7 @@ export default function Header() {
               </div>
             </div>
 
-            <div className="shrink-0 border-t border-gray-100 bg-white p-4">
-              <Button
-                onClick={() => {
-                  setIsMenuOpen(false);
-                  toggle();
-                }}
-                icon={<HiOutlinePhone size={22} />}
-                className="h-12 w-full bg-jsyellow text-base font-medium text-white hover:bg-jsyellow/90 md:text-lg"
-                text={t("contactus")}
-              />
-            </div>
+
           </div>
         </div>
       </nav>

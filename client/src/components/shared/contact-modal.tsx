@@ -12,12 +12,9 @@ import { toast } from "sonner";
 import { motion, AnimatePresence } from "framer-motion";
 import Select from "../ui/select";
 import { Locale } from "@/i18n/request";
-import SimpleCaptcha, {
-  type SimpleCaptchaContext,
-} from "@/components/shared/simple-captcha";
 
 type CourseItem = { id: string; title?: Record<string, string> };
-type FormValues = RequestFormInputs & { courseId?: string; website?: string };
+type FormValues = RequestFormInputs & { courseId?: string; website?: string; childAge?: number; childLanguage?: Language };
 
 const ADVICE_VALUE = "__advice__";
 
@@ -28,12 +25,10 @@ export default function ContactModal() {
   const { isSpam, honeypotName } = useSpamProtection();
 
   const [success, setSuccess] = useState(false);
-  const [captchaValid, setCaptchaValid] = useState(false);
-  const [captchaContext, setCaptchaContext] = useState<SimpleCaptchaContext>();
-  const [captchaKey, setCaptchaKey] = useState(0);
-  const [courseOptions, setCourseOptions] = useState<
-    { value: string; label: string }[]
-  >([]);
+
+  const [courseOptions, setCourseOptions] = useState<{
+    value: string; label: string
+  }[]>([]);
 
   const {
     register,
@@ -53,6 +48,10 @@ export default function ContactModal() {
 
   const selectedCourseId = watch("courseId");
 
+
+
+
+
   useEffect(() => {
     let active = true;
     (async () => {
@@ -63,29 +62,21 @@ export default function ContactModal() {
         const items: CourseItem[] = res.data?.items ?? res.data ?? [];
         const opts = items.map((c) => ({
           value: String(c.id),
-          label:
-            (c.title?.[locale] ||
-              c.title?.az ||
-              c.title?.en ||
-              c.title?.en ||
-              "Adsız kurs") as string,
+          label: (
+            c.title?.[locale] ||
+            c.title?.az ||
+            c.title?.en ||
+            "Adsız kurs"
+          ) as string,
         }));
-        const withAdvice = [
-          { value: ADVICE_VALUE, label: t("adviceOption") ?? "Məsləhət almaq istəyirəm" },
-          ...opts,
-        ];
+        const withAdvice = [{ value: ADVICE_VALUE, label: t("adviceOption") ?? "Məsləhət almaq istəyirəm" }, ...opts];
         if (active) setCourseOptions(withAdvice);
       } catch (e) {
         console.error("Kurs siyahısı alınmadı:", e);
-        if (active)
-          setCourseOptions([
-            { value: ADVICE_VALUE, label: t("adviceOption") ?? "Məsləhət almaq istəyirəm" },
-          ]);
+        if (active) setCourseOptions([{ value: ADVICE_VALUE, label: t("adviceOption") ?? "Məsləhət almaq istəyirəm" }]);
       }
     })();
-    return () => {
-      active = false;
-    };
+    return () => { active = false; };
   }, [locale, t]);
 
   const selectedCourseTitle = useMemo(() => {
@@ -97,44 +88,14 @@ export default function ContactModal() {
     setValue("courseId", String(value), { shouldValidate: true });
   };
 
-  const resetCaptchaUi = () => {
-    setCaptchaKey((k) => k + 1);
-    setCaptchaValid(false);
-    setCaptchaContext(undefined);
-  };
-
-  // Sadece harf ve boşluk kabul eden handler
-  const handleNameInput = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const value = e.target.value;
-    // Sadece harf, boşluk ve Azerbaycan alfabesi karakterleri
-    const filtered = value.replace(/[^a-zA-ZəğıöüçşƏĞIÖÜÇŞ\s]/g, '');
-    if (value !== filtered) {
-      e.target.value = filtered;
-      const fieldName = e.target.name as "name" | "surname";
-      setValue(fieldName, filtered, { shouldValidate: true });
-    }
-  };
-
-  // Telefon numarası için sadece rakam, + ve boşluk kabul eden handler
-  const handlePhoneInput = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const value = e.target.value;
-    // Sadece rakam, + ve boşluk kabul et
-    const filtered = value.replace(/[^0-9+\s]/g, '');
-    if (value !== filtered) {
-      e.target.value = filtered;
-      setValue("number", filtered, { shouldValidate: true });
-    }
+  const resetForm = () => {
+    reset({ childAge: 12, childLanguage: Language.AZ, courseId: ADVICE_VALUE, website: "" });
   };
 
   const onSubmit: SubmitHandler<FormValues> = async (data) => {
-    if (!captchaValid || !captchaContext) {
-      toast.error(t("captchaRequired") || "Zəhmət olmasa CAPTCHA-nı düzgün həll edin.");
-      return;
-    }
     if (isSpam(data)) {
       setSuccess(true);
-      reset({ childAge: 12, childLanguage: Language.AZ, courseId: ADVICE_VALUE, website: "" });
-      resetCaptchaUi();
+      resetForm();
       return;
     }
     try {
@@ -146,23 +107,19 @@ export default function ContactModal() {
         number: data.number?.trim(),
         childAge: Number(data.childAge) || 12,
         childLanguage: data.childLanguage || Language.AZ,
-        captchaA: captchaContext.a,
-        captchaB: captchaContext.b,
-        captchaAnswer: Number(captchaContext.answer),
         additionalInfo: isAdvice
           ? { kind: "advice" }
           : {
-              kind: "course",
-              courseId: data.courseId,
-              courseTitle: selectedCourseTitle,
-            },
+            kind: "course",
+            courseId: data.courseId,
+            courseTitle: selectedCourseTitle,
+          },
       };
 
       await toast.promise(api.post("/requests", payload), {
         loading: t("sending"),
         success: () => {
-          reset({ childAge: 12, childLanguage: Language.AZ, courseId: ADVICE_VALUE, website: "" });
-          resetCaptchaUi();
+          resetForm();
           setSuccess(true);
           return t("messageSent");
         },
@@ -188,8 +145,7 @@ export default function ContactModal() {
           <motion.div
             className="absolute inset-0 bg-jsblack/20"
             onClick={() => {
-              reset({ childAge: 12, childLanguage: Language.AZ, courseId: ADVICE_VALUE, website: "" });
-              resetCaptchaUi();
+              resetForm();
               toggle();
             }}
             initial={{ opacity: 0 }}
@@ -208,8 +164,7 @@ export default function ContactModal() {
               <button
                 className="self-end p-2 hover:bg-jsyellow/10 rounded-full"
                 onClick={() => {
-                  reset({ childAge: 12, childLanguage: Language.AZ, courseId: ADVICE_VALUE, website: "" });
-                  resetCaptchaUi();
+                  resetForm();
                   toggle();
                   setSuccess(false);
                 }}
@@ -241,8 +196,7 @@ export default function ContactModal() {
                 <button
                   className="p-2 hover:bg-jsyellow/10 rounded-full"
                   onClick={() => {
-                    reset({ childAge: 12, childLanguage: Language.AZ, courseId: ADVICE_VALUE, website: "" });
-                    resetCaptchaUi();
+                    resetForm();
                     toggle();
                   }}
                   type="button"
@@ -256,8 +210,7 @@ export default function ContactModal() {
                   <input
                     type={field === "number" ? "tel" : "text"}
                     placeholder={t(`${field}.placeholder`)}
-                    className="w-full min-h-[58px] text-base px-5 rounded-[32px] border border-jsyellow bg-[#fef7eb]
-                      focus:outline-none focus:ring-2 focus:ring-jsyellow transition-all duration-300 shadow-sm"
+                    className="w-full min-h-[58px] text-base px-5 rounded-[32px] border border-jsyellow bg-[#fef7eb] focus:outline-none focus:ring-2 focus:ring-jsyellow transition-all duration-300 shadow-sm"
                     {...register(field as keyof FormValues, {
                       required: t(`${field}.required`),
                       minLength:
@@ -267,17 +220,35 @@ export default function ContactModal() {
                       pattern:
                         field === "number"
                           ? {
-                              value: /^(\+994|0)(50|51|55|70|77|99|10)\d{7}$/,
-                              message: t("number.invalid"),
-                            }
+                            value: /^(\+994|0)(50|51|55|70|77|99|10)\d{7}$/,
+                            message: t("number.invalid"),
+                          }
                           : field === "name" || field === "surname"
-                          ? {
+                            ? {
                               value: /^[a-zA-ZəğıöüçşƏĞIÖÜÇŞ\s]+$/,
                               message: t(`${field}.invalid`) || "Yalnız hərf və boşluq qəbul edilir",
                             }
-                          : undefined,
+                            : undefined,
                     })}
-                    onInput={field === "number" ? handlePhoneInput : handleNameInput}
+                    onInput={field === "number"
+                      ? (e: React.ChangeEvent<HTMLInputElement>) => {
+                        const value = e.target.value;
+                        const filtered = value.replace(/[^0-9+\s]/g, "");
+                        if (value !== filtered) {
+                          e.target.value = filtered;
+                          setValue("number", filtered, { shouldValidate: true });
+                        }
+                      }
+                      : (e: React.ChangeEvent<HTMLInputElement>) => {
+                        const value = e.target.value;
+                        const filtered = value.replace(/[^a-zA-ZəğıöüçşƏĞIÖÜÇŞ\s]/g, "");
+                        if (value !== filtered) {
+                          e.target.value = filtered;
+                          const fieldName = e.target.name as "name" | "surname";
+                          setValue(fieldName, filtered, { shouldValidate: true });
+                        }
+                      }
+                    }
                   />
                   {errors[field as keyof FormValues] && (
                     <p className="text-red-500 text-sm pl-2">
@@ -308,16 +279,6 @@ export default function ContactModal() {
                 {...register(honeypotName as keyof FormValues)}
               />
 
-              <SimpleCaptcha
-                key={captchaKey}
-                label={t("captchaLabel")}
-                errorText={t("captchaInvalid")}
-                onChange={(valid, context) => {
-                  setCaptchaValid(valid);
-                  setCaptchaContext(context);
-                }}
-              />
-
               <motion.button
                 type="submit"
                 disabled={isSubmitting}
@@ -334,4 +295,3 @@ export default function ContactModal() {
     </AnimatePresence>
   );
 }
- 
