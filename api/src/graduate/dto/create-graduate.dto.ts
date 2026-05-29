@@ -26,4 +26,7 @@ export class CreateGraduateDto {
 
   @ApiProperty({ required: false, default: 0 })
   order?: number;
+
+  @ApiProperty({ required: false, description: 'LinkedIn URL' })
+  linkedin?: string;
 }

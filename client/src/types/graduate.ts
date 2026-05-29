@@ -10,6 +10,7 @@ export interface Graduate {
   courseName?: MultilingualText | null;
   isActive: boolean;
   order: number;
+  linkedin?: string | null;
   createdAt: string;
   updatedAt: string;
 }

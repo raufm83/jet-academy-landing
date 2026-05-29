@@ -82,6 +82,8 @@ export default async function SingleCoursePage({
         getAllCourses({ limit: 100, page: 1, includeUnpublished: false }),
         api.get("/team/active"),
       ]);
+    if (!data) notFound();
+
     const fetchFaq = async (pageKey: string) => {
       try {
         const res = await fetch(
@@ -96,17 +98,18 @@ export default async function SingleCoursePage({
       }
     };
 
-    const [generalCourseFaq, specificCourseFaq] = await Promise.all([
+    const azSlug = data.slug?.az || params.slug;
+    const enSlug = data.slug?.en || params.slug;
+
+    const [generalCourseFaq, azCourseFaq, enCourseFaq] = await Promise.all([
       fetchFaq("course"),
-      fetchFaq(`course:${params.slug}`),
+      fetchFaq(`course:${azSlug}`),
+      fetchFaq(`course:${enSlug}`),
     ]);
 
-    const mergedCourseFaq = [...generalCourseFaq, ...specificCourseFaq].filter(
+    const mergedCourseFaq = [...generalCourseFaq, ...azCourseFaq, ...enCourseFaq].filter(
       (item, index, arr) => arr.findIndex((x) => x?.id === item?.id) === index
     );
-
-
-    if (!data) notFound();
 
     const currentId = (data as Course).id;
     const otherCourseItems = (courses?.items as Course[] | undefined)?.filter(

@@ -72,6 +72,7 @@ export class GraduateService {
 
     const courseId = dto.courseId || null;
     const courseName = await this.resolveCourseName(courseId);
+    const linkedin = dto.linkedin || null;
 
     return this.prisma.graduate.create({
       data: {
@@ -83,6 +84,7 @@ export class GraduateService {
         order,
         courseId,
         courseName,
+        linkedin,
       },
     });
   }
@@ -141,6 +143,10 @@ export class GraduateService {
       const cid = dto.courseId || null;
       data.courseId = cid;
       data.courseName = await this.resolveCourseName(cid);
+    }
+
+    if (dto.linkedin !== undefined) {
+      data.linkedin = dto.linkedin || null;
     }
 
     if (dto.mediaType !== undefined) {

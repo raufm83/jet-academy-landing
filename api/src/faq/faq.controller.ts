@@ -52,12 +52,14 @@ export class FaqController {
     required: false,
     description: 'Yalnız bu səhifə key-inə olan FAQ-lar',
   })
+  @ApiQuery({ name: 'search', required: false })
   findAll(
     @Query('page') page = 1,
     @Query('limit') limit = 20,
     @Query('pageKey') pageKey?: string,
+    @Query('search') search?: string,
   ) {
-    return this.faqService.findAll(+page, +limit, pageKey);
+    return this.faqService.findAll(+page, +limit, pageKey, search);
   }
 
   @Get(':id')

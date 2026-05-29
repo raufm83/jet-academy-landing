@@ -4,12 +4,16 @@ import { STATIC_PAGE_META_KEYS } from "@/data/page-meta-keys";
 import api from "@/utils/api/axios";
 import {
   Button,
+  Input,
   Modal,
   ModalBody,
   ModalContent,
   ModalFooter,
   ModalHeader,
   Pagination,
+  Select,
+  SelectItem,
+  SelectSection,
   Table,
   TableBody,
   TableCell,
@@ -22,7 +26,7 @@ import {
 import { motion } from "framer-motion";
 import { useRouter } from "next/navigation";
 import { useCallback, useEffect, useState } from "react";
-import { MdAdd, MdDelete, MdEdit, MdQuiz } from "react-icons/md";
+import { MdAdd, MdDelete, MdEdit, MdQuiz, MdSearch } from "react-icons/md";
 import type { FaqRow } from "@/types/faq";
 import { toast } from "sonner";
 
@@ -45,11 +49,58 @@ export default function FaqDashboardPage() {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [selected, setSelected] = useState<FaqRow | null>(null);
 
+  // Filters State
+  const [searchVal, setSearchVal] = useState("");
+  const [debouncedSearch, setDebouncedSearch] = useState("");
+  const [selectedPageKey, setSelectedPageKey] = useState<string>("all");
+  const [courseOptions, setCourseOptions] = useState<{ key: string; label: string }[]>([]);
+
+  // Debounce search input
+  useEffect(() => {
+    const handler = setTimeout(() => {
+      setDebouncedSearch(searchVal);
+      setPage(1);
+    }, 400);
+    return () => clearTimeout(handler);
+  }, [searchVal]);
+
+  // Load courses for dynamic filtering
+  useEffect(() => {
+    const loadCourses = async () => {
+      try {
+        const res = await fetch(
+          `${process.env.NEXT_PUBLIC_API_URL}/courses?limit=1000&page=1&sortOrder=desc&includeUnpublished=true`,
+          { cache: "no-store", credentials: "include" }
+        );
+        if (!res.ok) return;
+        const data = await res.json();
+        const items = Array.isArray(data?.items) ? data.items : [];
+        const mapped = items
+          .map((item: any) => {
+            const slug = item?.slug?.az || item?.slug?.en;
+            const label = item?.title?.az || item?.title?.en || slug;
+            if (!slug || !label) return null;
+            return {
+              key: `course:${slug}`,
+              label: String(label),
+            };
+          })
+          .filter(Boolean) as { key: string; label: string }[];
+        setCourseOptions(mapped);
+      } catch (e) {
+        console.error("Kurslar yüklənə bilmədi:", e);
+      }
+    };
+    loadCourses();
+  }, []);
+
   const fetchList = useCallback(async () => {
     try {
       setLoading(true);
+      const pageKeyQuery = selectedPageKey && selectedPageKey !== "all" ? `&pageKey=${selectedPageKey}` : "";
+      const searchQuery = debouncedSearch ? `&search=${encodeURIComponent(debouncedSearch)}` : "";
       const { data } = await api.get<FaqListResponse>(
-        `/faq?page=${page}&limit=${rowsPerPage}`
+        `/faq?page=${page}&limit=${rowsPerPage}${pageKeyQuery}${searchQuery}`
       );
       setItems(data.items);
       setTotal(data.meta.total);
@@ -59,7 +110,7 @@ export default function FaqDashboardPage() {
     } finally {
       setLoading(false);
     }
-  }, [page, rowsPerPage]);
+  }, [page, rowsPerPage, selectedPageKey, debouncedSearch]);
 
   useEffect(() => {
     fetchList();
@@ -180,6 +231,63 @@ export default function FaqDashboardPage() {
           >
             Yeni FAQ
           </Button>
+        </div>
+
+        {/* Filters and Search Bar */}
+        <div className="mb-6 flex flex-col gap-4 md:flex-row md:items-center">
+          <div className="flex-1">
+            <Input
+              isClearable
+              placeholder="Sual və ya cavab ilə axtar..."
+              startContent={<MdSearch className="text-default-400" size={20} />}
+              value={searchVal}
+              onValueChange={(val) => {
+                setSearchVal(val);
+                setPage(1);
+              }}
+              variant="bordered"
+              className="w-full"
+            />
+          </div>
+          <div className="w-full md:w-72">
+            <Select
+              placeholder="Səhifəyə görə filter"
+              selectedKeys={[selectedPageKey]}
+              onSelectionChange={(keys) => {
+                const selected = Array.from(keys)[0] as string;
+                setSelectedPageKey(selected || "all");
+                setPage(1);
+              }}
+              variant="bordered"
+              aria-label="Səhifəyə görə filter"
+            >
+              <SelectItem key="all" textValue="Hamısı (Bütün Səhifələr)">
+                Hamısı (Bütün Səhifələr)
+              </SelectItem>
+              <SelectItem key="course" textValue="Bütün kurs səhifələri (ümumi)">
+                Bütün kurs səhifələri (ümumi)
+              </SelectItem>
+              
+              <SelectSection title="Statik Səhifələr">
+                {STATIC_PAGE_META_KEYS.map((opt) => (
+                  <SelectItem key={opt.key} textValue={opt.label}>
+                    {opt.label}
+                  </SelectItem>
+                ))}
+              </SelectSection>
+
+              <SelectSection
+                title="Kurs Səhifələri"
+                className={courseOptions.length === 0 ? "hidden" : ""}
+              >
+                {courseOptions.map((opt) => (
+                  <SelectItem key={opt.key} textValue={opt.label}>
+                    {opt.label}
+                  </SelectItem>
+                ))}
+              </SelectSection>
+            </Select>
+          </div>
         </div>
 
         <Table

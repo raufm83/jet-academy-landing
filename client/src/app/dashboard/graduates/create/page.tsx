@@ -26,6 +26,7 @@ export default function CreateGraduatePage() {
       courseId: "",
       isActive: true,
       order: 0,
+      linkedin: "",
     },
   });
 
@@ -40,6 +41,7 @@ export default function CreateGraduatePage() {
       if (data.courseId) formData.append("courseId", data.courseId);
       formData.append("isActive", String(data.isActive));
       formData.append("order", String(data.order));
+      if (data.linkedin) formData.append("linkedin", data.linkedin);
 
       if (data.mediaType === "youtube") {
         formData.append("mediaUrl", data.mediaUrl || "");

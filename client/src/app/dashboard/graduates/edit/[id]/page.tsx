@@ -67,6 +67,7 @@ export default function EditGraduatePage() {
           courseId: data.courseId || "",
           isActive: data.isActive,
           order: data.order,
+          linkedin: data.linkedin || "",
         });
       } catch (e) {
         console.error(e);
@@ -90,6 +91,7 @@ export default function EditGraduatePage() {
       formData.append("courseId", data.courseId || "");
       formData.append("isActive", String(data.isActive));
       formData.append("order", String(data.order));
+      formData.append("linkedin", data.linkedin || "");
 
       if (data.mediaType === "youtube") {
         formData.append("mediaUrl", data.mediaUrl || "");

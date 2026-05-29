@@ -2,6 +2,7 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { PrismaService } from 'src/prisma.service';
 import { CreateFaqItemDto } from './dto/create-faq-item.dto';
 import { UpdateFaqItemDto } from './dto/update-faq-item.dto';
+import { jsonBilingualContains } from 'src/common/json-bilingual-search';
 
 type LangBlock = { az: string; en: string };
 
@@ -57,7 +58,7 @@ export class FaqService {
     });
   }
 
-  async findAll(page = 1, limit = 20, pageKeyFilter?: string) {
+  async findAll(page = 1, limit = 20, pageKeyFilter?: string, search?: string) {
     const safePage = Math.max(1, +page || 1);
     const safeLimit = Math.min(100, Math.max(1, +limit || 20));
     const skip = (safePage - 1) * safeLimit;
@@ -65,6 +66,30 @@ export class FaqService {
     const where = pageKeyFilter?.trim()
       ? { pages: { hasSome: [pageKeyFilter.trim()] } }
       : {};
+
+    if (search && search.trim()) {
+      const q = search.trim();
+      const list = await this.prisma.faqItem.findMany({
+        where,
+        orderBy: [{ order: 'asc' }, { createdAt: 'desc' }],
+      });
+      const filtered = list.filter(
+        (item) =>
+          jsonBilingualContains(item.question as any, q) ||
+          jsonBilingualContains(item.answer as any, q),
+      );
+      const total = filtered.length;
+      const items = filtered.slice(skip, skip + safeLimit);
+      return {
+        items,
+        meta: {
+          total,
+          page: safePage,
+          limit: safeLimit,
+          totalPages: Math.ceil(total / safeLimit) || 0,
+        },
+      };
+    }
 
     const [total, items] = await Promise.all([
       this.prisma.faqItem.count({ where }),

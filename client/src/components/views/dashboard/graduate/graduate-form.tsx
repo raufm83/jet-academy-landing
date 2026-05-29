@@ -38,6 +38,7 @@ export interface GraduateFormInputs {
   courseId: string;
   isActive: boolean;
   order: number;
+  linkedin?: string;
 }
 
 interface GraduateFormProps {
@@ -304,6 +305,22 @@ export default function GraduateForm({
                 )}
               </div>
             )}
+          </Card>
+
+          {/* LinkedIn Account */}
+          <Card className="border border-default-200 p-5 shadow-sm sm:p-6">
+            <h2 className="mb-4 text-lg font-semibold text-[#1F2937]">
+              LinkedIn profil linki (istəyə bağlı)
+            </h2>
+            <Input
+              {...register("linkedin")}
+              label="LinkedIn URL"
+              placeholder="https://linkedin.com/in/username"
+              variant="bordered"
+              classNames={inputClassNames}
+              isInvalid={!!errors.linkedin}
+              errorMessage={errors.linkedin?.message}
+            />
           </Card>
 
           {/* Settings */}
