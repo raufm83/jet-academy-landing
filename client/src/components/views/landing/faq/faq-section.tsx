@@ -62,7 +62,7 @@ export default function FaqSection({
   if (items.length === 0 && !loading) return null;
 
   return (
-    <section className={cn("bg-white py-12 md:py-16", sectionClassName)}>
+    <section className={cn("bg-transparent py-12 md:py-16", sectionClassName)}>
       <div className="container mx-auto max-w-2xl px-4">
         {(resolvedTitle || resolvedDescription) && (
           <div className="mb-8 text-center md:mb-10">

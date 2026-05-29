@@ -94,13 +94,20 @@ export default function Header() {
                 />
               </li>
             ))}
-              <Button
-                onClick={() => { setIsMenuOpen(false); toggleContact(); }}
-                icon={<HiOutlinePhone size={18} />}
-                className="font-medium text-xs sm:text-sm [@media(min-width:2500px)]:!text-2xl lg:text-sm xl:text-base h-8 sm:h-9 lg:h-9 xl:h-10 2xl:h-12 px-2 sm:px-3 lg:px-3 xl:px-5 2xl:px-6 bg-jsyellow hover:bg-jsyellow/90 text-white hover:text-white"
-                text={t("contactus")}
-              />
           </ul>
+
+          <div className="flex shrink-0 items-center gap-1.5 sm:gap-2 lg:gap-2 xl:gap-3">
+            <LanguageSwitcher />
+            <Button
+              onClick={() => {
+                setIsMenuOpen(false);
+                toggleContact();
+              }}
+              icon={<HiOutlinePhone size={18} />}
+              className="font-medium text-xs sm:text-sm [@media(min-width:2500px)]:!text-2xl lg:text-sm xl:text-base h-8 sm:h-9 lg:h-9 xl:h-10 2xl:h-12 px-2 sm:px-3 lg:px-3 xl:px-5 2xl:px-6 bg-jsyellow hover:bg-jsyellow/90 text-white hover:text-white"
+              text={t("contactus")}
+            />
+          </div>
 
 
         </div>

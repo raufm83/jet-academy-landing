@@ -286,12 +286,8 @@ const middlewares = withAuth(
     }
 
     // SEO: JSON-LD schema üçün layout-da pathname oxumaq
-    const requestHeaders = new Headers(request.headers);
-    requestHeaders.set("x-pathname", pathname);
-    const requestWithPath = new NextRequest(request.url, {
-      headers: requestHeaders,
-    });
-    return intlMiddleware(requestWithPath);
+    request.headers.set("x-pathname", pathname);
+    return intlMiddleware(request);
   },
   {
     callbacks: {
