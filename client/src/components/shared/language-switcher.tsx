@@ -2,16 +2,16 @@
 import { cn } from "@/utils/cn";
 import { usePathname, useRouter } from "@/i18n/routing";
 import { useLocale } from "next-intl";
+import Image from "next/image";
 import React, { useEffect, useRef, useState } from "react";
 import { HiChevronDown } from "react-icons/hi2";
 
-const LOCALE_META: Record<string, { emoji: string; label: string; ariaLabel: string }> = {
-  az: { emoji: "🇦🇿", label: "AZ", ariaLabel: "Azərbaycan dilinə keç" },
-  en: { emoji: "🇬🇧", label: "EN", ariaLabel: "Switch to English" },
-  ru: { emoji: "🇷🇺", label: "RU", ariaLabel: "Переключить на русский" },
+const LOCALE_META: Record<string, { flag: string; label: string; ariaLabel: string; srLabel: string }> = {
+  az: { flag: "/flags/az.png",  label: "AZ", ariaLabel: "Azərbaycan dilinə keç",  srLabel: "Cari dil: Azərbaycan" },
+  en: { flag: "/flags/uk.webp", label: "EN", ariaLabel: "Switch to English",       srLabel: "Current language: English" },
 };
 
-const locales = ["az", "en", "ru"];
+const locales = ["az", "en"];
 
 export default function LanguageSwitcher({
   className,
@@ -59,20 +59,16 @@ export default function LanguageSwitcher({
           !isOpen ? "hover:bg-jsblack/10" : "bg-jsblack/10"
         )}
       >
-        <span
+        <Image
+          src={current.flag}
+          alt=""
+          width={24}
+          height={17}
+          unoptimized
           aria-hidden
-          className="text-xl leading-none [@media(min-width:3500px)]:!text-3xl"
-          style={{ fontFamily: "Apple Color Emoji, Segoe UI Emoji, Noto Color Emoji, sans-serif" }}
-        >
-          {current.emoji}
-        </span>
-        <span className="sr-only">
-          {locale === "az"
-            ? "Cari dil: Azərbaycan"
-            : locale === "en"
-            ? "Current language: English"
-            : "Текущий язык: Русский"}
-        </span>
+          className="rounded-sm object-cover shrink-0 [@media(min-width:3500px)]:!w-10 [@media(min-width:3500px)]:!h-7"
+        />
+        <span className="sr-only">{current.srLabel}</span>
         <span aria-hidden>{current.label}</span>
         <HiChevronDown className="shrink-0" aria-hidden />
       </button>
@@ -98,17 +94,19 @@ export default function LanguageSwitcher({
               aria-label={meta.ariaLabel}
               onClick={() => handleSelect(code)}
               className={cn(
-                "hover:bg-jsblack/10 py-2.5 w-full text-center flex items-center justify-center gap-2.5 transition-all cursor-pointer text-jsblack font-semibold text-sm border-0 bg-transparent [@media(min-width:3500px)]:!text-xl",
+                "hover:bg-jsblack/10 py-2.5 w-full flex items-center justify-center gap-2.5 transition-all cursor-pointer text-jsblack font-semibold text-sm border-0 bg-transparent [@media(min-width:3500px)]:!text-xl",
                 code === locale && "bg-jsblack/5"
               )}
             >
-              <span
+              <Image
+                src={meta.flag}
+                alt=""
+                width={24}
+                height={17}
+                unoptimized
                 aria-hidden
-                className="text-xl leading-none [@media(min-width:3500px)]:!text-3xl"
-                style={{ fontFamily: "Apple Color Emoji, Segoe UI Emoji, Noto Color Emoji, sans-serif" }}
-              >
-                {meta.emoji}
-              </span>
+                className="rounded-sm object-cover shrink-0 [@media(min-width:3500px)]:!w-10 [@media(min-width:3500px)]:!h-7"
+              />
               <span aria-hidden>{meta.label}</span>
             </button>
           );
