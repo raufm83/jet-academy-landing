@@ -139,7 +139,7 @@ export default async function PostHero({
         </div>
       )}
 
-      <div className="post-body post-body-quill prose max-w-none text-gray-600 prose-headings:text-jsblack prose-li:ml-4 prose-li:list-disc prose-img:block prose-img:max-w-full prose-img:h-auto prose-img:rounded-lg prose-p:my-2 md:prose-p:my-2.5 xl:prose-p:my-2.5 2xl:prose-p:my-3 prose-headings:mb-2 prose-headings:mt-4 first:prose-headings:mt-0">
+      <div className="post-body post-body-quill prose max-w-none text-gray-600 prose-headings:text-jsblack prose-li:ml-4 prose-li:list-disc prose-img:block prose-img:max-w-full prose-img:h-auto prose-img:rounded-lg prose-p:my-2 md:prose-p:my-2.5 xl:prose-p:my-2.5 2xl:prose-p:my-3 prose-headings:mb-2 prose-headings:mt-4 prose-h1:text-[1.65rem] prose-h2:text-[1.4rem] prose-h3:text-[1.2rem] prose-h4:text-[1.05rem] prose-h5:text-[1rem] prose-h6:text-[0.9rem]">
         {parseContentWithImages(rewriteContentImageUrls(content)).map(
           (segment, index) =>
             segment.type === "html" ? (

@@ -117,4 +117,65 @@ main.bg-gray-100 .ql-snow .ql-editor .ql-bg-purple {
   padding: 0;
 }
 
+/* ─── Post içərisi başlıq ölçüləri ───────────────────────────────────────────
+   Quill header formatı h1-h6 HTML tag-ları çıxarır. Tailwind Typography
+   em-əsaslı ölçülər + tailwind.config.ts-də böyük ekran üçün artan prose
+   font-size birləşərək h2-ni page h1-dən böyük, h2-h4 arasını isə
+   "dağlar qədər" böyük göstərirdi. Buradakı rem-əsaslı override daha
+   nəzarətli və proporsional görkəm verir.
+   Not: specificity prose-dən yüksəkdir, !important lazım deyil.          */
+.post-body-quill h1,
+.post-body-quill .post-content-html h1 {
+  font-size: 1.65rem !important;
+  line-height: 1.2;
+  font-weight: 700;
+}
+.post-body-quill h2,
+.post-body-quill .post-content-html h2 {
+  font-size: 1.4rem !important;
+  line-height: 1.25;
+  font-weight: 700;
+}
+.post-body-quill h3,
+.post-body-quill .post-content-html h3 {
+  font-size: 1.2rem !important;
+  line-height: 1.3;
+  font-weight: 600;
+}
+.post-body-quill h4,
+.post-body-quill .post-content-html h4 {
+  font-size: 1.05rem !important;
+  line-height: 1.4;
+  font-weight: 600;
+}
+.post-body-quill h5,
+.post-body-quill .post-content-html h5 {
+  font-size: 1rem !important;
+  line-height: 1.5;
+  font-weight: 600;
+}
+.post-body-quill h6,
+.post-body-quill .post-content-html h6 {
+  font-size: 0.9rem !important;
+  line-height: 1.5;
+  font-weight: 600;
+}
+
+/* Ultra-geniş ekranlar (3500px+) — heading-lər bir qədər böyüyür amma
+   nisbət qorunur                                                          */
+@media (min-width: 3500px) {
+  .post-body-quill h1,
+  .post-body-quill .post-content-html h1 { font-size: 2rem !important; }
+  .post-body-quill h2,
+  .post-body-quill .post-content-html h2 { font-size: 1.7rem !important; }
+  .post-body-quill h3,
+  .post-body-quill .post-content-html h3 { font-size: 1.45rem !important; }
+  .post-body-quill h4,
+  .post-body-quill .post-content-html h4 { font-size: 1.25rem !important; }
+  .post-body-quill h5,
+  .post-body-quill .post-content-html h5 { font-size: 1.15rem !important; }
+  .post-body-quill h6,
+  .post-body-quill .post-content-html h6 { font-size: 1.05rem !important; }
+}
+
 

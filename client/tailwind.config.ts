@@ -63,6 +63,7 @@ const config: Config = {
         DEFAULT: {
           css: {
             fontSize: theme("fontSize.base"),
+            lineHeight: "1.75",
             "@screen xl": {
               fontSize: theme("fontSize.lg"),
             },
@@ -71,6 +72,50 @@ const config: Config = {
             },
             "@screen 4xl": {
               fontSize: theme("fontSize.2xl"),
+            },
+            // Heading-lər em əsaslı olaraq böyük ekranlarda page h1-dən böyük olurdu;
+            // rem ilə sabitlənir ki, prose bazası artsa belə heading ölçüsü nəzarətdə qalsın.
+            h1: {
+              fontSize: "1.65rem",
+              lineHeight: "1.2",
+              fontWeight: "700",
+              marginTop: "1.4em",
+              marginBottom: "0.5em",
+            },
+            h2: {
+              fontSize: "1.4rem",
+              lineHeight: "1.25",
+              fontWeight: "700",
+              marginTop: "1.3em",
+              marginBottom: "0.4em",
+            },
+            h3: {
+              fontSize: "1.2rem",
+              lineHeight: "1.3",
+              fontWeight: "600",
+              marginTop: "1.1em",
+              marginBottom: "0.35em",
+            },
+            h4: {
+              fontSize: "1.05rem",
+              lineHeight: "1.4",
+              fontWeight: "600",
+              marginTop: "1em",
+              marginBottom: "0.3em",
+            },
+            h5: {
+              fontSize: "1rem",
+              lineHeight: "1.5",
+              fontWeight: "600",
+              marginTop: "0.9em",
+              marginBottom: "0.25em",
+            },
+            h6: {
+              fontSize: "0.9rem",
+              lineHeight: "1.5",
+              fontWeight: "600",
+              marginTop: "0.8em",
+              marginBottom: "0.2em",
             },
           },
         },
