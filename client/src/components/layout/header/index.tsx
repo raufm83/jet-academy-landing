@@ -114,7 +114,19 @@ export default function Header() {
 
         <div className="flex items-center gap-2 lg:hidden relative z-50 shrink-0">
           <LanguageSwitcher />
-          
+
+          <button
+            onClick={() => {
+              setIsMenuOpen(false);
+              toggleContact();
+            }}
+            className="flex items-center gap-1.5 rounded-[30px] bg-jsyellow px-2.5 py-1.5 text-white transition-all hover:bg-jsyellow/90 sm:h-9 sm:px-3 sm:text-sm"
+            aria-label={t("contactus")}
+          >
+            <HiOutlinePhone size={16} />
+            <span className="hidden sm:inline text-sm font-semibold">{t("contactus")}</span>
+          </button>
+
           <button
             onClick={() => setIsMenuOpen((o) => !o)}
             className="p-2 text-jsblack hover:bg-gray-100 rounded-lg transition-colors"
