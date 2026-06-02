@@ -25,6 +25,7 @@ import BilingualTagInput, {
   toPairs,
   fromPairs,
 } from "@/components/views/dashboard/shared/bilingual-tag-input";
+import ImageHint from "@/components/views/dashboard/shared/image-hint";
 
 const ReactQuill = dynamic(() => import("react-quill"), {
   ssr: false,
@@ -316,6 +317,12 @@ export default function CourseForm({
                 </div>
               </div>
 
+              <ImageHint
+                size="1200 × 800 px"
+                aspect="3:2"
+                note="Server maks. 1200 px enə endirər."
+              />
+
               <div className="border-2 border-dashed border-gray-300 rounded-lg p-4">
                 {imagePreview ? (
                   <div className="relative">
@@ -359,7 +366,7 @@ export default function CourseForm({
                       />
                     </div>
                     <p className="text-xs text-gray-500 mt-1">
-                      PNG, JPG, GIF (max. 5MB)
+                      JPG, PNG, GIF, WebP (maks. 2 MB)
                     </p>
                   </div>
                 )}

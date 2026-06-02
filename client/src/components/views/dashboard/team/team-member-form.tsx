@@ -3,6 +3,7 @@ import { MdPerson, MdDescription } from "react-icons/md";
 import { motion } from "framer-motion";
 import { useRef, useState } from "react";
 import Image from "next/image";
+import ImageHint from "@/components/views/dashboard/shared/image-hint";
 
 export default function TeamMemberForm({
   mode,
@@ -153,6 +154,11 @@ export default function TeamMemberForm({
             <div className="space-y-2">
               <div className="flex flex-col gap-2">
                 <label className="text-sm font-medium">Şəkil</label>
+                <ImageHint
+                  size="600 × 600 px"
+                  aspect="1:1"
+                  note="Server şəkli mərkəzdən 600×600 px kvadratına kəsir — portret foto tövsiyə olunur."
+                />
                 <Input
                   type="file"
                   accept="image/*"

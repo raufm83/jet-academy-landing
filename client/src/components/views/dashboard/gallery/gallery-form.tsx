@@ -3,6 +3,7 @@ import { MdTitle, MdDescription } from "react-icons/md";
 import { motion } from "framer-motion";
 import { useRef, useState } from "react";
 import Image from "next/image";
+import ImageHint from "@/components/views/dashboard/shared/image-hint";
 
 export default function GalleryForm({
   mode,
@@ -100,6 +101,11 @@ export default function GalleryForm({
             <div className="space-y-2">
               <div className="flex flex-col gap-2">
                 <label className="text-sm font-medium">Şəkil</label>
+                <ImageHint
+                  size="1600 × 1067 px"
+                  aspect="3:2"
+                  note="Server maks. 1600 px enə endirər."
+                />
                 <Input
                   type="file"
                   accept="image/*"

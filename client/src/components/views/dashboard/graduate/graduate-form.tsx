@@ -24,6 +24,7 @@ import {
 } from "react-hook-form";
 import { MdCloudUpload, MdSchool } from "react-icons/md";
 import api from "@/utils/api/axios";
+import ImageHint from "@/components/views/dashboard/shared/image-hint";
 
 interface CourseOption {
   id: string;
@@ -277,6 +278,11 @@ export default function GraduateForm({
               />
             ) : (
               <div className="space-y-3">
+                <ImageHint
+                  size="800 × 800 px"
+                  aspect="1:1"
+                  note="Server maks. 800 px enə endirər — kare/portret foto tövsiyə olunur."
+                />
                 <input
                   ref={fileRef}
                   type="file"
