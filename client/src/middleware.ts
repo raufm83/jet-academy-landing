@@ -186,9 +186,9 @@ const middlewares = withAuth(
 
     const pathTrim = pathname.replace(/\/+$/, "") || pathname;
 
-    /** /en/dashboard/... → /dashboard/... — əks halda auth və icazə bloku işləmir */
+    /** /az/dashboard/... və /en/dashboard/... → /dashboard/... — əks halda auth bloku işləmir */
     const dashboardLocaleMatch = pathTrim.match(
-      /^\/(en)(\/dashboard(?:\/.*)?)$/
+      /^\/(az|en)(\/dashboard(?:\/.*)?)$/
     );
     if (dashboardLocaleMatch) {
       let targetPath = dashboardLocaleMatch[2];
@@ -206,67 +206,47 @@ const middlewares = withAuth(
       return NextResponse.redirect(new URL(`${newPath}/`.replace(/\/+$/, "/"), request.url), 308);
     }
 
-    /** /az/* → /* (default locale artıq prefix olmadan xidmət göstərir) */
-    const azPrefixMatch = pathTrim.match(/^\/az(\/.*)?$/);
-    if (azPrefixMatch) {
-      const rest = azPrefixMatch[1] || "/";
-      return NextResponse.redirect(new URL(rest, request.url), 308);
-    }
-
     const feedbackLegacy = pathTrim.match(
-      /^\/(en)\/(projects|feedback)$/
+      /^\/(az|en)\/(projects|reyler|feedback)$/
     );
     if (feedbackLegacy) {
       const loc = feedbackLegacy[1];
       const seg = feedbackLegacy[2];
+      let destSeg: string | null = null;
       if (seg === "projects") {
-        return NextResponse.redirect(new URL(`/${loc}/feedback/`, request.url), 308);
+        destSeg = loc === "az" ? "reyler" : "feedback";
+      } else if (seg === "feedback" && loc === "az") {
+        destSeg = "reyler";
+      } else if (seg === "reyler" && loc !== "az") {
+        destSeg = "feedback";
       }
-    }
-
-    /** Feedback legacy for az (no prefix): /reyler and /projects redirect */
-    const feedbackAzLegacy = pathTrim.match(/^\/(projects|feedback)$/);
-    if (feedbackAzLegacy) {
-      const seg = feedbackAzLegacy[1];
-      if (seg !== "reyler") {
-        return NextResponse.redirect(new URL("/reyler/", request.url), 308);
+      if (destSeg && destSeg !== seg) {
+        return NextResponse.redirect(new URL(`/${loc}/${destSeg}/`, request.url), 308);
       }
     }
 
     const courseLegacy = pathTrim.match(
-      /^\/(en)\/(course|courses|tedris-saheleri)(?:\/([^/]+))?$/
+      /^\/(az|en)\/(course|courses|tedris-saheleri)(?:\/([^/]+))?$/
     );
     if (courseLegacy) {
       const loc = courseLegacy[1];
       const seg = courseLegacy[2];
       const slug = courseLegacy[3];
-      const targetBase = "courses";
+      const targetBase = loc === "az" ? "tedris-saheleri" : "courses";
       const targetPath = `/${loc}/${targetBase}${slug ? `/${slug}` : ""}`;
       if (`/${loc}/${seg}${slug ? `/${slug}` : ""}` !== targetPath) {
         return NextResponse.redirect(new URL(`${targetPath}/`, request.url), 308);
       }
     }
 
-    /** Courses legacy for az (no prefix): /course/* and /courses/* → /tedris-saheleri/* */
-    const coursesAzLegacy = pathTrim.match(/^\/(course|courses)(?:\/([^/]+))?$/);
-    if (coursesAzLegacy) {
-      const slug = coursesAzLegacy[2];
-      return NextResponse.redirect(new URL(`/tedris-saheleri${slug ? `/${slug}` : ""}/`, request.url), 308);
-    }
-
-    const galleryLegacy = pathTrim.match(/^\/(en)\/(gallery|dersden-goruntuler)$/);
+    const galleryLegacy = pathTrim.match(/^\/(az|en)\/(gallery|dersden-goruntuler)$/);
     if (galleryLegacy) {
       const loc = galleryLegacy[1];
       const seg = galleryLegacy[2];
-      if (seg !== "gallery") {
-        return NextResponse.redirect(new URL(`/${loc}/gallery/`, request.url), 308);
+      const targetBase = loc === "az" ? "dersden-goruntuler" : "gallery";
+      if (seg !== targetBase) {
+        return NextResponse.redirect(new URL(`/${loc}/${targetBase}/`, request.url), 308);
       }
-    }
-
-    /** Gallery legacy for az (no prefix): /gallery → /dersden-goruntuler */
-    const galleryAzLegacy = pathTrim.match(/^\/gallery$/);
-    if (galleryAzLegacy) {
-      return NextResponse.redirect(new URL("/dersden-goruntuler/", request.url), 308);
     }
 
     if (pathname.match(/^\/(az|en|ru)\/dashboard\/login/)) {

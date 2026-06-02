@@ -526,7 +526,10 @@ export function addTrailingSlash(url: string): string {
 }
 
 /**
- * Rəylər səhifəsi: /reyler (az, default — prefix yox) və /en/feedback üçün hreflang.
+ * Rəylər səhifəsi:
+ *   canonical    = https://jetacademy.az/reyler/  (no locale prefix)
+ *   hreflang az  = https://jetacademy.az/az/reyler/
+ *   hreflang en  = https://jetacademy.az/en/feedback/
  */
 export function buildAlternatesFeedbacks(
   locale: string,
@@ -538,20 +541,15 @@ export function buildAlternatesFeedbacks(
   const baseUrl = (base || getBaseUrl()).replace(/\/$/, "");
   const pathAz = "/reyler";
   const pathIntl = "/feedback";
-  /** AZ = no prefix; others = /{locale} */
-  const url = (loc: string, pathSeg: string) => {
-    const prefix = loc === "az" ? "" : `/${loc}`;
-    return addTrailingSlash(`${baseUrl}${prefix}${pathSeg}`);
-  };
-  const pathFor = (loc: string) => (loc === "az" ? pathAz : pathIntl);
-  const canonical = url(locale, pathFor(locale));
+  void locale;
+  const canonical = addTrailingSlash(`${baseUrl}${pathAz}`);
 
   return {
     canonical,
     languages: {
-      az: url("az", pathAz),
-      en: url("en", pathIntl),
-      "x-default": url("az", pathAz),
+      az: addTrailingSlash(`${baseUrl}/az${pathAz}`),
+      en: addTrailingSlash(`${baseUrl}/en${pathIntl}`),
+      "x-default": canonical,
     },
   };
 }
@@ -559,10 +557,11 @@ export function buildAlternatesFeedbacks(
 /**
  * Builds a consistent canonical URL and hreflang alternates object for Next.js metadata.
  *
- * URL convention (localePrefix: "as-needed"):
- *   - az (default) → https://jetacademy.az/{path}       (no locale prefix)
- *   - en           → https://jetacademy.az/en/{path}
- *   - x-default    → https://jetacademy.az/{path}       (same as az)
+ * URL convention (localePrefix: "always"):
+ *   - canonical    → https://jetacademy.az/{path}       (no locale prefix — clean URL)
+ *   - hreflang az  → https://jetacademy.az/az/{path}
+ *   - hreflang en  → https://jetacademy.az/en/{path}
+ *   - x-default    → https://jetacademy.az/{path}       (same as canonical)
  *
  * @param path   - Page path WITHOUT locale prefix, e.g. "/courses" or "/course/frontend"
  * @param locale - Current page locale ("az" | "en")
@@ -579,18 +578,23 @@ export function buildAlternates(
   const baseUrl = (base || getBaseUrl()).replace(/\/$/, "");
   const normalizedPath = path === "/" ? "" : path.startsWith("/") ? path : `/${path}`;
 
-  /** AZ = no prefix; others = /{locale} */
-  const localeUrl = (loc: string) => {
-    const prefix = loc === "az" ? "" : `/${loc}`;
-    return addTrailingSlash(`${baseUrl}${prefix}${normalizedPath}`);
-  };
+  /** Canonical and x-default: no locale prefix */
+  const cleanUrl = normalizedPath
+    ? addTrailingSlash(`${baseUrl}${normalizedPath}`)
+    : `${baseUrl}/`;
+
+  /** hreflang: always with /{locale}/ prefix */
+  const hreflangUrl = (loc: string) =>
+    addTrailingSlash(`${baseUrl}/${loc}${normalizedPath}`);
+
+  void locale; // locale not used for canonical; kept for API compatibility
 
   return {
-    canonical: localeUrl(locale),
+    canonical: cleanUrl,
     languages: {
-      az: localeUrl("az"),
-      en: localeUrl("en"),
-      "x-default": localeUrl("az"),
+      az: hreflangUrl("az"),
+      en: hreflangUrl("en"),
+      "x-default": cleanUrl,
     },
   };
 }

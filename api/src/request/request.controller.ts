@@ -34,19 +34,6 @@ import { Role, Language } from '@prisma/client';
 export class RequestController {
   constructor(private readonly requestService: RequestService) {}
 
-  private verifyMathCaptcha(dto: CreateRequestDto) {
-    const { captchaA, captchaB, captchaAnswer } = dto;
-
-    if (
-      typeof captchaA !== 'number' ||
-      typeof captchaB !== 'number' ||
-      typeof captchaAnswer !== 'number' ||
-      captchaA + captchaB !== captchaAnswer
-    ) {
-      throw new BadRequestException('CAPTCHA verification failed');
-    }
-  }
-
   @Get()
   @UseGuards(JwtAuthGuard, RoleGuard)
   @Roles(Role.ADMIN, Role.STAFF, Role.CRMOPERATOR, Role.COORDINATOR)
@@ -137,12 +124,7 @@ export class RequestController {
     if (typeof honeypot === 'string' && honeypot.trim() !== '') {
       throw new BadRequestException('Invalid request');
     }
-    this.verifyMathCaptcha(createRequestDto);
-    const rest = { ...createRequestDto };
-    delete rest.captchaA;
-    delete rest.captchaB;
-    delete rest.captchaAnswer;
-    return this.requestService.createRequest(rest);
+    return this.requestService.createRequest(createRequestDto);
   }
 
   @Get(':id')

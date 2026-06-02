@@ -4,8 +4,9 @@ import { createNavigation } from "next-intl/navigation";
 export const routing = defineRouting({
   locales: ["az", "en"],
   defaultLocale: "az",
-  /** AZ (default) — prefix yoxdur; EN — /en/ prefiksi ilə. SEO canonical üçün doğru. */
-  localePrefix: "as-needed",
+  /** Hər iki dil öz prefiksi ilə göstərilir (/az/, /en/).
+   *  Canonical URL isə locale prefikssiz (jetacademy.az/blog/) qurulur — SEO-ya uyğun. */
+  localePrefix: "always",
 });
 
 export const { Link, redirect, usePathname, useRouter } =

@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsString, IsInt, IsEnum, IsOptional, Min, Max } from 'class-validator';
+import { IsString, IsInt, IsEnum, IsOptional } from 'class-validator';
 import { Language } from '@prisma/client';
 
 /** Spam qarşısı: bu sahə doldurulubsa müraciət qəbul edilmir (honeypot) */
@@ -36,24 +36,4 @@ export class CreateRequestDto {
   @IsString()
   [HONEYPOT_FIELD]?: string;
 
-  @ApiProperty({ required: false, description: 'Riyazi CAPTCHA: birinci ədəd (1-9)' })
-  @IsOptional()
-  @IsInt()
-  @Min(1)
-  @Max(9)
-  captchaA?: number;
-
-  @ApiProperty({ required: false, description: 'Riyazi CAPTCHA: ikinci ədəd (1-9)' })
-  @IsOptional()
-  @IsInt()
-  @Min(1)
-  @Max(9)
-  captchaB?: number;
-
-  @ApiProperty({ required: false, description: 'Riyazi CAPTCHA: istifadəçi cavabı (a + b)' })
-  @IsOptional()
-  @IsInt()
-  @Min(2)
-  @Max(18)
-  captchaAnswer?: number;
 }

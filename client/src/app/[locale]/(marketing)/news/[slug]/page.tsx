@@ -178,10 +178,7 @@ export async function generateMetadata({
 
     const postTypeUrl = "news";
 
-    const localePrefix = locale === "az" ? "" : `/${locale}`;
-    const canonicalUrl = addTrailingSlash(
-      `${baseUrl}${localePrefix}/${postTypeUrl}/${params.slug}`
-    );
+    const canonicalUrl = addTrailingSlash(`${baseUrl}/${postTypeUrl}/${params.slug}`);
 
     const azSlug = data.slug?.az || params.slug;
     const enSlug = data.slug?.en || params.slug;
@@ -200,12 +197,12 @@ export async function generateMetadata({
         canonical: canonicalUrl,
         languages: {
           az: data.slug.az
-            ? addTrailingSlash(`${baseUrl}/${postTypeUrl}/${azSlug}`)
+            ? addTrailingSlash(`${baseUrl}/az/${postTypeUrl}/${azSlug}`)
             : undefined,
           en: data.slug.en
             ? addTrailingSlash(`${baseUrl}/en/${postTypeUrl}/${enSlug}`)
             : undefined,
-          "x-default": addTrailingSlash(`${baseUrl}/${postTypeUrl}/${azSlug}`),
+          "x-default": canonicalUrl,
         },
       },
       openGraph: {
