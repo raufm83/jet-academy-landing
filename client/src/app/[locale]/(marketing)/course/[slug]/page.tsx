@@ -226,8 +226,9 @@ export async function generateMetadata({
 
     const baseUrl = process.env.NEXT_PUBLIC_APP_URL || "https://jetacademy.az";
 
+    const localePrefix = locale === "az" ? "" : `/${locale}`;
     const canonicalUrl = addTrailingSlash(
-      `${baseUrl}/${locale}${courseDetailPath(locale, params.slug)}`
+      `${baseUrl}${localePrefix}${courseDetailPath(locale, params.slug)}`
     );
 
     const azSlug = data.slug?.az || params.slug;
@@ -274,10 +275,9 @@ export async function generateMetadata({
       alternates: {
         canonical: canonicalUrl,
         languages: {
-          az: addTrailingSlash(`${baseUrl}/az${courseDetailPath("az", azSlug)}`),
+          az: addTrailingSlash(`${baseUrl}${courseDetailPath("az", azSlug)}`),
           en: addTrailingSlash(`${baseUrl}/en${courseDetailPath("en", enSlug)}`),
-          ru: addTrailingSlash(`${baseUrl}/ru${courseDetailPath("ru", azSlug)}`),
-          "x-default": addTrailingSlash(`${baseUrl}/az${courseDetailPath("az", azSlug)}`),
+          "x-default": addTrailingSlash(`${baseUrl}${courseDetailPath("az", azSlug)}`),
         },
       },
 

@@ -2,6 +2,7 @@ import { Role } from "@/types/enums";
 import { Button, Card, Input, Select, SelectItem } from "@nextui-org/react";
 import { motion } from "framer-motion";
 import { Controller } from "react-hook-form";
+import ImageHint from "@/components/views/dashboard/shared/image-hint";
 import {
   MdLock,
   MdMail,
@@ -319,7 +320,12 @@ export default function UsersForm({
                         />
                       </div>
                     )}
-                    <div className="flex flex-col gap-1">
+                    <div className="flex flex-col gap-2">
+                      <ImageHint
+                        size="800 × 800 px"
+                        aspect="1:1"
+                        note="Server şəkli mərkəzdən 800×800 px kvadratına kəsir."
+                      />
                       <input
                         ref={avatarInputRef}
                         type="file"

@@ -18,15 +18,15 @@ export async function generateMetadata(): Promise<Metadata> {
   const t = await getTranslations("coursesPage");
   const locale = (await getLocale()) as Locale;
   
-  const baseUrl = process.env.NEXT_PUBLIC_APP_URL || "https://jetacademy.az";
+  const baseUrl = (process.env.NEXT_PUBLIC_APP_URL || "https://jetacademy.az").replace(/\/$/, "");
   const canonicalPath = coursesListingPath(locale);
+  const localePrefix = locale === "az" ? "" : `/${locale}`;
   const alternates = {
-    canonical: addTrailingSlash(`${baseUrl}/${locale}${canonicalPath}`),
+    canonical: addTrailingSlash(`${baseUrl}${localePrefix}${canonicalPath}`),
     languages: {
-      az: addTrailingSlash(`${baseUrl}/az${coursesListingPath("az")}`),
+      az: addTrailingSlash(`${baseUrl}${coursesListingPath("az")}`),
       en: addTrailingSlash(`${baseUrl}/en${coursesListingPath("en")}`),
-      ru: addTrailingSlash(`${baseUrl}/ru${coursesListingPath("ru")}`),
-      "x-default": addTrailingSlash(`${baseUrl}/az${coursesListingPath("az")}`),
+      "x-default": addTrailingSlash(`${baseUrl}${coursesListingPath("az")}`),
     },
   };
 

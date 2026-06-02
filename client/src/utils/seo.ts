@@ -526,7 +526,7 @@ export function addTrailingSlash(url: string): string {
 }
 
 /**
- * Rəylər səhifəsi: /az/reyler və /en/feedback (və /ru/feedback) kimi fərqli path-lər üçün hreflang.
+ * Rəylər səhifəsi: /reyler (az, default — prefix yox) və /en/feedback üçün hreflang.
  */
 export function buildAlternatesFeedbacks(
   locale: string,
@@ -538,8 +538,11 @@ export function buildAlternatesFeedbacks(
   const baseUrl = (base || getBaseUrl()).replace(/\/$/, "");
   const pathAz = "/reyler";
   const pathIntl = "/feedback";
-  const url = (loc: string, pathSeg: string) =>
-    addTrailingSlash(`${baseUrl}/${loc}${pathSeg}`);
+  /** AZ = no prefix; others = /{locale} */
+  const url = (loc: string, pathSeg: string) => {
+    const prefix = loc === "az" ? "" : `/${loc}`;
+    return addTrailingSlash(`${baseUrl}${prefix}${pathSeg}`);
+  };
   const pathFor = (loc: string) => (loc === "az" ? pathAz : pathIntl);
   const canonical = url(locale, pathFor(locale));
 
@@ -548,7 +551,6 @@ export function buildAlternatesFeedbacks(
     languages: {
       az: url("az", pathAz),
       en: url("en", pathIntl),
-      ru: url("ru", pathIntl),
       "x-default": url("az", pathAz),
     },
   };
@@ -557,10 +559,10 @@ export function buildAlternatesFeedbacks(
 /**
  * Builds a consistent canonical URL and hreflang alternates object for Next.js metadata.
  *
- * URL convention:
- *   - az            → https://jetacademy.az/az/{path}
- *   - en            → https://jetacademy.az/en/{path}
- *   - x-default     → https://jetacademy.az/{path}
+ * URL convention (localePrefix: "as-needed"):
+ *   - az (default) → https://jetacademy.az/{path}       (no locale prefix)
+ *   - en           → https://jetacademy.az/en/{path}
+ *   - x-default    → https://jetacademy.az/{path}       (same as az)
  *
  * @param path   - Page path WITHOUT locale prefix, e.g. "/courses" or "/course/frontend"
  * @param locale - Current page locale ("az" | "en")
@@ -577,17 +579,18 @@ export function buildAlternates(
   const baseUrl = (base || getBaseUrl()).replace(/\/$/, "");
   const normalizedPath = path === "/" ? "" : path.startsWith("/") ? path : `/${path}`;
 
-  const localeUrl = (loc: string) => addTrailingSlash(`${baseUrl}/${loc}${normalizedPath}`);
-  const xDefaultUrl = normalizedPath
-    ? addTrailingSlash(`${baseUrl}${normalizedPath}`)
-    : `${baseUrl}/`;
+  /** AZ = no prefix; others = /{locale} */
+  const localeUrl = (loc: string) => {
+    const prefix = loc === "az" ? "" : `/${loc}`;
+    return addTrailingSlash(`${baseUrl}${prefix}${normalizedPath}`);
+  };
 
   return {
     canonical: localeUrl(locale),
     languages: {
       az: localeUrl("az"),
       en: localeUrl("en"),
-      "x-default": xDefaultUrl,
+      "x-default": localeUrl("az"),
     },
   };
 }

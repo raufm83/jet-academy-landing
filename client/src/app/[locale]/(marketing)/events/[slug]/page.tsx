@@ -178,8 +178,9 @@ export async function generateMetadata({
 
     const postTypeUrl = "events";
 
+    const localePrefix = locale === "az" ? "" : `/${locale}`;
     const canonicalUrl = addTrailingSlash(
-      `${baseUrl}/${locale}/${postTypeUrl}/${params.slug}`
+      `${baseUrl}${localePrefix}/${postTypeUrl}/${params.slug}`
     );
 
     const azSlug = data.slug?.az || params.slug;
@@ -199,7 +200,7 @@ export async function generateMetadata({
         canonical: canonicalUrl,
         languages: {
           az: data.slug.az
-            ? addTrailingSlash(`${baseUrl}/az/${postTypeUrl}/${azSlug}`)
+            ? addTrailingSlash(`${baseUrl}/${postTypeUrl}/${azSlug}`)
             : undefined,
           en: data.slug.en
             ? addTrailingSlash(`${baseUrl}/en/${postTypeUrl}/${enSlug}`)
