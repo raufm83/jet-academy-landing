@@ -90,20 +90,7 @@ export default function GraduateCard({
 
       {/* Content */}
       <div className="flex flex-1 flex-col p-5">
-        <div className="flex items-start justify-between gap-2">
-          <h3 className="text-lg font-bold text-[#1F2937] sm:text-xl">{name}</h3>
-          {graduate.linkedin && (
-            <a
-              href={graduate.linkedin}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-[#0A66C2] hover:text-[#004182] transition-colors"
-              title="LinkedIn Profil"
-            >
-              <FaLinkedin size={22} />
-            </a>
-          )}
-        </div>
+        <h3 className="text-lg font-bold text-[#1F2937] sm:text-xl">{name}</h3>
         {graduate.courseName && (graduate.courseName[lang] || graduate.courseName.az) && (
           <span className="mt-1.5 inline-flex w-fit items-center gap-1 rounded-full bg-jsyellow/10 px-3 py-0.5 text-xs font-medium text-jsyellow">
             {graduate.courseName[lang] || graduate.courseName.az}
@@ -112,6 +99,18 @@ export default function GraduateCard({
         <p className="mt-2 flex-1 text-sm leading-relaxed text-[#6b6b6b] line-clamp-4">
           {preview}
         </p>
+
+        {graduate.linkedin && (
+          <a
+            href={graduate.linkedin}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="mt-4 inline-flex w-full items-center justify-center gap-2 rounded-xl bg-[#0A66C2] px-4 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-[#004182]"
+          >
+            <FaLinkedin size={18} />
+            LinkedIn
+          </a>
+        )}
       </div>
 
       {/* Accent */}
