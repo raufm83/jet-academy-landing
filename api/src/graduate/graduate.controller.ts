@@ -70,6 +70,7 @@ export class GraduateController {
       courseId: body.courseId || undefined,
       isActive: body.isActive === 'true' || body.isActive === true,
       order: body.order ? +body.order : 0,
+      linkedin: body.linkedin || undefined,
     };
     return this.graduateService.create(dto, imageFilename);
   }
@@ -132,6 +133,7 @@ export class GraduateController {
     if (body.isActive !== undefined)
       dto.isActive = body.isActive === 'true' || body.isActive === true;
     if (body.order !== undefined) dto.order = +body.order;
+    if (body.linkedin !== undefined) dto.linkedin = body.linkedin || null;
 
     return this.graduateService.update(id, dto, imageFilename);
   }
