@@ -4,13 +4,7 @@ import { Toaster } from "sonner";
 import "./globals.css";
 import { GoogleAnalytics } from "@next/third-parties/google";
 import Script from "next/script";
-import dynamic from "next/dynamic";
 import { cookies } from "next/headers";
-
-const ContentProtection = dynamic(
-  () => import("@/components/shared/content-protection"),
-  { ssr: false }
-);
 
 export const viewport: Viewport = {
   themeColor: "#ffffff",
@@ -74,7 +68,6 @@ fbq('track', 'PageView');
       <body
         className={`${manrope.className} scroll-smooth antialiased overflow-x-clip`}
       >
-        <ContentProtection />
         {children}
         <Toaster />
         <GoogleAnalytics gaId="G-Z9R55K1YB9" />
