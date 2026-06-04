@@ -12,7 +12,6 @@ import { getLocale, getTranslations } from "next-intl/server";
 import { notFound } from "next/navigation";
 import BreadcrumbContextWrapper from "@/hooks/BreadcrumbContextWrapper";
 import {
-  addTrailingSlash,
   htmlToDescription,
   truncateDescription,
   truncateTitle,
@@ -229,9 +228,9 @@ export async function generateMetadata({
     const azSlug = data.slug?.az || params.slug;
     const enSlug = data.slug?.en || params.slug;
 
-    const canonicalUrl = addTrailingSlash(
-      `${baseUrl}${courseDetailPath("az", azSlug)}`
-    );
+    const azCanonical = `${baseUrl}${courseDetailPath("az", azSlug)}`;
+    const enCanonical = `${baseUrl}/en${courseDetailPath("en", enSlug)}`;
+    const canonicalUrl = locale === "en" ? enCanonical : azCanonical;
     const rawTitle =
       data.title?.[locale] ??
       data.title?.az ??
@@ -274,9 +273,9 @@ export async function generateMetadata({
       alternates: {
         canonical: canonicalUrl,
         languages: {
-          az: addTrailingSlash(`${baseUrl}/az${courseDetailPath("az", azSlug)}`),
-          en: addTrailingSlash(`${baseUrl}/en${courseDetailPath("en", enSlug)}`),
-          "x-default": canonicalUrl,
+          az: azCanonical,
+          en: enCanonical,
+          "x-default": azCanonical,
         },
       },
 

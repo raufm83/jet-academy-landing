@@ -6,7 +6,6 @@ import { getAllCourses } from "@/utils/api/course";
 import { Metadata } from "next";
 import { getLocale, getTranslations } from "next-intl/server";
 import { resolvePageMeta } from "@/utils/api/page-meta";
-import { addTrailingSlash } from "@/utils/seo";
 import { collectionPageGraph, SITE } from "@/data/site-schema";
 import JsonLd from "@/components/seo/json-ld";
 import FaqSection from "@/components/views/landing/faq/faq-section";
@@ -19,13 +18,16 @@ export async function generateMetadata(): Promise<Metadata> {
   const locale = (await getLocale()) as Locale;
   
   const baseUrl = (process.env.NEXT_PUBLIC_APP_URL || "https://jetacademy.az").replace(/\/$/, "");
-  const canonicalPath = coursesListingPath("az");
+  const azPath = coursesListingPath("az");
+  const enPath = coursesListingPath("en");
+  const azCanonical = `${baseUrl}${azPath}`;
+  const enCanonical = `${baseUrl}/en${enPath}`;
   const alternates = {
-    canonical: addTrailingSlash(`${baseUrl}${canonicalPath}`),
+    canonical: locale === "en" ? enCanonical : azCanonical,
     languages: {
-      az: addTrailingSlash(`${baseUrl}/az${coursesListingPath("az")}`),
-      en: addTrailingSlash(`${baseUrl}/en${coursesListingPath("en")}`),
-      "x-default": addTrailingSlash(`${baseUrl}${canonicalPath}`),
+      az: azCanonical,
+      en: enCanonical,
+      "x-default": azCanonical,
     },
   };
 

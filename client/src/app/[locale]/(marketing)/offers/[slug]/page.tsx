@@ -7,7 +7,7 @@ import { formatDate, formatTime } from "@/utils/formatters/formatDate";
 import { Metadata } from "next";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 import { notFound } from "next/navigation";
-import { addTrailingSlash, truncateTitle, htmlToDescription } from "@/utils/seo";
+import { truncateTitle, htmlToDescription } from "@/utils/seo";
 import { getPostImageSrc } from "@/utils/helpers/post";
 import { offerSingleGraph, SITE } from "@/data/site-schema";
 import JsonLd from "@/components/seo/json-ld";
@@ -181,10 +181,12 @@ export async function generateMetadata({
 
     const postTypeUrl = "offers";
 
-    const canonicalUrl = addTrailingSlash(`${baseUrl}/${postTypeUrl}/${params.slug}`);
-
     const azSlug = data.slug?.az || params.slug;
     const enSlug = data.slug?.en || params.slug;
+
+    const azCanonical = `${baseUrl}/${postTypeUrl}/${azSlug}`;
+    const enCanonical = `${baseUrl}/en/${postTypeUrl}/${enSlug}`;
+    const canonicalUrl = locale === "en" ? enCanonical : azCanonical;
 
     const truncatedTitle = truncateTitle(data.title[locale]);
     const truncatedDesc = contentText;
@@ -196,13 +198,9 @@ export async function generateMetadata({
       alternates: {
         canonical: canonicalUrl,
         languages: {
-          az: data.slug?.az
-            ? addTrailingSlash(`${baseUrl}/az/${postTypeUrl}/${azSlug}`)
-            : undefined,
-          en: data.slug?.en
-            ? addTrailingSlash(`${baseUrl}/en/${postTypeUrl}/${enSlug}`)
-            : undefined,
-          "x-default": canonicalUrl,
+          az: data.slug?.az ? azCanonical : undefined,
+          en: data.slug?.en ? enCanonical : undefined,
+          "x-default": azCanonical,
         },
       },
       openGraph: {

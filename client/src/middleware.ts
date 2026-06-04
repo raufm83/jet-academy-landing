@@ -186,7 +186,8 @@ const middlewares = withAuth(
 
     const pathTrim = pathname.replace(/\/+$/, "") || pathname;
 
-    /** /az/dashboard/... və /en/dashboard/... → /dashboard/... — əks halda auth bloku işləmir */
+    /** /az/dashboard/... və /en/dashboard/... → /dashboard/... — əks halda auth bloku işləmir
+     *  as-needed: az-da prefix yoxdur, amma köhnə /az/dashboard linkləri hələ gələ bilər */
     const dashboardLocaleMatch = pathTrim.match(
       /^\/(az|en)(\/dashboard(?:\/.*)?)$/
     );

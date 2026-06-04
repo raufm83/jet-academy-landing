@@ -526,10 +526,12 @@ export function addTrailingSlash(url: string): string {
 }
 
 /**
- * Rəylər səhifəsi:
- *   canonical    = https://jetacademy.az/reyler/  (no locale prefix)
- *   hreflang az  = https://jetacademy.az/az/reyler/
- *   hreflang en  = https://jetacademy.az/en/feedback/
+ * Rəylər səhifəsi (localePrefix: "as-needed"):
+ *   AZ canonical  = https://jetacademy.az/reyler/      (no prefix — served directly)
+ *   EN canonical  = https://jetacademy.az/en/feedback/
+ *   hreflang az   = https://jetacademy.az/reyler/
+ *   hreflang en   = https://jetacademy.az/en/feedback/
+ *   x-default     = https://jetacademy.az/reyler/
  */
 export function buildAlternatesFeedbacks(
   locale: string,
@@ -540,16 +542,18 @@ export function buildAlternatesFeedbacks(
 } {
   const baseUrl = (base || getBaseUrl()).replace(/\/$/, "");
   const pathAz = "/reyler";
-  const pathIntl = "/feedback";
-  void locale;
-  const canonical = addTrailingSlash(`${baseUrl}${pathAz}`);
+  const pathEn = "/feedback";
+
+  const azUrl = `${baseUrl}${pathAz}`;
+  const enUrl = `${baseUrl}/en${pathEn}`;
+  const canonical = locale === "en" ? enUrl : azUrl;
 
   return {
     canonical,
     languages: {
-      az: addTrailingSlash(`${baseUrl}/az${pathAz}`),
-      en: addTrailingSlash(`${baseUrl}/en${pathIntl}`),
-      "x-default": canonical,
+      az: azUrl,
+      en: enUrl,
+      "x-default": azUrl,
     },
   };
 }
@@ -557,11 +561,14 @@ export function buildAlternatesFeedbacks(
 /**
  * Builds a consistent canonical URL and hreflang alternates object for Next.js metadata.
  *
- * URL convention (localePrefix: "always"):
- *   - canonical    → https://jetacademy.az/{path}       (no locale prefix — clean URL)
- *   - hreflang az  → https://jetacademy.az/az/{path}
- *   - hreflang en  → https://jetacademy.az/en/{path}
- *   - x-default    → https://jetacademy.az/{path}       (same as canonical)
+ * URL convention (localePrefix: "as-needed"):
+ *   - AZ (default)  served at  jetacademy.az/{path}        — no prefix
+ *   - EN            served at  jetacademy.az/en/{path}
+ *
+ *   canonical   → served URL for current locale
+ *   hreflang az → jetacademy.az/{path}      (no prefix — az is default)
+ *   hreflang en → jetacademy.az/en/{path}
+ *   x-default   → jetacademy.az/{path}      (same as az canonical)
  *
  * @param path   - Page path WITHOUT locale prefix, e.g. "/courses" or "/course/frontend"
  * @param locale - Current page locale ("az" | "en")
@@ -578,23 +585,18 @@ export function buildAlternates(
   const baseUrl = (base || getBaseUrl()).replace(/\/$/, "");
   const normalizedPath = path === "/" ? "" : path.startsWith("/") ? path : `/${path}`;
 
-  /** Canonical and x-default: no locale prefix */
-  const cleanUrl = normalizedPath
-    ? addTrailingSlash(`${baseUrl}${normalizedPath}`)
-    : `${baseUrl}/`;
-
-  /** hreflang: always with /{locale}/ prefix */
-  const hreflangUrl = (loc: string) =>
-    addTrailingSlash(`${baseUrl}/${loc}${normalizedPath}`);
-
-  void locale; // locale not used for canonical; kept for API compatibility
+  /** AZ = no prefix; EN = /en/ prefix. No trailing slash on canonical/hreflang. */
+  const localeUrl = (loc: string) => {
+    const prefix = loc === "az" ? "" : `/${loc}`;
+    return `${baseUrl}${prefix}${normalizedPath}` || baseUrl;
+  };
 
   return {
-    canonical: cleanUrl,
+    canonical: localeUrl(locale),
     languages: {
-      az: hreflangUrl("az"),
-      en: hreflangUrl("en"),
-      "x-default": cleanUrl,
+      az: localeUrl("az"),
+      en: localeUrl("en"),
+      "x-default": localeUrl("az"),
     },
   };
 }
