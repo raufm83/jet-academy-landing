@@ -3,7 +3,7 @@ import createNextIntlPlugin from "next-intl/plugin";
 const withNextIntl = createNextIntlPlugin();
 
 const nextConfig = {
-  trailingSlash: true,
+  trailingSlash: false,
   output: "standalone",
   compress: true,
   poweredByHeader: false,
