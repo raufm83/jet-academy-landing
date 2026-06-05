@@ -13,22 +13,24 @@ interface LoginFormInputs {
   remember: boolean;
 }
 
-const APP_ORIGIN = (process.env.NEXT_PUBLIC_APP_URL || "https://jetacademy.az").replace(/\/+$/, "");
-
-function getDashboardRedirectUrl(url: string | null | undefined): string {
+/**
+ * NextAuth `result.url` bəzən yanlış host (məs. new.jetacademy.az) ilə absolute
+ * URL qaytarır. Yalnız path-i götürüb cari origin üzərində yönləndiririk — beləcə
+ * istifadəçi hansı domendədirsə orada qalır (cookie qorunur), rogue host sıçrayışı olmur.
+ */
+function getDashboardRedirectPath(url: string | null | undefined): string {
+  const fallback = "/dashboard/";
   if (typeof window === "undefined") {
-    return `${APP_ORIGIN}/dashboard/`;
+    return fallback;
   }
 
   try {
-    const parsedUrl = new URL(url || "/dashboard/", window.location.origin);
-    const destinationPath = parsedUrl.pathname.startsWith("/dashboard")
+    const parsedUrl = new URL(url || fallback, window.location.origin);
+    return parsedUrl.pathname.startsWith("/dashboard")
       ? `${parsedUrl.pathname}${parsedUrl.search}`
-      : "/dashboard/";
-
-    return `${APP_ORIGIN}${destinationPath}`;
+      : fallback;
   } catch {
-    return `${APP_ORIGIN}/dashboard/`;
+    return fallback;
   }
 }
 
@@ -67,7 +69,7 @@ export default function LoginPage() {
         }
 
         toast.success("Giriş uğurla başa çatdı");
-        window.location.replace(getDashboardRedirectUrl(result.url || callbackUrl));
+        window.location.replace(getDashboardRedirectPath(result.url || callbackUrl));
       })
       .catch((error) => {
         console.error("Login error:", error);
