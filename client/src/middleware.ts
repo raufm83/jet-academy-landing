@@ -259,15 +259,6 @@ const middlewares = withAuth(
       const dashPath = pathname.replace(/\/+$/, "") || pathname;
 
       if (dashPath === "/dashboard/login") {
-        const token = await getToken({
-          req: request,
-          secret: AUTH_SECRET,
-        });
-
-        if (token) {
-          const roleName = (token.role as Role) || Role.USER;
-          return NextResponse.redirect(getRoleHomePage(roleName, request));
-        }
         return NextResponse.next();
       }
 

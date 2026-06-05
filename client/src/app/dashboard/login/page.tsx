@@ -15,7 +15,7 @@ interface LoginFormInputs {
 
 export default function LoginPage() {
   const searchParams = useSearchParams();
-  const callbackUrl = searchParams.get("callbackUrl") || "/dashboard";
+  const callbackUrl = searchParams.get("callbackUrl") || "/dashboard/";
   const router = useRouter();
   const {
     register,
@@ -49,7 +49,7 @@ export default function LoginPage() {
         }
 
         toast.success("Giriş uğurla başa çatdı");
-        router.push("/dashboard/");
+        router.replace(result.url || callbackUrl);
         router.refresh();
       })
       .catch((error) => {

@@ -585,17 +585,21 @@ export function buildAlternates(
   const baseUrl = (base || getBaseUrl()).replace(/\/$/, "");
   const normalizedPath = path === "/" ? "" : path.startsWith("/") ? path : `/${path}`;
 
-  /** AZ = no prefix; EN = /en/ prefix. No trailing slash on canonical/hreflang. */
+  /** AZ = no prefix; EN = /en/ prefix. */
   const localeUrl = (loc: string) => {
     const prefix = loc === "az" ? "" : `/${loc}`;
     return `${baseUrl}${prefix}${normalizedPath}` || baseUrl;
   };
 
+  const homepageHreflangUrl = (loc: string) => `${baseUrl}/${loc}/`;
+  const hreflangUrl = (loc: string) =>
+    normalizedPath === "" ? homepageHreflangUrl(loc) : localeUrl(loc);
+
   return {
     canonical: localeUrl(locale),
     languages: {
-      az: localeUrl("az"),
-      en: localeUrl("en"),
+      az: hreflangUrl("az"),
+      en: hreflangUrl("en"),
       "x-default": localeUrl("az"),
     },
   };
