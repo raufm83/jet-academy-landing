@@ -104,6 +104,15 @@ const AUTH_SECRET = process.env.NEXTAUTH_SECRET;
 const intlMiddleware = createIntlMiddleware(routing);
 
 /**
+ * Dashboard cavablarının (xüsusən redirect-lərin) brauzerdə keşlənməsinin qarşısını alır.
+ * Keşlənmiş permanent redirect-lər "bəzi kompüterlərdə" sonsuz döngü/error yaradırdı.
+ */
+const noStore = (response: NextResponse): NextResponse => {
+  response.headers.set("Cache-Control", "no-store, must-revalidate");
+  return response;
+};
+
+/**
  * Checks if a pathname matches any route in the provided routes array
  */
 const pathMatches = (pathname: string, routes: string[]): boolean => {
@@ -198,7 +207,9 @@ const middlewares = withAuth(
       }
       const url = new URL(targetPath, request.url);
       url.search = request.nextUrl.search;
-      return NextResponse.redirect(url, 308);
+      /** 307 (temporary) — 308 brauzerdə keşlənərək "bəzi kompüterlərdə" sonsuz
+       *  yönləndirmə/error yaradırdı; dashboard üçün keşlənməyən redirect istifadə edirik. */
+      return noStore(NextResponse.redirect(url, 307));
     }
 
     /** /ru/* → /en/* (ru locale artıq dəstəklənmir) */
@@ -252,14 +263,14 @@ const middlewares = withAuth(
 
     if (pathname.match(/^\/(az|en|ru)\/dashboard\/login/)) {
       const newUrl = new URL(pathname.replace(/^\/(az|en|ru)/, ""), request.url);
-      return NextResponse.redirect(newUrl, 308);
+      return noStore(NextResponse.redirect(newUrl, 307));
     }
 
     if (pathname.startsWith("/dashboard")) {
       const dashPath = pathname.replace(/\/+$/, "") || pathname;
 
       if (dashPath === "/dashboard/login") {
-        return NextResponse.next();
+        return noStore(NextResponse.next());
       }
 
       const token = await getToken({
@@ -271,16 +282,16 @@ const middlewares = withAuth(
         if (dashPath !== "/dashboard/login") {
           loginUrl.searchParams.set("callbackUrl", pathname);
         }
-        return NextResponse.redirect(loginUrl);
+        return noStore(NextResponse.redirect(loginUrl, 307));
       }
 
       const userRole = (token.role as Role) || Role.USER;
 
       if (!hasRouteAccess(dashPath, userRole)) {
-        return NextResponse.redirect(getRoleHomePage(userRole, request));
+        return noStore(NextResponse.redirect(getRoleHomePage(userRole, request), 307));
       }
 
-      return NextResponse.next();
+      return noStore(NextResponse.next());
     }
 
     // SEO: JSON-LD schema üçün layout-da pathname oxumaq
