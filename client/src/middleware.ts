@@ -100,6 +100,7 @@ const ROUTE_PERMISSIONS = {
 };
 
 const AUTH_SECRET = process.env.NEXTAUTH_SECRET;
+const APP_ORIGIN = (process.env.NEXT_PUBLIC_APP_URL || "https://jetacademy.az").replace(/\/+$/, "");
 
 const intlMiddleware = createIntlMiddleware(routing);
 
@@ -185,6 +186,14 @@ const middlewares = withAuth(
     const pathname = request.nextUrl.pathname;
 
     const pathTrim = pathname.replace(/\/+$/, "") || pathname;
+
+    if (pathTrim.startsWith("/dashboard")) {
+      const appUrl = new URL(APP_ORIGIN);
+      if (request.nextUrl.origin !== appUrl.origin) {
+        const url = new URL(`${pathname}${request.nextUrl.search}`, appUrl.origin);
+        return NextResponse.redirect(url, 308);
+      }
+    }
 
     /** /az/dashboard/... və /en/dashboard/... → /dashboard/... — əks halda auth bloku işləmir
      *  as-needed: az-da prefix yoxdur, amma köhnə /az/dashboard linkləri hələ gələ bilər */

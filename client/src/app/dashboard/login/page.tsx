@@ -2,7 +2,7 @@
 import { Button, Card, Checkbox, Input } from "@nextui-org/react";
 import { motion } from "framer-motion";
 import { signIn } from "next-auth/react";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useSearchParams } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { MdDashboard, MdLock, MdMail } from "react-icons/md";
 import { toast } from "sonner";
@@ -13,10 +13,28 @@ interface LoginFormInputs {
   remember: boolean;
 }
 
+const APP_ORIGIN = (process.env.NEXT_PUBLIC_APP_URL || "https://jetacademy.az").replace(/\/+$/, "");
+
+function getDashboardRedirectUrl(url: string | null | undefined): string {
+  if (typeof window === "undefined") {
+    return `${APP_ORIGIN}/dashboard/`;
+  }
+
+  try {
+    const parsedUrl = new URL(url || "/dashboard/", window.location.origin);
+    const destinationPath = parsedUrl.pathname.startsWith("/dashboard")
+      ? `${parsedUrl.pathname}${parsedUrl.search}`
+      : "/dashboard/";
+
+    return `${APP_ORIGIN}${destinationPath}`;
+  } catch {
+    return `${APP_ORIGIN}/dashboard/`;
+  }
+}
+
 export default function LoginPage() {
   const searchParams = useSearchParams();
   const callbackUrl = searchParams.get("callbackUrl") || "/dashboard/";
-  const router = useRouter();
   const {
     register,
     handleSubmit,
@@ -49,8 +67,7 @@ export default function LoginPage() {
         }
 
         toast.success("Giriş uğurla başa çatdı");
-        router.replace(result.url || callbackUrl);
-        router.refresh();
+        window.location.replace(getDashboardRedirectUrl(result.url || callbackUrl));
       })
       .catch((error) => {
         console.error("Login error:", error);
