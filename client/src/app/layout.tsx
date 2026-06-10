@@ -5,6 +5,12 @@ import "./globals.css";
 import { GoogleAnalytics } from "@next/third-parties/google";
 import Script from "next/script";
 import { cookies } from "next/headers";
+import dynamic from "next/dynamic";
+
+const CopyProtection = dynamic(
+  () => import("@/components/shared/copy-protection"),
+  { ssr: false }
+);
 
 export const viewport: Viewport = {
   themeColor: "#ffffff",
@@ -69,6 +75,7 @@ fbq('track', 'PageView');
         className={`${manrope.className} scroll-smooth antialiased overflow-x-clip`}
       >
         {children}
+        <CopyProtection />
         <Toaster />
         <GoogleAnalytics gaId="G-Z9R55K1YB9" />
       </body>
