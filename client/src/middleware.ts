@@ -282,7 +282,34 @@ const middlewares = withAuth(
         if (dashPath !== "/dashboard/login") {
           loginUrl.searchParams.set("callbackUrl", pathname);
         }
-        return noStore(NextResponse.redirect(loginUrl, 307));
+        const response = NextResponse.redirect(loginUrl, 307);
+
+        /** Köhnə/zədələnmiş session cookie-ləri (xüsusən chunk qalıqları .0/.1)
+         *  token decode-u pozur → "giriş edən kimi logout" döngüsü yaranır.
+         *  Login-ə qaytararkən bütün session cookie variantlarını təmizləyirik ki,
+         *  növbəti giriş təmiz cookie ilə işləsin. */
+        const cookieHeader = request.headers.get("cookie") || "";
+        if (cookieHeader.includes("next-auth.session-token")) {
+          for (const base of [
+            "next-auth.session-token",
+            "__Secure-next-auth.session-token",
+          ]) {
+            for (const suffix of ["", ".0", ".1", ".2", ".3"]) {
+              const name = `${base}${suffix}`;
+              if (cookieHeader.includes(`${name}=`)) {
+                response.cookies.set(name, "", {
+                  maxAge: 0,
+                  path: "/",
+                  httpOnly: true,
+                  sameSite: "lax",
+                  secure: base.startsWith("__Secure-"),
+                });
+              }
+            }
+          }
+        }
+
+        return noStore(response);
       }
 
       const userRole = (token.role as Role) || Role.USER;

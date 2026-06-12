@@ -5,7 +5,8 @@ services:
       dockerfile: Dockerfile
       args:
         - NEXTAUTH_SECRET=${NEXTAUTH_SECRET}
-        - NEXTAUTH_URL=${NEXTAUTH_URL}
+        # Server .env-də köhnə host (new.jetacademy.az) qalıb — burada sabitlənir
+        - NEXTAUTH_URL=https://jetacademy.az
         - NEXT_PUBLIC_API_URL=${NEXT_PUBLIC_API_URL}
         - NEXT_PUBLIC_CDN_URL=${NEXT_PUBLIC_CDN_URL}
         - NEXT_PUBLIC_APP_URL=${NEXT_PUBLIC_APP_URL}
@@ -16,7 +17,7 @@ services:
       - "3030:3000"
     environment:
       - NEXTAUTH_SECRET=${NEXTAUTH_SECRET}
-      - NEXTAUTH_URL=${NEXTAUTH_URL}
+      - NEXTAUTH_URL=https://jetacademy.az
       - DATABASE_URL=${DATABASE_URL}
     networks:
       - jetschool
