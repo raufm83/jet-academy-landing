@@ -2,6 +2,7 @@ import { AuthOptions } from "next-auth";
 import Credentials from "next-auth/providers/credentials";
 import { JWT } from "next-auth/jwt";
 import { Session } from "next-auth";
+import { getSessionCookieName, useSecureAuthCookies } from "./auth-cookie";
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:3001/api";
 
@@ -61,6 +62,22 @@ export const authOptions: AuthOptions = {
   session: {
     strategy: "jwt",
     maxAge: 24 * 60 * 60, // 24 hours in seconds
+  },
+  /**
+   * Köhnə default adlı cookie-lər (next-auth.session-token və onun .0/.1
+   * chunk-ları) konflikt yaradırdı. Yeni ada keçməklə onlar tamamilə
+   * görməzdən gəlinir — istifadəçi heç nə silmədən təmiz giriş edir.
+   */
+  cookies: {
+    sessionToken: {
+      name: getSessionCookieName(),
+      options: {
+        httpOnly: true,
+        sameSite: "lax",
+        path: "/",
+        secure: useSecureAuthCookies(),
+      },
+    },
   },
   secret: process.env.NEXTAUTH_SECRET,
   debug: process.env.NODE_ENV === "development",
