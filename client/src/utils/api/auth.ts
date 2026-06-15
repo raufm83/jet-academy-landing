@@ -2,7 +2,7 @@ import { AuthOptions } from "next-auth";
 import Credentials from "next-auth/providers/credentials";
 import { JWT } from "next-auth/jwt";
 import { Session } from "next-auth";
-import { getSessionCookieName, useSecureAuthCookies } from "./auth-cookie";
+import { getSessionCookieName, isSecureAuthCookies } from "./auth-cookie";
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:3001/api";
 
@@ -75,7 +75,7 @@ export const authOptions: AuthOptions = {
         httpOnly: true,
         sameSite: "lax",
         path: "/",
-        secure: useSecureAuthCookies(),
+        secure: isSecureAuthCookies(),
       },
     },
   },

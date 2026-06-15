@@ -6,7 +6,7 @@ import { routing } from "./i18n/routing";
 import { getToken } from "next-auth/jwt";
 import { Role } from "@/types/enums";
 import { dashboardHomePathForRole } from "@/lib/dashboard-home";
-import { getSessionCookieName, useSecureAuthCookies } from "@/utils/api/auth-cookie";
+import { getSessionCookieName, isSecureAuthCookies } from "@/utils/api/auth-cookie";
 
 export { Role };
 
@@ -278,7 +278,7 @@ const middlewares = withAuth(
         req: request,
         secret: AUTH_SECRET,
         cookieName: getSessionCookieName(),
-        secureCookie: useSecureAuthCookies(),
+        secureCookie: isSecureAuthCookies(),
       });
       if (!token) {
         const loginUrl = new URL("/dashboard/login/", request.url);

@@ -8,14 +8,14 @@
  * döngüsü aradan qalxır, istifadəçi heç nə təmizləməyə məcbur olmur.
  */
 
-export function useSecureAuthCookies(): boolean {
+export function isSecureAuthCookies(): boolean {
   const url = process.env.NEXTAUTH_URL || "";
   if (url) return url.startsWith("https://");
   return process.env.NODE_ENV === "production";
 }
 
 export function getSessionCookieName(): string {
-  return useSecureAuthCookies()
+  return isSecureAuthCookies()
     ? "__Secure-jet-auth.session-token"
     : "jet-auth.session-token";
 }
