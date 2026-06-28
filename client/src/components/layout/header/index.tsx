@@ -139,7 +139,7 @@ export default function Header() {
             isMenuOpen ? "opacity-100 scale-100 visible" : "opacity-0 scale-95 invisible pointer-events-none"
           )}
         >
-          <div className="relative flex max-h-[85dvh] w-full max-w-md flex-col overflow-hidden rounded-2xl bg-white shadow-lg">
+          <div role="dialog" aria-modal="true" aria-label="Navigation Menu" className="relative flex max-h-[85dvh] w-full max-w-md flex-col overflow-hidden rounded-2xl bg-white shadow-lg">
             <div className="flex shrink-0 items-center justify-end border-b border-gray-200 p-3">
               <button
                 type="button"

@@ -1,0 +1,25 @@
+# JET Academy
+
+> JET Academy is a premium professional education center in Azerbaijan offering specialized tech education, coding bootcamps, and professional design courses for adults.
+
+## Main Navigation & Pages
+
+- [Home Page](/): Main landing page of JET Academy.
+- [About Us](/about-us): Learn about our mission, professional instructors, and training centers.
+- [Contact Us](/contact-us): Contact information, maps, and inquiries form.
+- [Courses](/courses): Professional courses in Programming, System Administration, Design, and QA.
+- [Student Projects](/projects): Portfolio of software and design projects completed by our graduates.
+- [Graduates](/graduates): Alumni success stories and career support placement info.
+- [Gallery](/gallery): Photo gallery of academy life, classroom environments, and events.
+- [Student Reviews](/reyler): Reviews and testimonials from our successful graduates.
+- [Glossary](/glossary): Extensive IT and professional programming glossary.
+- [Vacancies](/vacancies): Career opportunities at JET Academy for instructors and operations team.
+
+## Content & Sections
+
+- [Offers](/offers): Direct special campaigns, early bird discounts, and corporate training offers.
+- [News](/news): Professional events, programming hackathons, and corporate announcements.
+- [Blog](/blog): Career guidance, programming tutorials, tech trends, and professional growth tips.
+- [Events](/events): Seminars, guest speakers, open lessons, and coding bootcamps.
+- [Areas of Study](/tedris-saheleri): Specific departments and paths (Frontend, Backend, Cyber Security, etc.).
+- [Classroom Previews](/dersden-goruntuler): Real-time/visual look inside our academy classes.

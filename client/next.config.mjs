@@ -11,11 +11,16 @@ const nextConfig = {
     optimizePackageImports: [
       "@nextui-org/react",
       "react-icons",
-      "react-icons/hi2",
-      "react-icons/hi",
-      "react-icons/fa6",
-      "react-icons/md",
+      "date-fns",
+      "swiper",
+      "framer-motion",
+      "yet-another-react-lightbox",
     ],
+    staleTimes: {
+      dynamic: 0,
+      static: 600,
+    },
+    optimizeCss: true,
   },
   // Webpack configuration
   webpack: (config, { dev, isServer }) => {
@@ -38,8 +43,36 @@ const nextConfig = {
         maxSize: 244000,
         minChunks: 1,
         maxAsyncRequests: 30,
-        maxInitialRequests: 30,
+        maxInitialRequests: 25,
         cacheGroups: {
+          framework: {
+            test: /[\\/]node_modules[\\/](react|react-dom|scheduler)[\\/]/,
+            name: "framework",
+            priority: 50,
+            chunks: "all",
+            enforce: true,
+          },
+          framerMotion: {
+            test: /[\\/]node_modules[\\/]framer-motion[\\/]/,
+            name: "framer-motion",
+            priority: 40,
+            chunks: "async",
+            reuseExistingChunk: true,
+          },
+          nextui: {
+            test: /[\\/]node_modules[\\/]@nextui-org[\\/]/,
+            name: "nextui",
+            priority: 40,
+            chunks: "async",
+            reuseExistingChunk: true,
+          },
+          swiper: {
+            test: /[\\/]node_modules[\\/]swiper[\\/]/,
+            name: "swiper",
+            priority: 35,
+            chunks: "async",
+            reuseExistingChunk: true,
+          },
           defaultVendors: {
             test: /[\\/]node_modules[\\/]/,
             priority: -10,
@@ -67,9 +100,9 @@ const nextConfig = {
 
   images: {
     formats: ["image/webp", "image/avif"],
-    minimumCacheTTL: 86400,
-    deviceSizes: [640, 750, 828, 1080, 1200, 1920],
-    imageSizes: [16, 32, 48, 64, 96, 128, 256, 384],
+    minimumCacheTTL: 31536000,
+    deviceSizes: [320, 400, 560, 640, 750, 828, 1080, 1200, 1920],
+    imageSizes: [16, 32, 48, 64, 96, 128, 192, 256, 384],
     remotePatterns: [
       {
         protocol: "https",
@@ -130,15 +163,29 @@ const nextConfig = {
         ],
       },
       {
-        source: "/_next/image(.*)",
+        source: "/_next/image",
         headers: [
-          { key: "Cache-Control", value: "public, max-age=86400, stale-while-revalidate=604800" },
+          { key: "Cache-Control", value: "public, max-age=31536000, immutable" },
         ],
       },
       {
         source: "/_next/static/:path*",
         headers: [
           { key: "Cache-Control", value: "public, max-age=31536000, immutable" },
+        ],
+      },
+      {
+        source: "/:path*\\.(webp|png|jpg|jpeg|svg|ico|woff2|woff|ttf|otf)",
+        headers: [
+          { key: "Cache-Control", value: "public, max-age=31536000, immutable" },
+        ],
+      },
+      {
+        source: "/(.*)",
+        headers: [
+          { key: "X-Content-Type-Options", value: "nosniff" },
+          { key: "X-Frame-Options", value: "SAMEORIGIN" },
+          { key: "Referrer-Policy", value: "strict-origin-when-cross-origin" },
         ],
       },
     ];

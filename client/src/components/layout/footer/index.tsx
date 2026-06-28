@@ -101,6 +101,7 @@ export default async function Footer() {
 
     const exploreLinks = [
       { href: "/", label: t("home") },
+      { href: "/about-us", label: t("about") },
       { href: feedbacksPageHref(lang), label: t("feedbacks") },
       { href: feedbacksPageHref(lang), label: t("projects") },
       { href: galleryListingPath(lang), label: t("gallery") },
@@ -226,6 +227,7 @@ export default async function Footer() {
                       href={contact?.socialLinks?.facebook}
                       target="_blank"
                       rel="noopener noreferrer"
+                      aria-label="Facebook"
                       className="w-8 h-8 sm:w-10 sm:h-10 [@media(min-width:2500px)]:!w-14 [@media(min-width:2500px)]:!h-14 [@media(min-width:3500px)]:!w-16 [@media(min-width:3500px)]:!h-16 flex items-center justify-center rounded-full bg-white/10 hover:bg-white/20 transition-all duration-200 hover:scale-110"
                     >
                       <FaFacebook className="w-4 h-4 sm:w-5 sm:h-5 [@media(min-width:2500px)]:!w-7 [@media(min-width:2500px)]:!h-7 [@media(min-width:3500px)]:!w-8 [@media(min-width:3500px)]:!h-8" />
@@ -236,6 +238,7 @@ export default async function Footer() {
                       href={contact?.socialLinks?.instagram}
                       target="_blank"
                       rel="noopener noreferrer"
+                      aria-label="Instagram"
                       className="w-8 h-8 sm:w-10 sm:h-10 [@media(min-width:2500px)]:!w-14 [@media(min-width:2500px)]:!h-14 [@media(min-width:3500px)]:!w-16 [@media(min-width:3500px)]:!h-16 flex items-center justify-center rounded-full bg-white/10 hover:bg-white/20 transition-all duration-200 hover:scale-110"
                     >
                       <FaInstagram className="w-4 h-4 sm:w-5 sm:h-5 [@media(min-width:2500px)]:!w-7 [@media(min-width:2500px)]:!h-7 [@media(min-width:3500px)]:!w-8 [@media(min-width:3500px)]:!h-8" />
@@ -246,6 +249,7 @@ export default async function Footer() {
                       href={contact?.socialLinks?.youtube}
                       target="_blank"
                       rel="noopener noreferrer"
+                      aria-label="YouTube"
                       className="w-8 h-8 sm:w-10 sm:h-10 [@media(min-width:2500px)]:!w-14 [@media(min-width:2500px)]:!h-14 [@media(min-width:3500px)]:!w-16 [@media(min-width:3500px)]:!h-16 flex items-center justify-center rounded-full bg-white/10 hover:bg-white/20 transition-all duration-200 hover:scale-110"
                     >
                       <FaYoutube className="w-4 h-4 sm:w-5 sm:h-5 [@media(min-width:2500px)]:!w-7 [@media(min-width:2500px)]:!h-7 [@media(min-width:3500px)]:!w-8 [@media(min-width:3500px)]:!h-8" />
@@ -256,6 +260,7 @@ export default async function Footer() {
                       href={contact?.socialLinks?.tiktok}
                       target="_blank"
                       rel="noopener noreferrer"
+                      aria-label="TikTok"
                       className="w-8 h-8 sm:w-10 sm:h-10 [@media(min-width:2500px)]:!w-14 [@media(min-width:2500px)]:!h-14 [@media(min-width:3500px)]:!w-16 [@media(min-width:3500px)]:!h-16 flex items-center justify-center rounded-full bg-white/10 hover:bg-white/20 transition-all duration-200 hover:scale-110"
                     >
                       <FaTiktok className="w-4 h-4 sm:w-5 sm:h-5 [@media(min-width:2500px)]:!w-7 [@media(min-width:2500px)]:!h-7 [@media(min-width:3500px)]:!w-8 [@media(min-width:3500px)]:!h-8" />
@@ -266,6 +271,7 @@ export default async function Footer() {
                       href={contact?.socialLinks?.linkedin}
                       target="_blank"
                       rel="noopener noreferrer"
+                      aria-label="LinkedIn"
                       className="w-8 h-8 sm:w-10 sm:h-10 [@media(min-width:2500px)]:!w-14 [@media(min-width:2500px)]:!h-14 [@media(min-width:3500px)]:!w-16 [@media(min-width:3500px)]:!h-16 flex items-center justify-center rounded-full bg-white/10 hover:bg-white/20 transition-all duration-200 hover:scale-110"
                     >
                       <FaLinkedinIn className="w-4 h-4 sm:w-5 sm:h-5 [@media(min-width:2500px)]:!w-7 [@media(min-width:2500px)]:!h-7 [@media(min-width:3500px)]:!w-8 [@media(min-width:3500px)]:!h-8" />

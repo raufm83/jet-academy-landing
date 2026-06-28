@@ -9,8 +9,6 @@ export default function robots(): MetadataRoute.Robots {
         "/dashboard",
         "/en/registration",
         "/az/registration",
-        "/az/glossary/terms/?letter=",
-        "/en/glossary/terms/?letter=",
         "/az/glossary/search*",
         "/en/glossary/search*",
       ],

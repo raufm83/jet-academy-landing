@@ -58,7 +58,7 @@ export class SharpPipe
             position: 'center',
           });
 
-      const pipeline = resizeOptions.webp({ quality });
+      const pipeline = resizeOptions.flatten({ background: '#ffffff' }).webp({ quality });
 
       await pipeline.toFile(outputPath);
 
