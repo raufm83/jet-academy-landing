@@ -1,4 +1,4 @@
-import { PUBLIC_API_BASE } from "@/constants/public-api-base";
+const PUBLIC_API_BASE = process.env.NEXT_PUBLIC_API_URL?.trim().replace(/\/+$/, "") || "https://api.jetacademy.az/api";
 
 /** Kursun hər iki dildəki slug-u (dil dəyişəndə URL doğru olsun) */
 export async function fetchCourseSlugsFromApi(

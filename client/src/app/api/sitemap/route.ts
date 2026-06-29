@@ -241,7 +241,7 @@ export async function GET() {
       for (const post of newsResponse.items || []) {
         if (post.slug?.[lang as "az" | "en"]) {
           newsSitemapEntries.push({
-            url: `${baseUrl}/${lang}/news/${encodeURIComponent(post.slug[lang as "az" | "en"])}`,
+            url: `${baseUrl}/${lang}/news/${encodeURIComponent(post.slug[lang as "az" | "en"] || "")}`,
             lastModified: new Date(post.updatedAt || new Date()).toISOString(),
             changeFrequency: "weekly",
             priority: 0.7,
@@ -252,7 +252,7 @@ export async function GET() {
       for (const post of offersResponse.items || []) {
         if (post.slug?.[lang as "az" | "en"]) {
           offersSitemapEntries.push({
-            url: `${baseUrl}/${lang}/offers/${encodeURIComponent(post.slug[lang as "az" | "en"])}`,
+            url: `${baseUrl}/${lang}/offers/${encodeURIComponent(post.slug[lang as "az" | "en"] || "")}`,
             lastModified: new Date(post.updatedAt || new Date()).toISOString(),
             changeFrequency: "weekly",
             priority: 0.7,
@@ -263,7 +263,7 @@ export async function GET() {
       for (const post of eventsResponse.items || []) {
         if (post.slug?.[lang as "az" | "en"]) {
           eventsSitemapEntries.push({
-            url: `${baseUrl}/${lang}/events/${encodeURIComponent(post.slug[lang as "az" | "en"])}`,
+            url: `${baseUrl}/${lang}/events/${encodeURIComponent(post.slug[lang as "az" | "en"] || "")}`,
             lastModified: new Date(post.updatedAt || new Date()).toISOString(),
             changeFrequency: "weekly",
             priority: 0.7,
@@ -274,7 +274,7 @@ export async function GET() {
       for (const blog of blogsResponse.items || []) {
         if (blog.slug?.[lang as "az" | "en"]) {
           blogSitemapEntries.push({
-            url: `${baseUrl}/${lang}/blog/${encodeURIComponent(blog.slug[lang as "az" | "en"])}`,
+            url: `${baseUrl}/${lang}/blog/${encodeURIComponent(blog.slug[lang as "az" | "en"] || "")}`,
             lastModified: new Date(blog.updatedAt || new Date()).toISOString(),
             changeFrequency: "weekly",
             priority: 0.7,
@@ -287,7 +287,7 @@ export async function GET() {
           courseSitemapEntries.push({
             url: `${baseUrl}/${lang}${courseDetailPath(
               lang,
-              encodeURIComponent(course.slug[lang as "az" | "en"])
+              encodeURIComponent(course.slug[lang as "az" | "en"] || "")
             )}`,
             lastModified: new Date(
               course.updatedAt || new Date()
@@ -301,7 +301,7 @@ export async function GET() {
       for (const category of glossaryCategories) {
         if (category.slug?.[lang as "az" | "en"]) {
           glossaryCategorySitemapEntries.push({
-            url: `${baseUrl}/${lang}/glossary/category/${encodeURIComponent(category.slug[lang as "az" | "en"])
+            url: `${baseUrl}/${lang}/glossary/category/${encodeURIComponent(category.slug[lang as "az" | "en"] || "")
               }`,
             lastModified: new Date(
               category.updatedAt || new Date()
@@ -315,7 +315,7 @@ export async function GET() {
       for (const term of glossaryTerms) {
         if (term.published && term.slug?.[lang as "az" | "en"]) {
           glossaryTermSitemapEntries.push({
-            url: `${baseUrl}/${lang}/glossary/term/${encodeURIComponent(term.slug[lang as "az" | "en"])
+            url: `${baseUrl}/${lang}/glossary/term/${encodeURIComponent(term.slug[lang as "az" | "en"] || "")
               }`,
             lastModified: new Date().toISOString(),
             changeFrequency: "monthly",
