@@ -218,6 +218,8 @@ model Course {
   tag              String[]
   newTags          Json?
   imageUrl         String?
+  totalHours       Int?
+  durationMonths   Int?
   imageAlt         MultilingualText?
   ageRange         String?
   backgroundColor  String?               @default("#FEF3C7")

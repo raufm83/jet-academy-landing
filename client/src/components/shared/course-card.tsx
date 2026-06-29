@@ -86,7 +86,7 @@ export default function CourseCard({
       <div className="relative z-0 mt-4 flex flex-col gap-1 text-sm opacity-90 sm:mt-5 sm:text-base">
         {!!lessonPerWeek && (
           <p className="font-normal">
-            <span>
+            <span className="font-bold">
               {translations.lessonPerWeek ||
                 (normalizedLocale === "az" ? "Həftədə" : "Per week")}
               :
@@ -96,7 +96,7 @@ export default function CourseCard({
         )}
         {showAge && data.ageRange && (
           <p className="font-normal">
-            <span>
+            <span className="font-bold">
               {translations.age || (normalizedLocale === "az" ? "Yaş:" : "Age:")}
             </span>{" "}
             {data.ageRange}
@@ -104,14 +104,14 @@ export default function CourseCard({
         )}
         {showLevel && data.level && (
           <p className="font-normal">
-            <span>
+            <span className="font-bold">
               {translations.level || (normalizedLocale === "az" ? "Səviyyə:" : "Level:")}
             </span>{" "}
             {data.level}
           </p>
         )}
         <p className="font-normal">
-          <span>
+          <span className="font-bold">
             {translations.duration || (normalizedLocale === "az" ? "Müddət:" : "Duration:")}
           </span>{" "}
           {data.duration}{" "}

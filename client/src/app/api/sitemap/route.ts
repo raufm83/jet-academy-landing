@@ -238,11 +238,10 @@ export async function GET() {
     ]);
 
     for (const lang of languages) {
-      // News
       for (const post of newsResponse.items || []) {
         if (post.slug?.[lang as "az" | "en"]) {
           newsSitemapEntries.push({
-            url: `${baseUrl}/${lang}/news/${post.slug[lang as "az" | "en"]}`,
+            url: `${baseUrl}/${lang}/news/${encodeURIComponent(post.slug[lang as "az" | "en"])}`,
             lastModified: new Date(post.updatedAt || new Date()).toISOString(),
             changeFrequency: "weekly",
             priority: 0.7,
@@ -250,11 +249,10 @@ export async function GET() {
         }
       }
 
-      // Offers
       for (const post of offersResponse.items || []) {
         if (post.slug?.[lang as "az" | "en"]) {
           offersSitemapEntries.push({
-            url: `${baseUrl}/${lang}/offers/${post.slug[lang as "az" | "en"]}`,
+            url: `${baseUrl}/${lang}/offers/${encodeURIComponent(post.slug[lang as "az" | "en"])}`,
             lastModified: new Date(post.updatedAt || new Date()).toISOString(),
             changeFrequency: "weekly",
             priority: 0.7,
@@ -262,11 +260,10 @@ export async function GET() {
         }
       }
 
-      // Events
       for (const post of eventsResponse.items || []) {
         if (post.slug?.[lang as "az" | "en"]) {
           eventsSitemapEntries.push({
-            url: `${baseUrl}/${lang}/events/${post.slug[lang as "az" | "en"]}`,
+            url: `${baseUrl}/${lang}/events/${encodeURIComponent(post.slug[lang as "az" | "en"])}`,
             lastModified: new Date(post.updatedAt || new Date()).toISOString(),
             changeFrequency: "weekly",
             priority: 0.7,
@@ -274,11 +271,10 @@ export async function GET() {
         }
       }
 
-      // Blogs
       for (const blog of blogsResponse.items || []) {
         if (blog.slug?.[lang as "az" | "en"]) {
           blogSitemapEntries.push({
-            url: `${baseUrl}/${lang}/blog/${blog.slug[lang as "az" | "en"]}`,
+            url: `${baseUrl}/${lang}/blog/${encodeURIComponent(blog.slug[lang as "az" | "en"])}`,
             lastModified: new Date(blog.updatedAt || new Date()).toISOString(),
             changeFrequency: "weekly",
             priority: 0.7,
@@ -286,13 +282,12 @@ export async function GET() {
         }
       }
 
-      // Courses
       for (const course of coursesResponse.items || []) {
         if (course.slug?.[lang as "az" | "en"]) {
           courseSitemapEntries.push({
             url: `${baseUrl}/${lang}${courseDetailPath(
               lang,
-              course.slug[lang as "az" | "en"]
+              encodeURIComponent(course.slug[lang as "az" | "en"])
             )}`,
             lastModified: new Date(
               course.updatedAt || new Date()
@@ -303,11 +298,10 @@ export async function GET() {
         }
       }
 
-      // Glossary Categories
       for (const category of glossaryCategories) {
         if (category.slug?.[lang as "az" | "en"]) {
           glossaryCategorySitemapEntries.push({
-            url: `${baseUrl}/${lang}/glossary/category/${category.slug[lang as "az" | "en"]
+            url: `${baseUrl}/${lang}/glossary/category/${encodeURIComponent(category.slug[lang as "az" | "en"])
               }`,
             lastModified: new Date(
               category.updatedAt || new Date()
@@ -318,11 +312,10 @@ export async function GET() {
         }
       }
 
-      // Glossary Terms
       for (const term of glossaryTerms) {
         if (term.published && term.slug?.[lang as "az" | "en"]) {
           glossaryTermSitemapEntries.push({
-            url: `${baseUrl}/${lang}/glossary/term/${term.slug[lang as "az" | "en"]
+            url: `${baseUrl}/${lang}/glossary/term/${encodeURIComponent(term.slug[lang as "az" | "en"])
               }`,
             lastModified: new Date().toISOString(),
             changeFrequency: "monthly",
@@ -376,7 +369,7 @@ function generateSitemapXml(entries: any[]) {
     .map((entry) => {
       return `
       <url>
-        <loc>${entry.url}</loc>
+        <loc>${escapeXml(entry.url)}</loc>
         <lastmod>${entry.lastModified}</lastmod>
         <changefreq>${entry.changeFrequency}</changefreq>
         <priority>${entry.priority}</priority>
@@ -390,4 +383,13 @@ function generateSitemapXml(entries: any[]) {
       ${xmlItems}
     </urlset>
   `;
+}
+
+function escapeXml(s: string) {
+  return s
+    .replace(/&/g, "&amp;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&apos;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;");
 }

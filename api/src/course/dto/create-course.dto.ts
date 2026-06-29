@@ -145,6 +145,26 @@ export class CreateCourseDto {
   @IsInt()
   lessonPerWeek?: number;
 
+  @ApiProperty({ example: 48, description: 'Total hours of the course', required: false })
+  @IsOptional()
+  @Transform(({ value }) => {
+    if (!value) return undefined;
+    const num = parseInt(value, 10);
+    return isNaN(num) ? undefined : num;
+  })
+  @IsInt()
+  totalHours?: number;
+
+  @ApiProperty({ example: 6, description: 'Duration in months', required: false })
+  @IsOptional()
+  @Transform(({ value }) => {
+    if (!value) return undefined;
+    const num = parseInt(value, 10);
+    return isNaN(num) ? undefined : num;
+  })
+  @IsInt()
+  durationMonths?: number;
+
   @ApiProperty({ example: '#FEF3C7', required: false })
   @IsOptional()
   @IsString()

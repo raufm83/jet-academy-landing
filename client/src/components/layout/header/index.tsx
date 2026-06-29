@@ -135,48 +135,46 @@ export default function Header() {
         {/* Mobile menu panel */}
         <div
           className={cn(
-            "fixed inset-0 z-50 flex items-center justify-center p-4 transition-all duration-300",
-            isMenuOpen ? "opacity-100 scale-100 visible" : "opacity-0 scale-95 invisible pointer-events-none"
+            "fixed inset-y-0 right-0 z-50 flex w-full sm:w-[400px] flex-col bg-white shadow-2xl transition-transform duration-300",
+            isMenuOpen ? "translate-x-0" : "translate-x-full"
           )}
         >
-          <div role="dialog" aria-modal="true" aria-label="Navigation Menu" className="relative flex max-h-[85dvh] w-full max-w-md flex-col overflow-hidden rounded-2xl bg-white shadow-lg">
-            <div className="flex shrink-0 items-center justify-end border-b border-gray-200 p-3">
-              <button
-                type="button"
-                onClick={() => setIsMenuOpen(false)}
-                className="rounded-lg p-2 transition-colors hover:bg-gray-100"
-                aria-label={t("closeMenu")}
-              >
-                <HiX size={24} aria-hidden />
-              </button>
-            </div>
+          <div className="flex shrink-0 items-center justify-between border-b border-gray-100 p-4">
+            <Logo className="w-32 sm:w-36" />
+            <button
+              type="button"
+              onClick={() => setIsMenuOpen(false)}
+              className="rounded-lg p-2 transition-colors hover:bg-gray-100"
+              aria-label={t("closeMenu")}
+            >
+              <HiX size={28} aria-hidden />
+            </button>
+          </div>
 
-            <div className="min-h-0 flex-1 overflow-y-auto overscroll-contain px-4 py-3">
-              <div className="flex flex-col gap-1.5">
-                {navLinks.map((link) => (
-                  <NavLink
-                    key={link.href + link.title}
-                    {...link}
-                    handleClick={() => setIsMenuOpen(false)}
-                    className={`${link.className ?? ""} cursor-pointer whitespace-nowrap border-b border-gray-100 py-2.5 text-base last:border-b-0 md:text-lg`}
-                  />
-                ))}
-              </div>
+          <div className="min-h-0 flex-1 overflow-y-auto overscroll-contain px-6 py-6">
+            <div className="flex flex-col gap-4">
+              {navLinks.map((link) => (
+                <NavLink
+                  key={link.href + link.title}
+                  {...link}
+                  handleClick={() => setIsMenuOpen(false)}
+                  className={`${link.className ?? ""} cursor-pointer whitespace-nowrap border-b border-gray-50 pb-3 text-lg font-medium md:text-xl`}
+                />
+              ))}
             </div>
+          </div>
 
-            <div className="shrink-0 border-t border-gray-200 p-4">
-              <button
-                onClick={() => {
-                  setIsMenuOpen(false);
-                  toggleContact();
-                }}
-                className="flex w-full items-center justify-center gap-2 rounded-[30px] bg-jsyellow py-3 text-base font-semibold text-white transition-all hover:bg-jsyellow/90"
-              >
-                <HiOutlinePhone size={20} />
-                {t("contactus")}
-              </button>
-            </div>
-
+          <div className="shrink-0 border-t border-gray-100 bg-gray-50/50 p-6">
+            <button
+              onClick={() => {
+                setIsMenuOpen(false);
+                toggleContact();
+              }}
+              className="flex w-full items-center justify-center gap-2 rounded-xl bg-jsyellow py-4 text-lg font-medium text-white transition-all hover:bg-[#00A300]"
+            >
+              <HiOutlinePhone size={24} />
+              {t("contactus")}
+            </button>
           </div>
         </div>
       </nav>

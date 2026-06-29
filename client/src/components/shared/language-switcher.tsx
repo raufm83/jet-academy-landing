@@ -1,53 +1,164 @@
 "use client";
 import { cn } from "@/utils/cn";
-import { usePathname, useRouter } from "@/i18n/routing";
+import { Link, usePathname } from "@/i18n/routing";
 import { useLocale } from "next-intl";
 import Image from "next/image";
-import React, { useEffect, useRef, useState } from "react";
+import React, { Suspense, useEffect, useRef, useState } from "react";
 import { HiChevronDown } from "react-icons/hi2";
+import {
+  useParams,
+  usePathname as useNextPathname,
+  useSearchParams,
+} from "next/navigation";
+import {
+  pathnameWithoutLeadingLocale,
+  interpolatePathnameDynamicSegments,
+  fetchCourseSlugsFromApi,
+  fetchBlogSlugsFromApi,
+} from "@/utils/intl/language-switch-target";
 
 const LOCALE_META: Record<string, { flag: string; label: string; ariaLabel: string; srLabel: string }> = {
   az: { flag: "/flags/az.png",  label: "AZ", ariaLabel: "Azərbaycan dilinə keç",  srLabel: "Cari dil: Azərbaycan" },
   en: { flag: "/flags/uk.webp", label: "EN", ariaLabel: "Switch to English",       srLabel: "Current language: English" },
 };
 
-const locales = ["az", "en"];
+const locales = ["az", "en"] as const;
 
-export default function LanguageSwitcher({
-  className,
-}: {
-  className?: string;
-}) {
+function LanguageSwitcherInner({ className }: { className?: string }) {
   const locale = useLocale();
   const [isOpen, setIsOpen] = useState(false);
-  const pathname = usePathname();
-  const router = useRouter();
+  const intlPath = usePathname();
+  const nextFullPath = useNextPathname() ?? "/";
+  const params = useParams();
+  const searchParams = useSearchParams();
   const rootRef = useRef<HTMLDivElement>(null);
 
-  useEffect(() => {
-    if (!isOpen) return;
-    const onPointerDown = (e: Event) => {
-      if (rootRef.current?.contains(e.target as Node)) return;
-      setIsOpen(false);
-    };
-    document.addEventListener("mousedown", onPointerDown);
-    document.addEventListener("touchstart", onPointerDown);
-    return () => {
-      document.removeEventListener("mousedown", onPointerDown);
-      document.removeEventListener("touchstart", onPointerDown);
-    };
-  }, [isOpen]);
+  const pathStr = String(intlPath);
+  let normalizedPathInternal =
+    pathStr.includes("[") && pathStr.includes("]")
+      ? interpolatePathnameDynamicSegments(
+          pathStr,
+          params as Readonly<Record<string, string | string[] | undefined>>
+        )
+      : pathStr;
+  if (
+    normalizedPathInternal.includes("[") ||
+    normalizedPathInternal.includes("]")
+  ) {
+    normalizedPathInternal = pathnameWithoutLeadingLocale(nextFullPath);
+  }
 
-  const handleSelect = (code: string) => {
-    setIsOpen(false);
-    const href = pathname === "" ? "/" : pathname;
-    router.replace(href, { locale: code });
-  };
+  const slugParam = typeof params.slug === "string" ? params.slug : undefined;
+
+  const isCourseDetail =
+    Boolean(slugParam) &&
+    (pathStr === "/course/[slug]" ||
+      /^\/course\/[^/]+\/?$/.test(normalizedPathInternal));
+
+  const isBlogDetail =
+    Boolean(slugParam) &&
+    (pathStr === "/blog/[slug]" ||
+      /^\/blog\/[^/]+\/?$/.test(normalizedPathInternal));
+
+  const [courseSlugs, setCourseSlugs] = useState<Partial<Record<"az" | "en", string>> | null>(null);
+  const [courseFetchDone, setCourseFetchDone] = useState(false);
+
+  const [blogSlugs, setBlogSlugs] = useState<Partial<Record<"az" | "en", string>> | null>(null);
+  const [blogFetchDone, setBlogFetchDone] = useState(false);
+
+  const qs = searchParams.toString();
+
+  let pathnameBase = normalizedPathInternal.startsWith("/")
+    ? normalizedPathInternal
+    : `/${normalizedPathInternal}`;
+  if (!pathnameBase || pathnameBase === "") pathnameBase = "/";
+
+  const defaultHref = (qs ? `${pathnameBase}?${qs}` : pathnameBase) as never;
+
+  useEffect(() => {
+    if (!isCourseDetail || !slugParam) {
+      setCourseSlugs(null);
+      setCourseFetchDone(false);
+      return;
+    }
+    let cancelled = false;
+    setCourseFetchDone(false);
+    setCourseSlugs(null);
+    (async () => {
+      try {
+        const slugs = await fetchCourseSlugsFromApi(slugParam);
+        if (!cancelled && slugs) setCourseSlugs(slugs);
+      } catch {
+      } finally {
+        if (!cancelled) setCourseFetchDone(true);
+      }
+    })();
+    return () => {
+      cancelled = true;
+    };
+  }, [isCourseDetail, slugParam]);
+
+  useEffect(() => {
+    if (!isBlogDetail || !slugParam) {
+      setBlogSlugs(null);
+      setBlogFetchDone(false);
+      return;
+    }
+    let cancelled = false;
+    setBlogFetchDone(false);
+    setBlogSlugs(null);
+    (async () => {
+      try {
+        const slugs = await fetchBlogSlugsFromApi(slugParam);
+        if (!cancelled && slugs) setBlogSlugs(slugs);
+      } catch {
+      } finally {
+        if (!cancelled) setBlogFetchDone(true);
+      }
+    })();
+    return () => {
+      cancelled = true;
+    };
+  }, [isBlogDetail, slugParam]);
+
+  function hrefForTargetLocale(code: (typeof locales)[number]): never {
+    if (courseSlugs) {
+      const slug = (code === "az" ? courseSlugs.az : courseSlugs.en) ?? slugParam ?? "";
+      const base = { pathname: "/course/[slug]" as const, params: { slug } };
+      if (!qs) return base as never;
+      return { ...base, query: Object.fromEntries(searchParams.entries()) } as never;
+    }
+
+    if (blogSlugs) {
+      const slug = (code === "az" ? blogSlugs.az : blogSlugs.en) ?? slugParam ?? "";
+      const base = { pathname: "/blog/[slug]" as const, params: { slug } };
+      if (!qs) return base as never;
+      return { ...base, query: Object.fromEntries(searchParams.entries()) } as never;
+    }
+
+    return defaultHref;
+  }
+
+  const linkPending = (isCourseDetail && !courseFetchDone) || (isBlogDetail && !blogFetchDone);
+
+  useEffect(() => {
+    function handlePointerDown(event: Event) {
+      if (!rootRef.current?.contains(event.target as Node)) {
+        setIsOpen(false);
+      }
+    }
+    document.addEventListener("mousedown", handlePointerDown);
+    document.addEventListener("touchstart", handlePointerDown);
+    return () => {
+      document.removeEventListener("mousedown", handlePointerDown);
+      document.removeEventListener("touchstart", handlePointerDown);
+    };
+  }, []);
 
   const current = LOCALE_META[locale] ?? LOCALE_META.az;
 
   return (
-    <div ref={rootRef} className={cn("relative", className)}>
+    <div ref={rootRef} className={cn("relative z-[1001]", className)}>
       <button
         type="button"
         aria-expanded={isOpen}
@@ -85,18 +196,12 @@ export default function LanguageSwitcher({
       >
         {locales.map((code) => {
           const meta = LOCALE_META[code];
-          return (
-            <button
+          return code === locale ? (
+            <div
               key={code}
-              type="button"
               role="option"
-              aria-selected={code === locale}
-              aria-label={meta.ariaLabel}
-              onClick={() => handleSelect(code)}
-              className={cn(
-                "hover:bg-jsblack/10 py-2.5 w-full flex items-center justify-center gap-2.5 transition-all cursor-pointer text-jsblack font-semibold text-sm border-0 bg-transparent [@media(min-width:3500px)]:!text-xl",
-                code === locale && "bg-jsblack/5"
-              )}
+              aria-selected
+              className="flex items-center justify-center gap-2.5 py-2.5 text-center bg-jsblack/5 opacity-70 cursor-default"
             >
               <Image
                 src={meta.flag}
@@ -104,14 +209,71 @@ export default function LanguageSwitcher({
                 width={24}
                 height={17}
                 unoptimized
-                aria-hidden
                 className="rounded-sm object-cover shrink-0 [@media(min-width:3500px)]:!w-10 [@media(min-width:3500px)]:!h-7"
               />
-              <span aria-hidden>{meta.label}</span>
-            </button>
+              <span className="text-sm font-semibold text-jsblack [@media(min-width:3500px)]:!text-xl">{meta.label}</span>
+            </div>
+          ) : linkPending ? (
+            <div
+              key={code}
+              role="option"
+              aria-selected={false}
+              aria-disabled
+              className="flex items-center justify-center gap-2.5 py-2.5 text-center opacity-40 cursor-wait"
+            >
+              <Image
+                src={meta.flag}
+                alt=""
+                width={24}
+                height={17}
+                unoptimized
+                className="rounded-sm object-cover shrink-0 [@media(min-width:3500px)]:!w-10 [@media(min-width:3500px)]:!h-7"
+              />
+              <span className="text-sm font-semibold text-jsblack [@media(min-width:3500px)]:!text-xl">{meta.label}</span>
+            </div>
+          ) : (
+            <Link
+              key={code}
+              href={hrefForTargetLocale(code)}
+              locale={code}
+              prefetch={false}
+              scroll={false}
+              role="option"
+              aria-selected={false}
+              className="flex cursor-pointer items-center justify-center gap-2.5 py-2.5 text-center transition-colors hover:bg-jsblack/10"
+              onClick={() => setIsOpen(false)}
+            >
+              <Image
+                src={meta.flag}
+                alt=""
+                width={24}
+                height={17}
+                unoptimized
+                className="rounded-sm object-cover shrink-0 [@media(min-width:3500px)]:!w-10 [@media(min-width:3500px)]:!h-7"
+              />
+              <span className="text-sm font-semibold text-jsblack [@media(min-width:3500px)]:!text-xl">{meta.label}</span>
+            </Link>
           );
         })}
       </div>
     </div>
+  );
+}
+
+export default function LanguageSwitcher({ className }: { className?: string }) {
+  return (
+    <Suspense
+      fallback={
+        <div
+          className={cn(
+            "h-11 min-w-[100px] rounded-[30px] border border-gray-300 bg-white",
+            className
+          )}
+          aria-hidden
+        />
+      }
+    >
+      <LanguageSwitcherInner className={className} />
+    </Suspense>
   );
 }

@@ -4,6 +4,8 @@ import {
   Button,
   Card,
   Input,
+  Select,
+  SelectItem,
   Switch,
 } from "@nextui-org/react";
 import dynamic from "next/dynamic";
@@ -15,6 +17,7 @@ import {
   MdImage,
   MdLink,
   MdPeople,
+  MdSignalCellular4Bar,
   MdStar,
   MdTag,
   MdTitle,
@@ -103,6 +106,12 @@ export default function CourseForm({
       setTagPairs(toPairs({ az: initialValues.newTags?.az || [], en: initialValues.newTags?.en || [] }));
     }
   }, [initialValues]);
+
+  const levels = [
+    { value: { az: "Başlanğıc", en: "Beginner" } },
+    { value: { az: "Orta", en: "Intermediate" } },
+    { value: { az: "Qabaqcıl", en: "Advanced" } },
+  ];
 
   const isPublished = watch("published", false);
 
@@ -572,14 +581,12 @@ export default function CourseForm({
               />
             </div>
 
-            {/* <div className="space-y-4">
+            <div className="space-y-4">
               <div className="space-y-2">
                 <Select
                   label="Səviyyə (AZ)"
                   variant="bordered"
-                  startContent={
-                    <MdSignalCellular4Bar className="text-gray-400" />
-                  }
+                  startContent={<MdSignalCellular4Bar className="text-gray-400" />}
                   isDisabled={isSubmitting}
                   defaultSelectedKeys={[watch("level.az") || "Başlanğıc"]}
                   {...register("level.az", {
@@ -588,8 +595,7 @@ export default function CourseForm({
                   isInvalid={!!errors.level?.az}
                   errorMessage={errors.level?.az?.message}
                   classNames={{
-                    trigger:
-                      "bg-white border-2 hover:border-primary focus:border-primary",
+                    trigger: "bg-white border-2 hover:border-primary focus:border-primary",
                     value: "bg-transparent",
                   }}
                 >
@@ -605,9 +611,7 @@ export default function CourseForm({
                 <Select
                   label="Level (EN)"
                   variant="bordered"
-                  startContent={
-                    <MdSignalCellular4Bar className="text-gray-400" />
-                  }
+                  startContent={<MdSignalCellular4Bar className="text-gray-400" />}
                   isDisabled={isSubmitting}
                   defaultSelectedKeys={[watch("level.en") || "Beginner"]}
                   {...register("level.en", {
@@ -616,8 +620,7 @@ export default function CourseForm({
                   isInvalid={!!errors.level?.en}
                   errorMessage={errors.level?.en?.message}
                   classNames={{
-                    trigger:
-                      "bg-white border-2 hover:border-primary focus:border-primary",
+                    trigger: "bg-white border-2 hover:border-primary focus:border-primary",
                     value: "bg-transparent",
                   }}
                 >
@@ -628,7 +631,7 @@ export default function CourseForm({
                   ))}
                 </Select>
               </div>
-            </div> */}
+            </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <Input
@@ -650,6 +653,40 @@ export default function CourseForm({
                 })}
                 isInvalid={!!errors.lessonPerWeek}
                 errorMessage={errors.lessonPerWeek?.message}
+                classNames={{
+                  input: "bg-transparent",
+                  inputWrapper: [
+                    "bg-white border-2 hover:border-primary focus:border-primary",
+                  ],
+                }}
+              />
+              <Input
+                type="number"
+                label="Ümumi Saat"
+                variant="bordered"
+                startContent={<MdAccessTime className="text-gray-400" />}
+                placeholder="məs: 48"
+                isDisabled={isSubmitting}
+                {...register("totalHours", {
+                  valueAsNumber: true,
+                })}
+                classNames={{
+                  input: "bg-transparent",
+                  inputWrapper: [
+                    "bg-white border-2 hover:border-primary focus:border-primary",
+                  ],
+                }}
+              />
+              <Input
+                type="number"
+                label="Müddət (Ay - Yeni)"
+                variant="bordered"
+                startContent={<MdAccessTime className="text-gray-400" />}
+                placeholder="məs: 6"
+                isDisabled={isSubmitting}
+                {...register("durationMonths", {
+                  valueAsNumber: true,
+                })}
                 classNames={{
                   input: "bg-transparent",
                   inputWrapper: [

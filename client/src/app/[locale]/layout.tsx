@@ -3,7 +3,8 @@ import { getMessages, getTranslations } from "next-intl/server";
 import { setRequestLocale } from "next-intl/server";
 import React from "react";
 import { Metadata } from "next";
-import { addTrailingSlash, truncateTitle, truncateDescription } from "@/utils/seo";
+import { headers } from "next/headers";
+import { addTrailingSlash, truncateTitle, truncateDescription, buildAlternates } from "@/utils/seo";
 
 export async function generateMetadata({
   params: { locale },
@@ -13,6 +14,11 @@ export async function generateMetadata({
   setRequestLocale(locale);
 
   const t = await getTranslations({ locale, namespace: "Metadata" });
+
+  const headersList = headers();
+  const pathname = headersList.get("x-pathname") || "";
+  const normalizedPath = pathname.replace(/^\/(az|en)(\/|$)/, "/");
+  const pathForAlternates = normalizedPath.startsWith("/") ? normalizedPath.slice(1) : normalizedPath;
 
   const baseUrl = addTrailingSlash(
     process.env.NEXT_PUBLIC_APP_URL || "https://jetacademy.az"
@@ -25,6 +31,7 @@ export async function generateMetadata({
 
   return {
     metadataBase: new URL(baseUrl),
+    alternates: buildAlternates(pathForAlternates, locale, baseUrl),
     title: {
       default: title,
       template: t("titleTemplate"),

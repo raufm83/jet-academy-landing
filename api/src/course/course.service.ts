@@ -220,6 +220,8 @@ export class CourseService {
             tag: true,
             order: true,
             createdAt: true,
+            totalHours: true,
+            durationMonths: true,
           },
         }),
       ]);

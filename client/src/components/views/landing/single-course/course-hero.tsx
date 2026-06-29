@@ -1,5 +1,6 @@
 import React from "react";
 import Image from "next/image";
+import { MdCalendarToday, MdPeople, MdSignalCellular4Bar } from "react-icons/md";
 import LazyHtmlContent from "@/components/shared/lazy-html-content";
 import CourseContent from "./course-content";
 import { deferEmbedsInHtml } from "@/utils/deferEmbedsInHtml";
@@ -37,18 +38,26 @@ export default async function CourseHero({
         {title}
       </h1>
 
-      {tags.length > 0 && (
-        <div className="flex flex-wrap gap-2">
-          {tags.map((tag, index) => (
-            <span
-              key={index}
-              className="bg-gray-100 text-gray-700 rounded-full px-3 py-1 text-[clamp(11px,1.1vw,14px)] [@media(min-width:2500px)]:!text-xl [@media(min-width:3500px)]:!text-2xl"
-            >
-              {tag}
-            </span>
-          ))}
+      <div className="flex flex-wrap gap-4 items-center mt-2">
+        <div className="flex items-center gap-2 bg-[#fef7eb] border border-jsyellow/40 text-jsblack rounded-xl px-5 py-2.5 shadow-sm">
+          <MdPeople className="text-jsyellow w-5 h-5 sm:w-6 sm:h-6" />
+          <span className="font-semibold text-[clamp(14px,1.2vw,16px)]">
+            {locale === 'az' ? 'Yaş:' : 'Age:'} {data?.ageRange || "8-12"}
+          </span>
         </div>
-      )}
+        <div className="flex items-center gap-2 bg-[#fef7eb] border border-jsyellow/40 text-jsblack rounded-xl px-5 py-2.5 shadow-sm">
+          <MdSignalCellular4Bar className="text-jsyellow w-5 h-5 sm:w-6 sm:h-6" />
+          <span className="font-semibold text-[clamp(14px,1.2vw,16px)]">
+            {locale === 'az' ? 'Səviyyə:' : 'Level:'} {data?.level?.[locale] || data?.level || "Başlanğıc"}
+          </span>
+        </div>
+        <div className="flex items-center gap-2 bg-[#fef7eb] border border-jsyellow/40 text-jsblack rounded-xl px-5 py-2.5 shadow-sm">
+          <MdCalendarToday className="text-jsyellow w-5 h-5 sm:w-6 sm:h-6" />
+          <span className="font-semibold text-[clamp(14px,1.2vw,16px)]">
+            {locale === 'az' ? 'Müddət:' : 'Duration:'} {data?.durationMonths || data?.duration || "0"} {locale === 'az' ? 'Ay' : 'Months'}
+          </span>
+        </div>
+      </div>
 
       <div className="flex flex-col gap-6 w-full">
         <div
@@ -84,6 +93,19 @@ export default async function CourseHero({
 
         <div className="w-full">
           <CourseContent title={t("courseModules")} locale={locale === "en" ? "en" : "az"} modules={data.modules} />
+
+          {tags && tags.length > 0 && (
+            <div className="mt-8 flex flex-wrap gap-3">
+              {tags.map((tag, index) => (
+                <span
+                  key={index}
+                  className="inline-flex items-center px-5 py-2 rounded-full text-sm font-semibold bg-[#fef7eb] text-jsblack border border-jsyellow/40 transition-all hover:bg-jsyellow/20 hover:scale-105 shadow-sm [@media(min-width:2500px)]:text-xl"
+                >
+                  #{tag}
+                </span>
+              ))}
+            </div>
+          )}
         </div>
       </div>
     </div>
