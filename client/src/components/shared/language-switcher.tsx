@@ -124,16 +124,14 @@ function LanguageSwitcherInner({ className }: { className?: string }) {
   function hrefForTargetLocale(code: (typeof locales)[number]): never {
     if (courseSlugs) {
       const slug = (code === "az" ? courseSlugs.az : courseSlugs.en) ?? slugParam ?? "";
-      const base = { pathname: "/course/[slug]" as const, params: { slug } };
-      if (!qs) return base as never;
-      return { ...base, query: Object.fromEntries(searchParams.entries()) } as never;
+      const href = `/course/${slug}${qs ? `?${qs}` : ""}`;
+      return href as never;
     }
 
     if (blogSlugs) {
       const slug = (code === "az" ? blogSlugs.az : blogSlugs.en) ?? slugParam ?? "";
-      const base = { pathname: "/blog/[slug]" as const, params: { slug } };
-      if (!qs) return base as never;
-      return { ...base, query: Object.fromEntries(searchParams.entries()) } as never;
+      const href = `/blog/${slug}${qs ? `?${qs}` : ""}`;
+      return href as never;
     }
 
     return defaultHref;
