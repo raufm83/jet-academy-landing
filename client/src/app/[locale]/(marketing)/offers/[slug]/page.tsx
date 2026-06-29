@@ -200,7 +200,7 @@ export async function generateMetadata({
         languages: {
           az: data.slug?.az ? azCanonical : undefined,
           en: data.slug?.en ? enCanonical : undefined,
-          "x-default": azCanonical,
+          "x-default": data.slug?.az ? azCanonical : undefined,
         },
       },
       openGraph: {

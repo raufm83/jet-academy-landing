@@ -198,8 +198,8 @@ export async function generateMetadata({
       alternates: {
         canonical: canonicalUrl,
         languages: {
-          az: data.slug.az ? azCanonical : undefined,
-          en: data.slug.en ? enCanonical : undefined,
+          az: azCanonical,
+          en: enCanonical,
           "x-default": azCanonical,
         },
       },

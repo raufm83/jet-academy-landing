@@ -71,7 +71,7 @@ export class SharpPipe
         console.error('Cleanup error:', cleanupError);
       }
       throw new BadRequestException(
-        'Şəkil saxlanılmadı. Faylın pozulmamasını və JPG, PNG, GIF və ya WebP formatında olduğunu yoxlayın.',
+        'Şəkil saxlanılmadı. Faylın düzgün və dəstəklənən formatda (məs. JPG, PNG, WebP, AVIF) olduğunu yoxlayın.',
       );
     }
   }

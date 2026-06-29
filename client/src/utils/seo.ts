@@ -591,15 +591,11 @@ export function buildAlternates(
     return `${baseUrl}${prefix}${normalizedPath}` || baseUrl;
   };
 
-  const homepageHreflangUrl = (loc: string) => `${baseUrl}/${loc}/`;
-  const hreflangUrl = (loc: string) =>
-    normalizedPath === "" ? homepageHreflangUrl(loc) : localeUrl(loc);
-
   return {
     canonical: localeUrl(locale),
     languages: {
-      az: hreflangUrl("az"),
-      en: hreflangUrl("en"),
+      az: localeUrl("az"),
+      en: localeUrl("en"),
       "x-default": localeUrl("az"),
     },
   };
