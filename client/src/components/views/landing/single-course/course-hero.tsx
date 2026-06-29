@@ -41,20 +41,20 @@ export default async function CourseHero({
       <div className="flex flex-wrap gap-4 items-center mt-2">
         <div className="flex items-center gap-2 bg-[#fef7eb] border border-jsyellow/40 text-jsblack rounded-xl px-5 py-2.5 shadow-sm">
           <MdPeople className="text-jsyellow w-5 h-5 sm:w-6 sm:h-6" />
-          <span className="font-semibold text-[clamp(14px,1.2vw,16px)]">
-            {locale === 'az' ? 'Yaş:' : 'Age:'} {data?.ageRange || "8-12"}
+          <span className="text-[clamp(14px,1.2vw,16px)]">
+            <strong className="font-bold">{locale === 'az' ? 'Yaş:' : 'Age:'}</strong> <span className="font-medium">{data?.ageRange || "8-12"}</span>
           </span>
         </div>
         <div className="flex items-center gap-2 bg-[#fef7eb] border border-jsyellow/40 text-jsblack rounded-xl px-5 py-2.5 shadow-sm">
           <MdSignalCellular4Bar className="text-jsyellow w-5 h-5 sm:w-6 sm:h-6" />
-          <span className="font-semibold text-[clamp(14px,1.2vw,16px)]">
-            {locale === 'az' ? 'Səviyyə:' : 'Level:'} {data?.level?.[locale] || data?.level || "Başlanğıc"}
+          <span className="text-[clamp(14px,1.2vw,16px)]">
+            <strong className="font-bold">{locale === 'az' ? 'Səviyyə:' : 'Level:'}</strong> <span className="font-medium">{data?.level?.[locale] || data?.level || "Başlanğıc"}</span>
           </span>
         </div>
         <div className="flex items-center gap-2 bg-[#fef7eb] border border-jsyellow/40 text-jsblack rounded-xl px-5 py-2.5 shadow-sm">
           <MdCalendarToday className="text-jsyellow w-5 h-5 sm:w-6 sm:h-6" />
-          <span className="font-semibold text-[clamp(14px,1.2vw,16px)]">
-            {locale === 'az' ? 'Müddət:' : 'Duration:'} {data?.durationMonths || data?.duration || "0"} {locale === 'az' ? 'Ay' : 'Months'}
+          <span className="text-[clamp(14px,1.2vw,16px)]">
+            <strong className="font-bold">{locale === 'az' ? 'Müddət:' : 'Duration:'}</strong> <span className="font-medium">{data?.durationMonths || data?.duration || "0"} {locale === 'az' ? 'Ay' : 'Months'}</span>
           </span>
         </div>
       </div>
