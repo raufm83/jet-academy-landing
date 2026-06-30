@@ -16,6 +16,7 @@ import {
   TableRow,
   Tooltip,
   useDisclosure,
+  Input,
 } from "@nextui-org/react";
 import { motion } from "framer-motion";
 import { useRouter } from "next/navigation";
