@@ -193,4 +193,25 @@ export class CreateCourseDto {
   })
   @IsInt()
   order?: number;
+
+  @ApiProperty({ required: false })
+  @IsOptional()
+  @ValidateNested()
+  @Type(() => TranslatedField)
+  @IsObject()
+  metaTitle?: TranslatedField;
+
+  @ApiProperty({ required: false })
+  @IsOptional()
+  @ValidateNested()
+  @Type(() => TranslatedField)
+  @IsObject()
+  metaDescription?: TranslatedField;
+
+  @ApiProperty({ required: false })
+  @IsOptional()
+  @ValidateNested()
+  @Type(() => TranslatedField)
+  @IsObject()
+  metaKeywords?: TranslatedField;
 }

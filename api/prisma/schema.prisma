@@ -225,6 +225,9 @@ model Course {
   backgroundColor  String?               @default("#FEF3C7")
   borderColor      String?               @default("#F59E0B")
   textColor        String?               @default("#1F2937")
+  metaTitle        Json?
+  metaDescription  Json?
+  metaKeywords     Json?
   /// Sıralama: böyük dəyər əvvəl (prioritet). 0 = default.
   order            Int                   @default(0)
   createdAt        DateTime              @default(now())

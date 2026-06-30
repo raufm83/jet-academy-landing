@@ -78,7 +78,7 @@ export default function PostCard({
                 }
                 fill
                 sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 320px"
-                className="object-cover object-center"
+                className="object-contain sm:object-cover object-center"
                 priority={imagePriority}
                 {...(!imagePriority ? { loading: "lazy" as const } : {})}
               />

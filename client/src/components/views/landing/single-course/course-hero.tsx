@@ -95,7 +95,7 @@ export default async function CourseHero({
           <CourseContent title={t("courseModules")} locale={locale === "en" ? "en" : "az"} modules={data.modules} />
 
           {tags && tags.length > 0 && (
-            <div className="mt-8 -mx-4 overflow-hidden px-4">
+            <div className="mt-4 -mx-4 overflow-hidden px-4">
               <div className="scrolling-tags flex w-max gap-3">
                 {[...tags, ...tags].map((tag, index) => (
                   <span

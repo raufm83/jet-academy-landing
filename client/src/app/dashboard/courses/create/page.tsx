@@ -85,6 +85,13 @@ export default function CreateCoursePage() {
       if (data.imageAlt?.az) formData.append("imageAlt[az]", data.imageAlt.az);
       if (data.imageAlt?.en) formData.append("imageAlt[en]", data.imageAlt.en);
 
+      if (data.metaTitle?.az) formData.append("metaTitle[az]", data.metaTitle.az);
+      if (data.metaTitle?.en) formData.append("metaTitle[en]", data.metaTitle.en);
+      if (data.metaDescription?.az) formData.append("metaDescription[az]", data.metaDescription.az);
+      if (data.metaDescription?.en) formData.append("metaDescription[en]", data.metaDescription.en);
+      if (data.metaKeywords?.az) formData.append("metaKeywords[az]", data.metaKeywords.az);
+      if (data.metaKeywords?.en) formData.append("metaKeywords[en]", data.metaKeywords.en);
+
 
 if (data.image) {
   const imageFile = data.image instanceof FileList ? data.image[0] : data.image;

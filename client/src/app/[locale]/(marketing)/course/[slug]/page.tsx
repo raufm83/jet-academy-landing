@@ -72,14 +72,13 @@ export default async function SingleCoursePage({
   params,
 }: ISingleCoursePageProps) {
   try {
-    const [data, locale, t, tCourseOther, courses, teamMembersRes] =
+    const [data, locale, t, tCourseOther, courses] =
       await Promise.all([
         getCourseDetails(params.slug),
         getLocale() as Promise<Locale>,
         getTranslations("singleCoursePage"),
         getTranslations("courseInfoCP"),
         getAllCourses({ limit: 100, page: 1, includeUnpublished: false }),
-        api.get("/team/active"),
       ]);
     if (!data) notFound();
 
@@ -149,7 +148,7 @@ export default async function SingleCoursePage({
         <div className="container mx-auto px-4 sm:px-6 md:px-8 lg:px-12 xl:px-16 3xl:px-28 4xl:px-32 my-10 md:my-16 lg:my-10 4xl:my-24 [@media(min-width:2500px)]:!px-[111px] [@media(min-width:3500px)]:px-32">
           
 
-          <div className="flex flex-col lg:flex-row lg:gap-8 xl:gap-12 mb-16">
+          <div className="flex flex-col lg:flex-row lg:gap-8 xl:gap-12 mb-8 lg:mb-12">
             <div className="w-full lg:w-2/3">
               <CourseHero
                 title={pickCourseTitle(data.title, locale)}
@@ -225,36 +224,36 @@ export async function generateMetadata({
 
     const baseUrl = process.env.NEXT_PUBLIC_APP_URL || "https://jetacademy.az";
 
-    const azSlug = data.slug?.az || params.slug;
-    const enSlug = data.slug?.en || params.slug;
-
-    const azCanonical = `${baseUrl}${courseDetailPath("az", azSlug)}`;
-    const enCanonical = `${baseUrl}/en${courseDetailPath("en", enSlug)}`;
+    const azCanonical = `${baseUrl}${courseDetailPath("az", params.slug)}`;
+    const enCanonical = `${baseUrl}/en${courseDetailPath("en", params.slug)}`;
     const canonicalUrl = locale === "en" ? enCanonical : azCanonical;
-    const rawTitle =
-      data.title?.[locale] ??
-      data.title?.az ??
-      data.title?.en ??
-      "Kurs";
+    
+    let rawTitle = data.metaTitle?.[locale];
+    if (!rawTitle) {
+      rawTitle =
+        data.title?.[locale] ??
+        data.title?.az ??
+        data.title?.en ??
+        "Kurs";
+    }
 
     const fullTitle = `${rawTitle} | JET Academy`;
 
     // Build description ONLY from course.description, with locale fallbacks,
     // and truncate to 160 characters via htmlToDescription
-    const rawDescLocale = data.description?.[locale];
-    const rawDescAz = data.description?.az;
-    const rawDescEn = data.description?.en;
-
-    const rawDesc = rawDescLocale ?? rawDescAz ?? rawDescEn ?? "";
-
-    const cleanDesc = htmlToDescription(rawDesc || "");
+    let cleanDesc = data.metaDescription?.[locale];
+    if (!cleanDesc) {
+      const rawDescLocale = data.description?.[locale];
+      const rawDescAz = data.description?.az;
+      const rawDescEn = data.description?.en;
+  
+      const rawDesc = rawDescLocale ?? rawDescAz ?? rawDescEn ?? "";
+      cleanDesc = htmlToDescription(rawDesc || "");
+    }
+    
     const meta =
-      (await getPageMeta(`course:${params.slug}`, locale)) ||
-      (locale === "az" && azSlug !== params.slug
-        ? await getPageMeta(`course:${azSlug}`, locale)
-        : locale === "en" && enSlug !== params.slug
-          ? await getPageMeta(`course:${enSlug}`, locale)
-          : null);
+      (await getPageMeta(`course:${params.slug}`, locale)) || null;
+
     const resolvedMeta = meta
       ? {
           title: truncateTitle(meta.title),
@@ -267,9 +266,14 @@ export async function generateMetadata({
           cleanDesc
         );
 
+    const finalTitle = data.metaTitle?.[locale] ? data.metaTitle[locale] : resolvedMeta.title;
+    const finalDescription = data.metaDescription?.[locale] ? data.metaDescription[locale] : resolvedMeta.description;
+    const keywords = data.metaKeywords?.[locale] || undefined;
+
     return {
-      title: { absolute: resolvedMeta.title },
-      description: resolvedMeta.description,
+      title: { absolute: finalTitle },
+      description: finalDescription,
+      keywords,
       alternates: {
         canonical: canonicalUrl,
         languages: {
@@ -278,27 +282,27 @@ export async function generateMetadata({
           "x-default": azCanonical,
         },
       },
-
       openGraph: {
-        title: resolvedMeta.title,
-        description: resolvedMeta.description,
+        title: finalTitle,
+        description: finalDescription,
         url: canonicalUrl,
         type: "website",
-        siteName: "JET Academy",
-        locale: locale === "az" ? "az_AZ" : "en_US",
-        images: [
-          {
-            url: "/og-image.jpg",
-            width: 1200,
-            height: 630,
-            alt: rawTitle,
-          },
-        ],
+        images: data.imageUrl
+          ? [
+              {
+                url: data.imageUrl,
+                width: 1200,
+                height: 630,
+                alt: finalTitle,
+              },
+            ]
+          : undefined,
       },
       twitter: {
         card: "summary_large_image",
-        title: resolvedMeta.title,
-        description: resolvedMeta.description,
+        title: finalTitle,
+        description: finalDescription,
+        images: data.imageUrl ? [data.imageUrl] : undefined,
       },
       robots: {
         index: true,

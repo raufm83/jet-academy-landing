@@ -201,11 +201,8 @@ export async function generateMetadata({
 
     const postTypeUrl = "blog";
 
-    const azSlug = data.slug?.az || params.slug;
-    const enSlug = data.slug?.en || params.slug;
-
-    const azCanonical = `${baseUrl}/${postTypeUrl}/${azSlug}`;
-    const enCanonical = `${baseUrl}/en/${postTypeUrl}/${enSlug}`;
+    const azCanonical = `${baseUrl}/${postTypeUrl}/${params.slug}`;
+    const enCanonical = `${baseUrl}/en/${postTypeUrl}/${params.slug}`;
     const canonicalUrl = locale === "en" ? enCanonical : azCanonical;
 
     const truncatedTitle = truncateTitle(data.title[locale]);
