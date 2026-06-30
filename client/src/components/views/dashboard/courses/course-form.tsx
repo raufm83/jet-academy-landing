@@ -4,8 +4,6 @@ import {
   Button,
   Card,
   Input,
-  Select,
-  SelectItem,
   Switch,
 } from "@nextui-org/react";
 import dynamic from "next/dynamic";
@@ -17,7 +15,6 @@ import {
   MdImage,
   MdLink,
   MdPeople,
-  MdSignalCellular4Bar,
   MdStar,
   MdTag,
   MdTitle,
@@ -107,11 +104,7 @@ export default function CourseForm({
     }
   }, [initialValues]);
 
-  const levels = [
-    { value: { az: "Başlanğıc", en: "Beginner" } },
-    { value: { az: "Orta", en: "Intermediate" } },
-    { value: { az: "Qabaqcıl", en: "Advanced" } },
-  ];
+
 
   const isPublished = watch("published", false);
 
