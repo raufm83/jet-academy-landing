@@ -1,6 +1,6 @@
 import React from "react";
 import Image from "next/image";
-import { MdCalendarToday, MdPeople, MdSignalCellular4Bar } from "react-icons/md";
+import { MdCalendarToday, MdAccessTime, MdMenuBook } from "react-icons/md";
 import LazyHtmlContent from "@/components/shared/lazy-html-content";
 import CourseContent from "./course-content";
 import { deferEmbedsInHtml } from "@/utils/deferEmbedsInHtml";
@@ -40,15 +40,15 @@ export default async function CourseHero({
 
       <div className="flex flex-wrap gap-4 items-center mt-2">
         <div className="flex items-center gap-2 bg-[#fef7eb] border border-jsyellow/40 text-jsblack rounded-xl px-5 py-2.5">
-          <MdPeople className="text-jsyellow w-5 h-5 sm:w-6 sm:h-6" />
+          <MdAccessTime className="text-jsyellow w-5 h-5 sm:w-6 sm:h-6" />
           <span className="text-[clamp(14px,1.2vw,16px)]">
-            <strong className="font-bold">{locale === 'az' ? 'Yaş:' : 'Age:'}</strong> <span className="font-medium">{data?.ageRange || "8-12"}</span>
+            <strong className="font-bold">{locale === 'az' ? 'Saat:' : 'Hours:'}</strong> <span className="font-medium">{data?.totalHours || "0"}</span>
           </span>
         </div>
         <div className="flex items-center gap-2 bg-[#fef7eb] border border-jsyellow/40 text-jsblack rounded-xl px-5 py-2.5">
-          <MdSignalCellular4Bar className="text-jsyellow w-5 h-5 sm:w-6 sm:h-6" />
+          <MdMenuBook className="text-jsyellow w-5 h-5 sm:w-6 sm:h-6" />
           <span className="text-[clamp(14px,1.2vw,16px)]">
-            <strong className="font-bold">{locale === 'az' ? 'Səviyyə:' : 'Level:'}</strong> <span className="font-medium">{data?.level?.[locale] || data?.level || "Başlanğıc"}</span>
+            <strong className="font-bold">{locale === 'az' ? 'Həftəlik dərs sayı:' : 'Lessons per week:'}</strong> <span className="font-medium">{data?.lessonPerWeek || "0"}</span>
           </span>
         </div>
         <div className="flex items-center gap-2 bg-[#fef7eb] border border-jsyellow/40 text-jsblack rounded-xl px-5 py-2.5">
