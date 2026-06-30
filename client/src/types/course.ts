@@ -10,6 +10,8 @@ export interface CourseFormInputs {
   shortDescription?: MultilingualContent;
   slug: MultilingualContent;
   duration: number;
+  durationMonths?: number;
+  totalHours?: number;
   level: MultilingualContent;
   lessonPerWeek?: number;
   imageUrl?: string;
@@ -26,6 +28,7 @@ export interface CourseFormInputs {
     az: string[];
     en: string[];
   };
+  imageAlt?: MultilingualContent;
 }
 interface ModuleContent extends MultilingualContent {
   order: number;
@@ -109,6 +112,8 @@ export interface Course {
   slug: MultilingualContent;
   level: MultilingualContent;
   duration: number;
+  durationMonths?: number;
+  totalHours?: number;
   published: boolean;
   backgroundColor: string;
   borderColor: string;
