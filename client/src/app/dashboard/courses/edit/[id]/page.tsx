@@ -114,6 +114,17 @@ export default function EditCoursePage({ params }: { params: { id: string } }) {
         formData.append("order", String(data.order));
       }
 
+      if (typeof data.totalHours === "number" && !Number.isNaN(data.totalHours)) {
+        formData.append("totalHours", String(data.totalHours));
+      }
+
+      if (typeof data.durationMonths === "number" && !Number.isNaN(data.durationMonths)) {
+        formData.append("durationMonths", String(data.durationMonths));
+      }
+
+      if (data.imageAlt?.az) formData.append("imageAlt[az]", data.imageAlt.az);
+      if (data.imageAlt?.en) formData.append("imageAlt[en]", data.imageAlt.en);
+
       if (data.image && data.image instanceof File) {
         formData.append("image", data.image);
       }

@@ -66,6 +66,24 @@ export default function CreateCoursePage() {
       if (typeof data.order === "number" && !Number.isNaN(data.order)) {
         formData.append("order", String(data.order));
       }
+      
+      if (typeof data.totalHours === "number" && !Number.isNaN(data.totalHours)) {
+        formData.append("totalHours", String(data.totalHours));
+      }
+
+      if (typeof data.durationMonths === "number" && !Number.isNaN(data.durationMonths)) {
+        formData.append("durationMonths", String(data.durationMonths));
+      }
+
+      if (data.backgroundColor) formData.append("backgroundColor", data.backgroundColor);
+      if (data.borderColor) formData.append("borderColor", data.borderColor);
+      if (data.textColor) formData.append("textColor", data.textColor);
+
+      if (data.shortDescription?.az) formData.append("shortDescription[az]", data.shortDescription.az);
+      if (data.shortDescription?.en) formData.append("shortDescription[en]", data.shortDescription.en);
+
+      if (data.imageAlt?.az) formData.append("imageAlt[az]", data.imageAlt.az);
+      if (data.imageAlt?.en) formData.append("imageAlt[en]", data.imageAlt.en);
 
 
 if (data.image) {
