@@ -117,7 +117,7 @@ export default async function SingleCoursePage({
     const coursesForSlider = { ...courses, items: otherCourseItems };
 
     const courseTitle = pickCourseTitle(data.title, locale);
-    const allTeachers = teamMembersRes.data ?? [];
+    const courseTeachers = data.teachers ?? [];
 
     const baseUrl = SITE.baseUrl;
     const base = locale === "az" ? baseUrl : `${baseUrl}/${locale}`;
@@ -178,7 +178,7 @@ export default async function SingleCoursePage({
           <TeachersSection
             title={t("teachers")}
             description={t("teachersDescription")}
-            data={{ teachers: allTeachers }}
+            data={{ teachers: courseTeachers }}
             locale={locale}
           />
           <FaqSection
