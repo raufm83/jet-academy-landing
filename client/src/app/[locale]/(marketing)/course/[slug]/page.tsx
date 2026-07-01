@@ -6,7 +6,6 @@ import TeachersSection from "@/components/views/landing/single-course/course-tea
 import CoursesSlider from "@/components/views/landing/home/courses";
 import { Locale } from "@/i18n/request";
 import { getAllCourses, getCourseDetails } from "@/utils/api/course";
-import api from "@/utils/api/axios";
 import { Metadata } from "next";
 import { getLocale, getTranslations } from "next-intl/server";
 import { notFound } from "next/navigation";
