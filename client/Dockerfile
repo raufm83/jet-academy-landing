@@ -4,7 +4,7 @@ FROM node:20-alpine AS builder
 WORKDIR /app
 
 # Next.js build is memory-heavy; use official V8 flag (hyphens) + enough heap for CI/Droplet
-ENV NODE_OPTIONS="--max-old-space-size=8192"
+ENV NODE_OPTIONS="--max-old-space-size=1024"
 
 # Disable Next.js telemetry during build
 ENV NEXT_TELEMETRY_DISABLED=1

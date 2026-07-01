@@ -308,15 +308,16 @@ export default function GlossaryDashboardPage() {
                 setSelectedCategory(e.target.value || "all");
                 setPage(1);
               }}
-            >
-              {[
-                <SelectItem key="all" value="all">Bütün kateqoriyalar</SelectItem>,
-                ...categories.map((cat) => (
-                  <SelectItem key={cat.id} value={cat.id}>
-                    {cat.name.az}
-                  </SelectItem>
-                ))
+              items={[
+                { id: "all", name: { az: "Bütün kateqoriyalar" } },
+                ...categories,
               ]}
+            >
+              {(cat) => (
+                <SelectItem key={cat.id} value={cat.id}>
+                  {cat.name.az}
+                </SelectItem>
+              )}
             </Select>
             <div className="flex gap-3">
               <Button
