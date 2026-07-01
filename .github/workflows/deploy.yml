@@ -43,7 +43,7 @@ jobs:
           free -h
 
           # Ensure swap is available for builds
-          if [ ! -f /swapfile ]; then
+          if ! sudo swapon --show | grep -q '/swapfile'; then
             echo "🔄 Creating swap file for build process..."
             sudo fallocate -l 2G /swapfile || sudo dd if=/dev/zero of=/swapfile bs=1M count=2048
             sudo chmod 600 /swapfile
@@ -51,7 +51,7 @@ jobs:
             sudo swapon /swapfile
             echo '/swapfile none swap sw 0 0' | sudo tee -a /etc/fstab
           else
-            sudo swapon /swapfile || true
+            echo "🔁 Swapfile already active"
           fi
 
           echo "🔨 Building and starting backend API..."

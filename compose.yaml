@@ -3,6 +3,7 @@ services:
     build:
       context: ./client
       dockerfile: Dockerfile
+      network: host
       args:
         - NEXTAUTH_SECRET=${NEXTAUTH_SECRET}
         # Server .env-də köhnə host (new.jetacademy.az) qalıb — burada sabitlənir
