@@ -48,6 +48,8 @@ export class GlossaryController {
     @Query('page') page = 1,
     @Query('limit') limit = 10,
     @Query('includeUnpublished') includeUnpublished = false,
+    @Query('search') search = '',
+    @Query('categoryId') categoryId = '',
     @Request() req: { user?: { id: string; role: Role } },
   ) {
     const authorId = req.user?.role === Role.AUTHOR ? req.user.id : undefined;
@@ -58,6 +60,8 @@ export class GlossaryController {
       letter,
       authorId,
       tag,
+      search,
+      categoryId,
     );
   }
   @Get('brief')

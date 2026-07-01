@@ -17,6 +17,8 @@ import {
   Tooltip,
   useDisclosure,
   Input,
+  Select,
+  SelectItem,
 } from "@nextui-org/react";
 import { motion } from "framer-motion";
 import { useRouter } from "next/navigation";
@@ -76,12 +78,24 @@ export default function GlossaryDashboardPage() {
 
   const [searchQuery, setSearchQuery] = useState("");
   const [debouncedSearch, setDebouncedSearch] = useState("");
+  const [categories, setCategories] = useState<{id: string, name: {az: string}}[]>([]);
+  const [selectedCategory, setSelectedCategory] = useState<string>("all");
+
+  const fetchCategories = useCallback(async () => {
+    try {
+      const { data } = await api.get("/glossary-categories");
+      setCategories(data.items || []);
+    } catch (error) {
+      console.error("Kateqoriyaları yükləmə xətası:", error);
+    }
+  }, []);
 
   const fetchTerms = useCallback(async () => {
     try {
       setLoading(true);
+      const catParam = selectedCategory !== "all" ? `&categoryId=${selectedCategory}` : "";
       const { data } = await api.get<GlossaryResponse>(
-        `/glossary?page=${page}&limit=${rowsPerPage}&includeUnpublished=${includeUnpublished}&search=${debouncedSearch}`
+        `/glossary?page=${page}&limit=${rowsPerPage}&includeUnpublished=${includeUnpublished}&search=${debouncedSearch}${catParam}`
       );
       setTerms(data.items);
       setTotalTerms(data.meta.total);
@@ -91,7 +105,11 @@ export default function GlossaryDashboardPage() {
     } finally {
       setLoading(false);
     }
-  }, [page, rowsPerPage, includeUnpublished, debouncedSearch]);
+  }, [page, rowsPerPage, includeUnpublished, debouncedSearch, selectedCategory]);
+
+  useEffect(() => {
+    fetchCategories();
+  }, [fetchCategories]);
 
   useEffect(() => {
     const handler = setTimeout(() => {
@@ -282,6 +300,22 @@ export default function GlossaryDashboardPage() {
               value={searchQuery}
               onValueChange={setSearchQuery}
             />
+            <Select
+              className="w-full sm:max-w-[200px]"
+              placeholder="Bütün kateqoriyalar"
+              selectedKeys={[selectedCategory]}
+              onChange={(e) => {
+                setSelectedCategory(e.target.value || "all");
+                setPage(1);
+              }}
+            >
+              <SelectItem key="all" value="all">Bütün kateqoriyalar</SelectItem>
+              {categories.map((cat) => (
+                <SelectItem key={cat.id} value={cat.id}>
+                  {cat.name.az}
+                </SelectItem>
+              ))}
+            </Select>
             <div className="flex gap-3">
               <Button
                 color="warning"

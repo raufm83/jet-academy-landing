@@ -77,32 +77,53 @@ export class GlossaryService {
     letter = '',
     authorId?: string,
     tag = '',
+    search = '',
+    categoryId = '',
   ) {
     try {
       const skip = (page - 1) * limit;
-      const where: Prisma.GlossaryWhereInput =
-        authorId != null
-          ? { authorId }
-          : includeUnpublished
-            ? {}
-            : { published: true };
+      const where: Prisma.GlossaryWhereInput = {
+        ...(authorId != null ? { authorId } : {}),
+        ...(includeUnpublished ? {} : { published: true }),
+        ...(categoryId ? { categoryId } : {}),
+      };
 
       const allItems = await this.prisma.glossary.findMany({
         where,
         include: this.includeRelations,
       });
 
-      let filteredItems = letter
-        ? allItems.filter((item) =>
-            item.term?.az?.toLowerCase().startsWith(letter.toLowerCase()),
-          )
-        : allItems;
+      let filteredItems = allItems;
+
+      if (letter) {
+        filteredItems = filteredItems.filter((item) =>
+          item.term?.az?.toLowerCase().startsWith(letter.toLowerCase()),
+        );
+      }
 
       if (tag) {
         const lowerTag = tag.toLowerCase().trim();
         filteredItems = filteredItems.filter((item) => {
           const itemTags = extractAllTagStrings(item.tags);
           return itemTags.some((t) => t === lowerTag);
+        });
+      }
+
+      if (search) {
+        const lowerSearch = search.toLowerCase().trim();
+        filteredItems = filteredItems.filter((item) => {
+          const termAz = item.term?.az?.toLowerCase() || '';
+          const termEn = item.term?.en?.toLowerCase() || '';
+          const defAz = item.definition?.az?.toLowerCase() || '';
+          const defEn = item.definition?.en?.toLowerCase() || '';
+          const itemTags = extractAllTagStrings(item.tags);
+          return (
+            termAz.includes(lowerSearch) ||
+            termEn.includes(lowerSearch) ||
+            defAz.includes(lowerSearch) ||
+            defEn.includes(lowerSearch) ||
+            itemTags.some((t) => t.includes(lowerSearch))
+          );
         });
       }
 
