@@ -1,7 +1,7 @@
 import React from "react";
 import { Metadata } from "next";
 import { getTranslations, setRequestLocale } from "next-intl/server";
-import { notFound, permanentRedirect } from "next/navigation";
+import { permanentRedirect } from "next/navigation";
 import { Locale } from "@/i18n/request";
 import { getVacancyDetail } from "@/utils/api/vacancy";
 import { htmlToDescription, buildAlternates } from "@/utils/seo";

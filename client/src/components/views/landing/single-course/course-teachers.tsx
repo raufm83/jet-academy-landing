@@ -53,7 +53,7 @@ export default function TeachersSection({
           loop={activeTeachers.length > 5}
           grabCursor={true}
           spaceBetween={24}
-          centeredSlides={true}
+          centeredSlides={false}
           centerInsufficientSlides={true}
           breakpoints={{
             0: { slidesPerView: 1.6, spaceBetween: 16 },
