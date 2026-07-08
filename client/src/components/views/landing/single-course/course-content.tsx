@@ -8,7 +8,7 @@ interface CourseContentProps {
   title?: string;
 }
 
-export default function CourseContent({ modules, locale }: CourseContentProps) {
+export default function CourseContent({ modules, locale, title }: CourseContentProps) {
   const [openModule, setOpenModule] = useState<number | null>(null);
 
   return (
