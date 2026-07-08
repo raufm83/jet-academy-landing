@@ -80,9 +80,9 @@ export default async function CourseHero({
           )}
           <div className="absolute inset-0 bg-white/20 rounded-xl sm:rounded-2xl lg:rounded-[32px]" />
           <div className="relative z-10">
-            <p className="font-semibold mb-2 sm:mb-3 lg:mb-4 text-[clamp(16px,1.6vw,22px)] lg:text-[clamp(18px,1.5vw,26px)] [@media(min-width:2500px)]:!text-3xl [@media(min-width:3500px)]:!text-4xl">
+            <h2 className="font-semibold mb-2 sm:mb-3 lg:mb-4 text-[clamp(16px,1.6vw,22px)] lg:text-[clamp(18px,1.5vw,26px)] [@media(min-width:2500px)]:!text-3xl [@media(min-width:3500px)]:!text-4xl">
               {courseOverviewText}
-            </p>
+            </h2>
             <LazyHtmlContent
               html={deferEmbedsInHtml(description)}
               className="prose prose-xs sm:prose-sm lg:prose-base max-w-none text-[clamp(14px,1.35vw,18px)] font-normal leading-relaxed text-jsblack/90 [&_p]:font-normal [&_li]:font-normal [&_strong]:font-semibold [@media(min-width:2500px)]:!text-2xl [@media(min-width:3500px)]:!text-3xl"

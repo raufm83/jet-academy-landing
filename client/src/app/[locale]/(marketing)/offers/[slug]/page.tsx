@@ -6,7 +6,7 @@ import { getAllPosts, getPostDetails } from "@/utils/api/post";
 import { formatDate, formatTime } from "@/utils/formatters/formatDate";
 import { Metadata } from "next";
 import { getTranslations, setRequestLocale } from "next-intl/server";
-import { notFound } from "next/navigation";
+import { notFound, permanentRedirect } from "next/navigation";
 import { truncateTitle, htmlToDescription } from "@/utils/seo";
 import { getPostImageSrc } from "@/utils/helpers/post";
 import { offerSingleGraph, SITE } from "@/data/site-schema";
@@ -64,7 +64,7 @@ export default async function SinglePostPage({ params }: ISinglePostPageProps) {
       console.warn(
         `Post data missing for slug: ${params.slug}, locale: ${locale}`
       );
-      notFound();
+      permanentRedirect(`/${locale}/offers`);
     }
 
     const getPostTypeName = (type: PostType) => {

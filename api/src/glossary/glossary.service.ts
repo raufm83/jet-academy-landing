@@ -5,6 +5,18 @@ import { Role } from '@prisma/client';
 import { CreateGlossaryDto } from './dto/create-glossary.dto';
 import { UpdateGlossaryDto } from './dto/update-glossary.dto';
 
+const normalizeText = (text: string): string => {
+  if (!text) return '';
+  const charMap: Record<string, string> = {
+    'ü': 'u', 'ö': 'o', 'ğ': 'g', 'ı': 'i', 'ə': 'e', 'ş': 's', 'ç': 'c',
+    'Ü': 'u', 'Ö': 'o', 'Ğ': 'g', 'I': 'i', 'Ə': 'e', 'Ş': 's', 'Ç': 'c',
+    'i': 'i', 'İ': 'i'
+  };
+  return text
+    .replace(/[üöğıəşçÜÖĞIƏŞÇİi]/g, (match) => charMap[match] || match)
+    .toLowerCase();
+};
+
 /** Extract all tag strings from a bilingual tags object or legacy string array. */
 function extractAllTagStrings(tags: any): string[] {
   if (!tags) return [];
@@ -110,13 +122,13 @@ export class GlossaryService {
       }
 
       if (search) {
-        const lowerSearch = search.toLowerCase().trim();
+        const lowerSearch = normalizeText(search.trim());
         filteredItems = filteredItems.filter((item) => {
-          const termAz = item.term?.az?.toLowerCase() || '';
-          const termEn = item.term?.en?.toLowerCase() || '';
-          const defAz = item.definition?.az?.toLowerCase() || '';
-          const defEn = item.definition?.en?.toLowerCase() || '';
-          const itemTags = extractAllTagStrings(item.tags);
+          const termAz = normalizeText(item.term?.az);
+          const termEn = normalizeText(item.term?.en);
+          const defAz = normalizeText(item.definition?.az);
+          const defEn = normalizeText(item.definition?.en);
+          const itemTags = extractAllTagStrings(item.tags).map(normalizeText);
           return (
             termAz.includes(lowerSearch) ||
             termEn.includes(lowerSearch) ||
@@ -457,18 +469,18 @@ export class GlossaryService {
       const filtered = allItems.filter((item) => {
         const allTags = extractAllTagStrings(item.tags);
         const tagMatch = lowerTag
-          ? allTags.some((t) => t.includes(lowerTag))
+          ? allTags.some((t) => normalizeText(t).includes(lowerTag))
           : true;
         if (!tagMatch) return false;
 
         if (!lowerQuery) return true;
 
-            const termAz = item.term?.az?.toLowerCase() || '';
-            const termEn = item.term?.en?.toLowerCase() || '';
-            const defAz = item.definition?.az?.toLowerCase() || '';
-            const defEn = item.definition?.en?.toLowerCase() || '';
-            const categoryAz = item.category?.name?.az?.toLowerCase() || '';
-            const categoryEn = item.category?.name?.en?.toLowerCase() || '';
+            const termAz = normalizeText(item.term?.az);
+            const termEn = normalizeText(item.term?.en);
+            const defAz = normalizeText(item.definition?.az);
+            const defEn = normalizeText(item.definition?.en);
+            const categoryAz = normalizeText(item.category?.name?.az);
+            const categoryEn = normalizeText(item.category?.name?.en);
 
             return (
               termAz.includes(lowerQuery) ||
@@ -477,7 +489,7 @@ export class GlossaryService {
               defEn.includes(lowerQuery) ||
               categoryAz.includes(lowerQuery) ||
               categoryEn.includes(lowerQuery) ||
-              allTags.some((t) => t.includes(lowerQuery))
+              allTags.some((t) => normalizeText(t).includes(lowerQuery))
             );
           });
 

@@ -1,7 +1,7 @@
 import React from "react";
 import { Metadata } from "next";
 import { getTranslations, setRequestLocale } from "next-intl/server";
-import { notFound } from "next/navigation";
+import { notFound, permanentRedirect } from "next/navigation";
 import { Locale } from "@/i18n/request";
 import { getVacancyDetail } from "@/utils/api/vacancy";
 import { htmlToDescription, buildAlternates } from "@/utils/seo";
@@ -90,7 +90,7 @@ export default async function VacancySinglePage({ params }: VacancySinglePagePro
     getFaqByPage("vacancies"),
   ]);
 
-  if (!vacancy) notFound();
+  if (!vacancy) return permanentRedirect(`/${locale}/vacancies`);
 
   const vacancyName = vacancy.title[locale] || vacancy.title.az;
   const title = t("cardTitle", { name: vacancyName });

@@ -61,7 +61,7 @@ const TeamMemberCard = memo(
               : { loading: "lazy" as const, placeholder: "blur" as const, blurDataURL: BLUR })}
           />
         </div>
-        <h4 className="font-semibold [@media(min-width:2500px)]:!text-lg [@media(min-width:3500px)]:!text-3xl text-md text-jsblack text-center">{fullName}</h4>
+        <div className="font-semibold [@media(min-width:2500px)]:!text-lg [@media(min-width:3500px)]:!text-3xl text-md text-jsblack text-center">{fullName}</div>
         <p className="text-gray-600 [@media(min-width:2500px)]:!text-md [@media(min-width:3000px)]:text-2xl text-xs text-center mt-1 line-clamp-2 min-h-[2rem]">{description}</p>
 
         {isCoursePage && "position" in member && member.position && (

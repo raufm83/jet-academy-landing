@@ -63,7 +63,7 @@ export default function CourseCard({
           cursor-pointer
           ${
             onlyTitleBold
-              ? "[&_p]:!font-normal [&_span]:!font-normal [&_h2]:!font-bold"
+              ? "[&_p]:!font-normal [&_span]:!font-normal [&_h3]:!font-bold"
               : ""
           }
           ${className}
@@ -75,9 +75,9 @@ export default function CourseCard({
       }}
     >
       <div className="relative z-0">
-        <h2 className="text-2xl sm:text-2xl font-bold mb-3 leading-tight text-gray-900 line-clamp-2">
+        <h3 className="text-2xl sm:text-2xl font-bold mb-3 leading-tight text-gray-900 line-clamp-2">
           {data.title}
-        </h2>
+        </h3>
         <p className="text-base sm:text-lg font-normal opacity-80 line-clamp-2">
           {data.slogan}
         </p>

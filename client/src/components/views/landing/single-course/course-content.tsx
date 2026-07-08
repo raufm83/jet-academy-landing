@@ -13,6 +13,11 @@ export default function CourseContent({ modules, locale }: CourseContentProps) {
 
   return (
     <div className="w-full max-w-3xl mx-auto sm:py-8 md:py-2">
+      {title && (
+        <h2 className="text-2xl md:text-3xl font-bold text-jsblack mb-6 [@media(min-width:3500px)]:!text-5xl">
+          {title}
+        </h2>
+      )}
       <div className="flex flex-col space-y-4">
         {modules.map((module, index) => {
           const isOpen = openModule === index;
@@ -36,11 +41,11 @@ export default function CourseContent({ modules, locale }: CourseContentProps) {
                 <div className="w-6 h-6 bg-jsyellow text-white flex items-center justify-center mr-3 md:mr-4 rounded-full text-base md:text-lg">
                   {index + 1}
                 </div>
-                <span
+                <h3
                   className="font-semibold text-sm md:text-base [@media(min-width:2500px)]:!text-3xl"
                 >
                   {moduleTitle}
-                </span>
+                </h3>
               </div>
               <span
                 className={`transition-transform duration-200 ${
