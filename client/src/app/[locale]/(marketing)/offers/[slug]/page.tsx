@@ -6,7 +6,7 @@ import { getAllPosts, getPostDetails } from "@/utils/api/post";
 import { formatDate, formatTime } from "@/utils/formatters/formatDate";
 import { Metadata } from "next";
 import { getTranslations, setRequestLocale } from "next-intl/server";
-import { permanentRedirect } from "next/navigation";
+import { permanentRedirect, notFound } from "next/navigation";
 import { truncateTitle, htmlToDescription } from "@/utils/seo";
 import { getPostImageSrc } from "@/utils/helpers/post";
 import { offerSingleGraph, SITE } from "@/data/site-schema";
