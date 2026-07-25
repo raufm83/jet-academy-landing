@@ -64,7 +64,7 @@ export async function generateMetadata({ params }: VacancySinglePageProps): Prom
   const title = t("cardTitle", { name: vacancyName });
   const description = htmlToDescription(vacancy.description[locale] || vacancy.description.az);
 
-  const baseUrl = process.env.NEXT_PUBLIC_APP_URL || "https://jetacademy.az";
+  const baseUrl = (process.env.NEXT_PUBLIC_APP_URL || "https://jetacademy.az").replace(/\/$/, "");
   const alternates = buildAlternates(`/vacancies/${params.slug}`, locale, baseUrl);
 
   return {

@@ -37,7 +37,7 @@ export async function generateMetadata({
     locale: params.locale,
     namespace: "Metadata",
   });
-  const baseUrl = process.env.NEXT_PUBLIC_APP_URL || "https://jetacademy.az";
+  const baseUrl = (process.env.NEXT_PUBLIC_APP_URL || "https://jetacademy.az").replace(/\/$/, "");
   const alternates = buildAlternates("/", params.locale, baseUrl);
   const { title, description } = await resolvePageMeta(
     "home",

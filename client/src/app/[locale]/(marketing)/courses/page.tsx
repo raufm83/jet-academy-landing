@@ -20,7 +20,7 @@ export async function generateMetadata(): Promise<Metadata> {
   const baseUrl = (process.env.NEXT_PUBLIC_APP_URL || "https://jetacademy.az").replace(/\/$/, "");
   const azPath = coursesListingPath("az");
   const enPath = coursesListingPath("en");
-  const azCanonical = `${baseUrl}${azPath}`;
+  const azCanonical = `${baseUrl}/az${azPath}`;
   const enCanonical = `${baseUrl}/en${enPath}`;
   const alternates = {
     canonical: locale === "en" ? enCanonical : azCanonical,

@@ -29,7 +29,7 @@ export async function generateMetadata({
   const t = await getTranslations({ locale, namespace: "postsPage" });
   const type = params.type?.toUpperCase() as PostType | undefined;
 
-  const baseUrl = process.env.NEXT_PUBLIC_APP_URL || "https://jetacademy.az";
+  const baseUrl = (process.env.NEXT_PUBLIC_APP_URL || "https://jetacademy.az").replace(/\/$/, "");
   const alternates = buildAlternates(`/${params.type || "news"}`, locale, baseUrl);
 
   let title = t("metaTitle") || "Bloq | JET Academy";

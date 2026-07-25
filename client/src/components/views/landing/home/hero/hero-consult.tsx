@@ -15,7 +15,7 @@ export default function HeroConsult() {
       className={cn(
         "group/btn",
         "bg-jsyellow hover:bg-white border hover:border-jsyellow hover:text-jsyellow text-white hover:opacity-70",
-        "py-2.5 px-6 rounded-[28px]",
+        "py-3 px-8 rounded-[32px] text-[clamp(15px,1.2vw,17px)]",
         "flex items-center transition-all duration-300 justify-center gap-2 flex-row-reverse",
         "font-semibold",
         "shadow-jsshadow mx-auto lg:mx-0",

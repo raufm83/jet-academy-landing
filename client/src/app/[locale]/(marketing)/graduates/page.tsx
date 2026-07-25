@@ -21,7 +21,7 @@ export async function generateMetadata({
 }: GraduatesPageProps): Promise<Metadata> {
   const locale = params.locale as Locale;
   const t = await getTranslations("graduates");
-  const baseUrl = process.env.NEXT_PUBLIC_APP_URL || "https://jetacademy.az";
+  const baseUrl = (process.env.NEXT_PUBLIC_APP_URL || "https://jetacademy.az").replace(/\/$/, "");
   const alternates = buildAlternates("/graduates", locale, baseUrl);
 
   return {

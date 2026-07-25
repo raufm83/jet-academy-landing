@@ -38,7 +38,7 @@ export async function generateMetadata({
   const locale = params.locale;
   const t = await getTranslations({ locale, namespace: "postsPage" });
 
-  const baseUrl = process.env.NEXT_PUBLIC_APP_URL || "https://jetacademy.az";
+  const baseUrl = (process.env.NEXT_PUBLIC_APP_URL || "https://jetacademy.az").replace(/\/$/, "");
   const alternates = buildAlternates("/blog", locale, baseUrl);
 
   const title = t("blogMetaTitle") || "Bloq Məqalələri | JET Academy";

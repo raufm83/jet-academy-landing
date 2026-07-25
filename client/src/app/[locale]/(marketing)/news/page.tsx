@@ -31,7 +31,7 @@ export async function generateMetadata({
   const type = searchParams.type as PostType | undefined;
   const t = await getTranslations({ locale, namespace: "postsPage" });
 
-  const baseUrl = process.env.NEXT_PUBLIC_APP_URL || "https://jetacademy.az";
+  const baseUrl = (process.env.NEXT_PUBLIC_APP_URL || "https://jetacademy.az").replace(/\/$/, "");
   let canonicalPath = "/news";
   if (type) {
     canonicalPath = `/news?type=${type}`;

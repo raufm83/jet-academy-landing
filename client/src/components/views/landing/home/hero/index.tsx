@@ -61,13 +61,13 @@ export default async function Hero({ locale, cms }: HeroProps) {
         {useUnifiedCms ? (
           <div
             className="
-            w-full max-w-xl mx-auto lg:mx-0
+            w-full max-w-2xl mx-auto lg:mx-0
             text-jsblack
-            [&_p]:mb-3 last:[&_p]:mb-0
+            [&_p]:text-[#5c5c5c] [&_p]:font-medium [&_p]:leading-[1.7] [&_p]:text-[clamp(15px,1.5vw,18px)] [&_p]:mb-5 last:[&_p]:mb-0
+            [@media(min-width:3500px)]:[&_p]:text-2xl
             [&_a]:text-jsyellow [&_a]:underline
-            text-sm md:text-base lg:text-lg xl:text-xl
-            [@media(min-width:3500px)]:!text-xl
-            [&_h1]:font-bold [&_h1]:text-jsblack [&_h1]:text-2xl [&_h1]:sm:text-3xl [&_h1]:md:text-4xl [&_h1]:lg:text-[2.25rem] [&_h1]:leading-tight
+            [&_h1]:font-bold [&_h1]:text-jsblack [&_h1]:mb-5 [&_h1]:text-[clamp(28px,3vw,46px)] [&_h1]:leading-[1.25] [&_h1]:tracking-tight
+            [@media(min-width:3500px)]:[&_h1]:text-6xl
           "
             dangerouslySetInnerHTML={{ __html: cmsBlockHtml }}
           />
@@ -86,6 +86,7 @@ export default async function Hero({ locale, cms }: HeroProps) {
               className="
             shadow-jsshadow
             mx-auto lg:mx-0
+            mb-4 md:mb-5
             text-xs md:text-sm lg:text-base
             py-1.5 md:py-2
             px-3 md:px-5
@@ -96,14 +97,14 @@ export default async function Hero({ locale, cms }: HeroProps) {
             <h1
               className="
             font-bold text-jsblack
-           
-            text-2xl sm:text-3xl md:text-4xl lg:text-[2.25rem] xl:text-[2.375rem] 2xl:text-[2.5rem]
-            leading-tight
-            [@media(min-width:3500px)]:!text-5xl
+            mb-5
+            text-[clamp(28px,3vw,46px)]
+            leading-[1.25] tracking-tight
+            [@media(min-width:3500px)]:!text-6xl
           "
             >
               {t("toJetAcademy")}{" "}
-              <span className="text-jsyellow text-3xl sm:text-[1.875rem] md:text-[2.125rem] lg:text-[2.375rem] xl:text-[2.5rem] [@media(min-width:3500px)]:!text-5xl">
+              <span className="text-jsyellow text-[clamp(28px,3vw,46px)] [@media(min-width:3500px)]:!text-6xl">
                 {t("welcome")}!
               </span>
             </h1>
@@ -111,10 +112,11 @@ export default async function Hero({ locale, cms }: HeroProps) {
             <p
               className="
             font-medium text-[#5c5c5c]
-            whitespace-pre-line leading-6 md:leading-7 lg:leading-relaxed
-            text-sm md:text-lg lg:text-lg xl:text-xl
-            max-w-xl mx-auto lg:mx-0
-            [@media(min-width:3500px)]:!text-xl
+            whitespace-pre-line leading-[1.7]
+            text-[clamp(15px,1.5vw,18px)]
+            max-w-2xl mx-auto lg:mx-0
+            mb-8
+            [@media(min-width:3500px)]:!text-2xl
           "
             >
               {t("description")}

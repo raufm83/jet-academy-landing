@@ -27,7 +27,7 @@ export async function generateMetadata({
   const { locale, slug } = params;
   const t = await getTranslations({ locale, namespace: "Metadata" });
   
-  const baseUrl = process.env.NEXT_PUBLIC_APP_URL || "https://jetacademy.az";
+  const baseUrl = (process.env.NEXT_PUBLIC_APP_URL || "https://jetacademy.az").replace(/\/$/, "");
 
   let termName = "";
   let termDefinition = "";

@@ -158,9 +158,9 @@ export default async function Footer() {
         <div className="container mx-auto px-4 sm:px-6 md:px-8 lg:px-12 xl:px-16 2xl:px-20 [@media(min-width:3000px)]:px-24 [@media(min-width:3500px)]:px-32 relative z-10 py-6 sm:py-8 md:py-12 lg:py-16">
           <div className="flex flex-col lg:flex-row justify-between gap-8 md:gap-10 lg:gap-12 [@media(min-width:2500px)]:gap-16 [@media(min-width:3500px)]:gap-24">
             <div className="flex flex-col gap-4 sm:gap-5 lg:gap-6 [@media(min-width:2500px)]:gap-8 [@media(min-width:3500px)]:gap-10 flex-1 min-w-[280px] max-w-[500px] [@media(min-width:2500px)]:max-w-[600px] [@media(min-width:3500px)]:max-w-[800px]">
-              <h2 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl [@media(min-width:2500px)]:!text-5xl [@media(min-width:3500px)]:!text-6xl font-bold">
+              <p className="text-xl sm:text-2xl md:text-3xl lg:text-4xl [@media(min-width:2500px)]:!text-5xl [@media(min-width:3500px)]:!text-6xl font-bold">
                 JET Academy
-              </h2>
+              </p>
               <p className="max-w-xs sm:max-w-sm lg:max-w-md [@media(min-width:2500px)]:max-w-lg [@media(min-width:3500px)]:max-w-xl text-white/80 text-sm sm:text-base [@media(min-width:2500px)]:!text-xl [@media(min-width:3500px)]:!text-3xl leading-relaxed [@media(min-width:3500px)]:leading-relaxed">
                 {t("tagline")}
               </p>

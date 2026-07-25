@@ -526,12 +526,12 @@ export function addTrailingSlash(url: string): string {
 }
 
 /**
- * Rəylər səhifəsi (localePrefix: "as-needed"):
- *   AZ canonical  = https://jetacademy.az/reyler/      (no prefix — served directly)
- *   EN canonical  = https://jetacademy.az/en/feedback/
- *   hreflang az   = https://jetacademy.az/reyler/
- *   hreflang en   = https://jetacademy.az/en/feedback/
- *   x-default     = https://jetacademy.az/reyler/
+ * Rəylər səhifəsi (localePrefix: "always"):
+ *   AZ canonical  = https://jetacademy.az/az/reyler
+ *   EN canonical  = https://jetacademy.az/en/feedback
+ *   hreflang az   = https://jetacademy.az/az/reyler
+ *   hreflang en   = https://jetacademy.az/en/feedback
+ *   x-default     = https://jetacademy.az/az/reyler
  */
 export function buildAlternatesFeedbacks(
   locale: string,
@@ -544,7 +544,7 @@ export function buildAlternatesFeedbacks(
   const pathAz = "/reyler";
   const pathEn = "/feedback";
 
-  const azUrl = `${baseUrl}${pathAz}`;
+  const azUrl = `${baseUrl}/az${pathAz}`;
   const enUrl = `${baseUrl}/en${pathEn}`;
   const canonical = locale === "en" ? enUrl : azUrl;
 
@@ -561,14 +561,14 @@ export function buildAlternatesFeedbacks(
 /**
  * Builds a consistent canonical URL and hreflang alternates object for Next.js metadata.
  *
- * URL convention (localePrefix: "as-needed"):
- *   - AZ (default)  served at  jetacademy.az/{path}        — no prefix
+ * URL convention (localePrefix: "always"):
+ *   - AZ (default)  served at  jetacademy.az/az/{path}
  *   - EN            served at  jetacademy.az/en/{path}
  *
  *   canonical   → served URL for current locale
- *   hreflang az → jetacademy.az/{path}      (no prefix — az is default)
+ *   hreflang az → jetacademy.az/az/{path}
  *   hreflang en → jetacademy.az/en/{path}
- *   x-default   → jetacademy.az/{path}      (same as az canonical)
+ *   x-default   → jetacademy.az/az/{path}
  *
  * @param path   - Page path WITHOUT locale prefix, e.g. "/courses" or "/course/frontend"
  * @param locale - Current page locale ("az" | "en")
@@ -585,10 +585,10 @@ export function buildAlternates(
   const baseUrl = (base || getBaseUrl()).replace(/\/$/, "");
   const normalizedPath = path === "/" ? "" : path.startsWith("/") ? path : `/${path}`;
 
-  /** AZ = no prefix; EN = /en/ prefix. */
+  /** AZ = /az prefix; EN = /en prefix. */
   const localeUrl = (loc: string) => {
-    const prefix = loc === "az" ? "" : `/${loc}`;
-    return `${baseUrl}${prefix}${normalizedPath}` || baseUrl;
+    const prefix = `/${loc}`;
+    return `${baseUrl}${prefix}${normalizedPath}`;
   };
 
   return {

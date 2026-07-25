@@ -18,7 +18,7 @@ export async function generateMetadata({
 }: PageProps): Promise<Metadata> {
   const cookieStore = cookies();
   const language = cookieStore.get("NEXT_LOCALE")?.value || "az";
-  const baseUrl = process.env.NEXT_PUBLIC_APP_URL || "https://jetacademy.az";
+  const baseUrl = (process.env.NEXT_PUBLIC_APP_URL || "https://jetacademy.az").replace(/\/$/, "");
   const locale = language === "en" ? "en" : "az";
 
   try {

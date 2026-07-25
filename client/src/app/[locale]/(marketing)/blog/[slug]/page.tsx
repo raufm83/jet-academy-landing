@@ -182,7 +182,7 @@ export async function generateMetadata({
   try {
     const data = await getPostDetails(params.slug);
     const locale = params.locale as Locale;
-    const baseUrl = process.env.NEXT_PUBLIC_APP_URL || "https://jetacademy.az";
+    const baseUrl = (process.env.NEXT_PUBLIC_APP_URL || "https://jetacademy.az").replace(/\/$/, "");
 
     if (!data || !data.title[locale] || !data.content[locale]) {
       console.warn(
@@ -201,7 +201,7 @@ export async function generateMetadata({
 
     const postTypeUrl = "blog";
 
-    const azCanonical = `${baseUrl}/${postTypeUrl}/${params.slug}`;
+    const azCanonical = `${baseUrl}/az/${postTypeUrl}/${params.slug}`;
     const enCanonical = `${baseUrl}/en/${postTypeUrl}/${params.slug}`;
     const canonicalUrl = locale === "en" ? enCanonical : azCanonical;
 

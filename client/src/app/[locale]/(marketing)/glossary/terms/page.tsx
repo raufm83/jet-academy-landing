@@ -25,7 +25,7 @@ export async function generateMetadata({
     namespace: "glossary.terms",
   });
 
-  const baseUrl = process.env.NEXT_PUBLIC_APP_URL || "https://jetacademy.az";
+  const baseUrl = (process.env.NEXT_PUBLIC_APP_URL || "https://jetacademy.az").replace(/\/$/, "");
   const letter = normalizeLetter(searchParams.letter);
 
   const qs = new URLSearchParams();

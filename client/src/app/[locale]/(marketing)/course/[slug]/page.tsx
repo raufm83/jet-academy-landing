@@ -151,7 +151,6 @@ export default async function SingleCoursePage({
             <div className="w-full lg:w-2/3">
               <CourseHero
                 title={pickCourseTitle(data.title, locale)}
-                courseOverviewText={t("courseDescription")}
                 tags={pickCourseTags(data.newTags, locale)}
                 description={pickCourseDescription(data.description, locale)}
                 params={params}
@@ -221,9 +220,9 @@ export async function generateMetadata({
       };
     }
 
-    const baseUrl = process.env.NEXT_PUBLIC_APP_URL || "https://jetacademy.az";
+    const baseUrl = (process.env.NEXT_PUBLIC_APP_URL || "https://jetacademy.az").replace(/\/$/, "");
 
-    const azCanonical = `${baseUrl}${courseDetailPath("az", params.slug)}`;
+    const azCanonical = `${baseUrl}/az${courseDetailPath("az", params.slug)}`;
     const enCanonical = `${baseUrl}/en${courseDetailPath("en", params.slug)}`;
     const canonicalUrl = locale === "en" ? enCanonical : azCanonical;
     

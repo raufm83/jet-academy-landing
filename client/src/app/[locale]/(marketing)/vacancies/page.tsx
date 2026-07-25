@@ -36,7 +36,7 @@ export async function generateMetadata({ params }: { params: { locale: string } 
   const locale = params.locale as Locale;
   const t = await getTranslations("vacancies");
 
-  const baseUrl = process.env.NEXT_PUBLIC_APP_URL || "https://jetacademy.az";
+  const baseUrl = (process.env.NEXT_PUBLIC_APP_URL || "https://jetacademy.az").replace(/\/$/, "");
   const alternates = buildAlternates("/vacancies", locale, baseUrl);
 
   const { title, description } = await resolvePageMeta(

@@ -16,7 +16,7 @@ export async function generateMetadata({
   const t = await getTranslations({ locale, namespace: "Metadata" });
   const glossaryT = await getTranslations({ locale, namespace: "glossary" });
 
-  const baseUrl = process.env.NEXT_PUBLIC_APP_URL || "https://jetacademy.az";
+  const baseUrl = (process.env.NEXT_PUBLIC_APP_URL || "https://jetacademy.az").replace(/\/$/, "");
   const alternates = buildAlternates("/glossary", locale, baseUrl);
 
   const rawTitle = t("glossaryPageTitle") || "Glossariy | JET Academy";
