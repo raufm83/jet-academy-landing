@@ -21,20 +21,20 @@ async function AboutUs() {
     >
       <SectionTitle title={t("title")} description={t("description")} />
 
-      <div className="flex md:grid md:grid-cols-2 [@media(min-width:2500px)]:grid-cols-4 gap-4 md:gap-6 4xl:gap-8 relative overflow-x-auto snap-x snap-mandatory pb-4 md:pb-0 md:overflow-visible [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
+      <div className="grid grid-cols-1 md:grid-cols-2 [@media(min-width:2500px)]:grid-cols-4 gap-4 md:gap-6 4xl:gap-8 relative">
         {aboutPoints.map((point, index) => (
           <div
             key={index}
             className={`
-              w-full min-w-[85vw] sm:min-w-[60vw] md:min-w-0
-              shrink-0 snap-center md:shrink md:snap-align-none
-              border
+              w-full border
+              
               flex items-start
               gap-3 4xl:gap-6
               bg-white border-jsyellow
               rounded-[32px]
               p-6 4xl:p-8
               text-jsblack
+              
             `}
           >
             <div

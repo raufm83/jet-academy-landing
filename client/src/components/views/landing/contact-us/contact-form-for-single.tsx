@@ -18,11 +18,7 @@ type CourseItem = { id: string; title?: Record<string, string> };
 type FormValues = RequestFormInputs & { website?: string };
 const ADVICE_VALUE = "__advice__";
 
-interface ContactFormForSingleProps {
-  defaultCourseId?: string;
-}
-
-const ContactFormForSingle = ({ defaultCourseId }: ContactFormForSingleProps) => {
+const ContactFormForSingle = () => {
   const t = useTranslations("contact.form");
   const locale = useLocale() as Locale;
   const { isSpam, honeypotName } = useSpamProtection();
@@ -44,8 +40,8 @@ const ContactFormForSingle = ({ defaultCourseId }: ContactFormForSingleProps) =>
       // Backend məcburi sahələr — UI-də gizli saxlayırıq
       childAge: 12,
       childLanguage: Language.AZ,
-      // courseId default olaraq “Məsləhət almaq istəyirəm” və ya propsdan gələn courseId
-      courseId: (defaultCourseId || ADVICE_VALUE) as any,
+      // courseId default olaraq “Məsləhət almaq istəyirəm”
+      courseId: ADVICE_VALUE as any,
       website: "",
     },
   });
@@ -236,7 +232,6 @@ const ContactFormForSingle = ({ defaultCourseId }: ContactFormForSingleProps) =>
               options={courseOptions}
               error={errors.courseId as any}
               placeholder={t("course.placeholder") ?? "Kurs seçin"}
-              value={selectedCourseId}
               {...register("courseId" as any, {
                 required: t("course.required") ?? "Kurs seçimi məcburidir",
               })}

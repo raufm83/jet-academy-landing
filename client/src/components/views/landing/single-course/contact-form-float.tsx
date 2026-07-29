@@ -5,10 +5,9 @@ import ContactFormForSingle from "../contact-us/contact-form-for-single";
 
 interface ContactFormFloatProps {
   title?: string;
-  courseId?: string;
 }
 
-export default function ContactFormFloat({ title, courseId }: ContactFormFloatProps) {
+export default function ContactFormFloat({ title }: ContactFormFloatProps) {
   const t = useTranslations("singleCoursePage");
   
   return (
@@ -22,7 +21,7 @@ export default function ContactFormFloat({ title, courseId }: ContactFormFloatPr
         <h3 className="text-xl lg:text-2xl [@media(min-width:3500px)]:!text-4xl font-semibold text-jsblack mb-6 text-center">
           {t(title ? title : "enroll")}
         </h3>
-        <ContactFormForSingle defaultCourseId={courseId} />
+        <ContactFormForSingle />
       </motion.div>
     </div>
   );
