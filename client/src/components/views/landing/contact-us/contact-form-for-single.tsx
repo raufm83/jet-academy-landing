@@ -18,7 +18,7 @@ type CourseItem = { id: string; title?: Record<string, string> };
 type FormValues = RequestFormInputs & { website?: string };
 const ADVICE_VALUE = "__advice__";
 
-const ContactFormForSingle = () => {
+const ContactFormForSingle = ({ initialCourseId }: { initialCourseId?: string | number } = {}) => {
   const t = useTranslations("contact.form");
   const locale = useLocale() as Locale;
   const { isSpam, honeypotName } = useSpamProtection();
@@ -40,8 +40,8 @@ const ContactFormForSingle = () => {
       // Backend məcburi sahələr — UI-də gizli saxlayırıq
       childAge: 12,
       childLanguage: Language.AZ,
-      // courseId default olaraq “Məsləhət almaq istəyirəm”
-      courseId: ADVICE_VALUE as any,
+      // courseId default olaraq verilən initialCourseId və ya “Məsləhət almaq istəyirəm”
+      courseId: (initialCourseId ? String(initialCourseId) : ADVICE_VALUE) as any,
       website: "",
     },
   });
@@ -86,7 +86,7 @@ const ContactFormForSingle = () => {
 
     if (isSpam(data)) {
       setSuccess(true);
-      reset({ childAge: 12, childLanguage: Language.AZ, courseId: ADVICE_VALUE as any, website: "" });
+      reset({ childAge: 12, childLanguage: Language.AZ, courseId: (initialCourseId ? String(initialCourseId) : ADVICE_VALUE) as any, website: "" });
       return;
     }
     try {
@@ -108,7 +108,7 @@ const ContactFormForSingle = () => {
       };
 
       await api.post("/requests", payload);
-      reset({ childAge: 12, childLanguage: Language.AZ, courseId: ADVICE_VALUE as any });
+      reset({ childAge: 12, childLanguage: Language.AZ, courseId: (initialCourseId ? String(initialCourseId) : ADVICE_VALUE) as any });
       setSuccess(true);
     } catch (err) {
       console.error("Error sending message:", err);
@@ -231,6 +231,7 @@ const ContactFormForSingle = () => {
             <Select
               options={courseOptions}
               error={errors.courseId as any}
+              value={selectedCourseId as any}
               placeholder={t("course.placeholder") ?? "Kurs seçin"}
               {...register("courseId" as any, {
                 required: t("course.required") ?? "Kurs seçimi məcburidir",

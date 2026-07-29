@@ -160,7 +160,7 @@ export default async function SingleCoursePage({
             </div>
 
             <div className="hidden lg:block w-full lg:w-1/3">
-              <ContactFormFloat />
+              <ContactFormFloat initialCourseId={currentId} />
             </div>
           </div>
 
@@ -185,7 +185,7 @@ export default async function SingleCoursePage({
           />
 
           <div className="lg:hidden mt-10">
-            <ContactFormFloat />
+            <ContactFormFloat initialCourseId={currentId} />
           </div>
           
           <CoursesSlider
