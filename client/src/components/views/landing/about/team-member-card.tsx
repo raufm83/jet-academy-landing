@@ -33,10 +33,7 @@ const TeamMemberCard = memo(
       "teacher" in member ? member.teacher.fullName : member.fullName;
     const fullName = typeof fullNameObj === "string" ? fullNameObj : (fullNameObj[langKey] || fullNameObj.az);
 
-    const description =
-      "teacher" in member
-        ? (member.courseTeacher?.description?.[langKey] || member.courseTeacher?.description?.az || "")
-        : (bio?.[langKey] || bio?.az || "");
+    const description = bio?.[langKey] || bio?.az || "";
 
     const imgSrc = resolveOptimizedImageUrl(imageUrl, "team");
 
