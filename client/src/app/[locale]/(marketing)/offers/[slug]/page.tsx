@@ -149,9 +149,10 @@ export default async function SinglePostPage({ params }: ISinglePostPageProps) {
         </div>
       </BreadcrumbContextWrapper>
     );
-  } catch (error) {
+  } catch (error: any) {
+    if (error?.digest?.startsWith("NEXT_REDIRECT")) throw error;
     console.error("Error in SinglePostPage:", error);
-    notFound();
+    permanentRedirect(`/${locale}/offers`);
   }
 }
 

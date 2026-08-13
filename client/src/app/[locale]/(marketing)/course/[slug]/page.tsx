@@ -8,7 +8,7 @@ import { Locale } from "@/i18n/request";
 import { getAllCourses, getCourseDetails } from "@/utils/api/course";
 import { Metadata } from "next";
 import { getLocale, getTranslations } from "next-intl/server";
-import { notFound } from "next/navigation";
+import { notFound, permanentRedirect } from "next/navigation";
 import BreadcrumbContextWrapper from "@/hooks/BreadcrumbContextWrapper";
 import {
   htmlToDescription,
@@ -79,7 +79,7 @@ export default async function SingleCoursePage({
         getTranslations("courseInfoCP"),
         getAllCourses({ limit: 100, page: 1, includeUnpublished: false }),
       ]);
-    if (!data) notFound();
+    if (!data) permanentRedirect(`/${locale}/courses`);
 
     const fetchFaq = async (pageKey: string) => {
       try {
@@ -199,9 +199,10 @@ export default async function SingleCoursePage({
         </div>
       </BreadcrumbContextWrapper>
     );
-  } catch (error) {
+  } catch (error: any) {
+    if (error?.digest?.startsWith("NEXT_REDIRECT")) throw error;
     console.error("Error in SingleCoursePage:", error);
-    notFound();
+    permanentRedirect(`/${params.locale}/courses`);
   }
 }
 

@@ -8,7 +8,7 @@ import type { Post } from "@/types/post";
 import { formatDate, formatTime } from "@/utils/formatters/formatDate";
 import { Metadata } from "next";
 import { getTranslations, setRequestLocale } from "next-intl/server";
-import { notFound } from "next/navigation";
+import { notFound, permanentRedirect } from "next/navigation";
 import { truncateTitle, htmlToDescription } from "@/utils/seo";
 import { getPostImageUrl, getPostImageSrc, getLocalizedPostTags } from "@/utils/helpers/post";
 import { blogSingleGraph, SITE } from "@/data/site-schema";
@@ -61,7 +61,7 @@ export default async function SinglePostPage({ params }: ISinglePostPageProps) {
       console.warn(
         `Post data missing for slug: ${params.slug}, locale: ${locale}`
       );
-      notFound();
+      permanentRedirect(`/${locale}/blog`);
     }
 
     let relatedPosts: Post[] = [];
@@ -169,9 +169,10 @@ export default async function SinglePostPage({ params }: ISinglePostPageProps) {
         </div>
       </BreadcrumbContextWrapper>
     );
-  } catch (error) {
+  } catch (error: any) {
+    if (error?.digest?.startsWith("NEXT_REDIRECT")) throw error;
     console.error("Error in SinglePostPage:", error);
-    notFound();
+    permanentRedirect(`/${locale}/blog`);
   }
 }
 
