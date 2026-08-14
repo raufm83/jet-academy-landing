@@ -8,7 +8,10 @@ RUN apk add --no-cache \
     openssl \
     openssl-dev \
     libc6-compat \
-    ca-certificates
+    ca-certificates \
+    python3 \
+    make \
+    g++
 
 # Copy package files
 COPY package*.json ./
@@ -39,8 +42,10 @@ RUN apk add --no-cache \
 # Copy package files
 COPY package*.json ./
 
-# Install production dependencies only
-RUN npm ci --only=production
+# Install production dependencies only with build tools temporarily
+RUN apk add --no-cache --virtual .gyp python3 make g++ && \
+    npm ci --only=production && \
+    apk del .gyp
 
 # Copy built application from builder stage
 COPY --from=builder /app/dist ./dist
