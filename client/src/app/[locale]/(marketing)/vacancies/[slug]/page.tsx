@@ -282,6 +282,5 @@ export default async function VacancySinglePage({ params }: VacancySinglePagePro
         </section>
       </div>
     </BreadcrumbContextWrapper>
-  // No try-catch in this component currently, but if there was we would handle NEXT_REDIRECT here.
-  // Wait, looking at the code for vacancies, it doesn't have a try-catch in VacancySinglePage!
+  );
 }
