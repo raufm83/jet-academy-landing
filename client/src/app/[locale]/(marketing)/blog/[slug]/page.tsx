@@ -8,7 +8,7 @@ import type { Post } from "@/types/post";
 import { formatDate, formatTime } from "@/utils/formatters/formatDate";
 import { Metadata } from "next";
 import { getTranslations, setRequestLocale } from "next-intl/server";
-import { notFound, permanentRedirect } from "next/navigation";
+import { permanentRedirect } from "next/navigation";
 import { truncateTitle, htmlToDescription } from "@/utils/seo";
 import { getPostImageUrl, getPostImageSrc, getLocalizedPostTags } from "@/utils/helpers/post";
 import { blogSingleGraph, SITE } from "@/data/site-schema";

@@ -8,7 +8,7 @@ import { Locale } from "@/i18n/request";
 import { getAllCourses, getCourseDetails } from "@/utils/api/course";
 import { Metadata } from "next";
 import { getLocale, getTranslations } from "next-intl/server";
-import { notFound, permanentRedirect } from "next/navigation";
+import { permanentRedirect } from "next/navigation";
 import BreadcrumbContextWrapper from "@/hooks/BreadcrumbContextWrapper";
 import {
   htmlToDescription,
