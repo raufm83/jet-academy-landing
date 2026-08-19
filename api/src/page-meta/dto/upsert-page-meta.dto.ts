@@ -22,4 +22,9 @@ export class UpsertPageMetaDto {
   @IsString()
   @IsOptional()
   description?: string;
+
+  @ApiProperty({ description: 'Meta keywords', required: false })
+  @IsString()
+  @IsOptional()
+  keywords?: string;
 }

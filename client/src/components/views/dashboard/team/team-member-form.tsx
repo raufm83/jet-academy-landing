@@ -259,6 +259,30 @@ export default function TeamMemberForm({
               />
             </div>
 
+            <div className="space-y-2">
+              <Input
+                type="url"
+                label="LinkedIn URL"
+                variant="bordered"
+                startContent={<MdPerson className="text-gray-400" />}
+                isDisabled={isSubmitting}
+                {...register("linkedinUrl", {
+                  pattern: {
+                    value: /^https?:\/\/(www\.)?linkedin\.com\/.*$/,
+                    message: "Düzgün LinkedIn linki daxil edin (https://linkedin.com/...)",
+                  },
+                })}
+                isInvalid={!!errors.linkedinUrl}
+                errorMessage={errors.linkedinUrl?.message}
+                classNames={{
+                  input: "bg-transparent",
+                  inputWrapper: [
+                    "bg-white border-2 hover:border-primary focus:border-primary",
+                  ],
+                }}
+              />
+            </div>
+
             <div className="flex justify-end space-x-4">
               <Button
                 onClick={() => router.back()}

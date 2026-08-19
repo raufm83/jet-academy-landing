@@ -61,4 +61,9 @@ export class CreateTeamDto {
   @IsObject()
   @IsOptional()
   imageAlt?: TranslatedField;
+
+  @ApiProperty({ required: false })
+  @IsOptional()
+  @IsString()
+  linkedinUrl?: string;
 }

@@ -13,12 +13,16 @@ type StaticFormRow = {
   titleEn: string;
   descAz: string;
   descEn: string;
+  keywordsAz: string;
+  keywordsEn: string;
 };
 type CourseFormRow = {
   titleAz: string;
   titleEn: string;
   descAz: string;
   descEn: string;
+  keywordsAz: string;
+  keywordsEn: string;
 };
 
 export default function SeoPage() {
@@ -100,6 +104,8 @@ export default function SeoPage() {
         titleEn: metaEn?.title ?? "",
         descAz: metaAz?.description ?? "",
         descEn: metaEn?.description ?? "",
+        keywordsAz: metaAz?.keywords ?? "",
+        keywordsEn: metaEn?.keywords ?? "",
       };
     });
     setStaticForm(staticState);
@@ -121,6 +127,8 @@ export default function SeoPage() {
         titleEn: metaEn?.title ?? "",
         descAz: metaAz?.description ?? "",
         descEn: metaEn?.description ?? "",
+        keywordsAz: metaAz?.keywords ?? "",
+        keywordsEn: metaEn?.keywords ?? "",
       };
     });
     setCourseForm(courseState);
@@ -143,12 +151,14 @@ export default function SeoPage() {
           locale: "az",
           title: form.titleAz || "—",
           description: form.descAz || undefined,
+          keywords: form.keywordsAz || undefined,
         }),
         api.post("/page-meta", {
           pageKey,
           locale: "en",
           title: form.titleEn || "—",
           description: form.descEn || undefined,
+          keywords: form.keywordsEn || undefined,
         }),
       ]);
       toast.success("Meta saxlanıldı");
@@ -185,12 +195,14 @@ export default function SeoPage() {
           locale: "az",
           title: form.titleAz || "—",
           description: form.descAz || undefined,
+          keywords: form.keywordsAz || undefined,
         }),
         api.post("/page-meta", {
           pageKey: `course:${slugEn}`,
           locale: "en",
           title: form.titleEn || "—",
           description: form.descEn || undefined,
+          keywords: form.keywordsEn || undefined,
         }),
       ]);
       toast.success("Meta saxlanıldı");
@@ -225,6 +237,8 @@ export default function SeoPage() {
           titleEn: "",
           descAz: "",
           descEn: "",
+          keywordsAz: "",
+          keywordsEn: "",
         }),
         [field]: value,
       },
@@ -244,6 +258,8 @@ export default function SeoPage() {
           titleEn: "",
           descEn: "",
           descAz: "",
+          keywordsAz: "",
+          keywordsEn: "",
         }),
         [field]: value,
       },
@@ -313,6 +329,18 @@ export default function SeoPage() {
                       variant="bordered"
                       minRows={2}
                     />
+                    <Input
+                      label="Meta açar sözlər (Keywords)"
+                      placeholder="AZ (vergüllə ayrılmış)"
+                      value={staticForm[pageKey]?.keywordsAz ?? ""}
+                      onValueChange={(v) =>
+                        updateStaticForm(pageKey, "keywordsAz", v ?? "")
+                      }
+                      onChange={(e) =>
+                        updateStaticForm(pageKey, "keywordsAz", e.target.value)
+                      }
+                      variant="bordered"
+                    />
                   </div>
                 </Tab>
                 <Tab key="en" title="English (EN)">
@@ -338,6 +366,18 @@ export default function SeoPage() {
                       }
                       variant="bordered"
                       minRows={2}
+                    />
+                    <Input
+                      label="Meta açar sözlər (Keywords)"
+                      placeholder="EN (vergüllə ayrılmış)"
+                      value={staticForm[pageKey]?.keywordsEn ?? ""}
+                      onValueChange={(v) =>
+                        updateStaticForm(pageKey, "keywordsEn", v ?? "")
+                      }
+                      onChange={(e) =>
+                        updateStaticForm(pageKey, "keywordsEn", e.target.value)
+                      }
+                      variant="bordered"
                     />
                   </div>
                 </Tab>
@@ -397,6 +437,18 @@ export default function SeoPage() {
                         variant="bordered"
                         minRows={2}
                       />
+                      <Input
+                        label="Meta açar sözlər (Keywords)"
+                        placeholder="AZ (vergüllə ayrılmış)"
+                        value={courseForm[c.id]?.keywordsAz ?? ""}
+                        onValueChange={(v) =>
+                          updateCourseForm(c.id, "keywordsAz", v ?? "")
+                        }
+                        onChange={(e) =>
+                          updateCourseForm(c.id, "keywordsAz", e.target.value)
+                        }
+                        variant="bordered"
+                      />
                     </div>
                   </Tab>
                   <Tab key="en" title="English (EN)">
@@ -422,6 +474,18 @@ export default function SeoPage() {
                         }
                         variant="bordered"
                         minRows={2}
+                      />
+                      <Input
+                        label="Meta açar sözlər (Keywords)"
+                        placeholder="EN (vergüllə ayrılmış)"
+                        value={courseForm[c.id]?.keywordsEn ?? ""}
+                        onValueChange={(v) =>
+                          updateCourseForm(c.id, "keywordsEn", v ?? "")
+                        }
+                        onChange={(e) =>
+                          updateCourseForm(c.id, "keywordsEn", e.target.value)
+                        }
+                        variant="bordered"
                       />
                     </div>
                   </Tab>

@@ -38,6 +38,10 @@ export default function CreateTeamMemberPage() {
         formData.append("bio[en]", data.bio.en);
       }
       
+      if (data.linkedinUrl) {
+        formData.append("linkedinUrl", data.linkedinUrl);
+      }
+      
       // Image
       if (data.image && data.image[0]) {
         formData.append("image", data.image[0]);

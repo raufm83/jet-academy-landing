@@ -80,6 +80,9 @@ export class TeamService {
           ...(createTeamDto.imageAlt && {
             imageAlt: this.toMultilingualText(createTeamDto.imageAlt),
           }),
+          ...(createTeamDto.linkedinUrl && {
+            linkedinUrl: createTeamDto.linkedinUrl,
+          }),
           order: totalMembers,
           isActive: true,
         },
@@ -114,6 +117,7 @@ export class TeamService {
             bio: true,
             order: true,
             isActive: true,
+            linkedinUrl: true,
           },
         }),
       ]);
@@ -156,6 +160,7 @@ export class TeamService {
         bio: true,
         order: true,
         isActive: true,
+        linkedinUrl: true,
       },
     });
     return result;
@@ -173,6 +178,7 @@ export class TeamService {
         bio: true,
         order: true,
         isActive: true,
+        linkedinUrl: true,
       },
     });
 

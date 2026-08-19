@@ -17,6 +17,7 @@ export interface TeamMember {
   order: number;
   createdAt: string;
   isActive: boolean;
+  linkedinUrl?: string;
 }
 
 export interface TeamMemberFormInputs {
@@ -28,6 +29,7 @@ export interface TeamMemberFormInputs {
     az: string;
     en: string;
   };
+  linkedinUrl?: string;
 }
 export interface CourseTeacherAssignment {
   teacherId: string;

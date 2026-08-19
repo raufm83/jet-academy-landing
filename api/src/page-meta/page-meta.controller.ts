@@ -81,6 +81,7 @@ export class PageMetaController {
     return this.pageMetaService.upsert(dto.pageKey, dto.locale, {
       title: dto.title,
       description: dto.description,
+      keywords: dto.keywords,
     });
   }
 }

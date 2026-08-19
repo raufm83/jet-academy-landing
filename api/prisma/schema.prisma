@@ -109,6 +109,7 @@ model PageMeta {
   locale      String   // "az" | "en"
   title       String
   description String?
+  keywords    String?
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 
@@ -176,6 +177,7 @@ model Team {
   bio             Json?
   order           Int
   isActive        Boolean           @default(true)
+  linkedinUrl     String?
   coursesTeaching CourseToTeacher[]
 }
 

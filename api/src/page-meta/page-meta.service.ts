@@ -22,7 +22,7 @@ export class PageMetaService {
   async upsert(
     pageKey: string,
     locale: string,
-    data: { title: string; description?: string },
+    data: { title: string; description?: string; keywords?: string },
   ) {
     const existing = await this.prisma.pageMeta.findFirst({
       where: { pageKey, locale },
@@ -33,6 +33,7 @@ export class PageMetaService {
         data: {
           title: data.title,
           description: data.description ?? null,
+          keywords: data.keywords ?? null,
         },
       });
     }
@@ -42,6 +43,7 @@ export class PageMetaService {
         locale,
         title: data.title,
         description: data.description ?? null,
+        keywords: data.keywords ?? null,
       },
     });
   }

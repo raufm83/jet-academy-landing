@@ -24,7 +24,7 @@ export async function generateFeedbacksMetadata(locale: string): Promise<Metadat
     "Tələbələrimizin rəyləri";
 
   const { title, description } = await resolvePageMeta(
-    "projects",
+    "reviews",
     locale,
     rawTitle,
     rawDescription

@@ -78,6 +78,10 @@ export default function EditTeamMemberPage({
         formData.append("bio[en]", data.bio.en);
       }
 
+      if (data.linkedinUrl !== undefined) {
+        formData.append("linkedinUrl", data.linkedinUrl || "");
+      }
+
       // Image (only if new image is provided)
       if (data.image && data.image[0]) {
         formData.append("image", data.image[0]);

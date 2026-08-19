@@ -6,6 +6,7 @@ import { cn } from "@/utils/cn";
 import { resolveOptimizedImageUrl } from "@/utils/optimized-image-url";
 import Image from "next/image";
 import { memo } from "react";
+import { FaLinkedin } from "react-icons/fa";
 
 const BLUR =
   "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/4gHYSUNDX1BST0ZJTEUAAQEAAAHIAAAAAAQwAABtbnRyUkdCIFhZWiAH4AABAAEAAAAAAABhY3NwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQAA9tYAAQAAAADTLQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAlkZXNjAAAA8AAAACRyWFlaAAABFAAAABRnWFlaAAABKAAAABRiWFlaAAABPAAAABR3dHB0AAABUAAAABRyVFJDAAABZAAAAChnVFJDAAABZAAAAChiVFJDAAABZAAAAChjcHJ0AAABjAAAADxtbHVjAAAAAAAAAAEAAAAMZW5VUwAAAAgAAAAcAHMAUgBHAEJYWVogAAAAAAAAb6IAADj1AAADkFhZWiAAAAAAAABimQAAt4UAABjaWFlaIAAAAAAAACSgAAAPhAAAts9YWVogAAAAAAAA9tYAAQAAAADTLXBhcmEAAAAAAAQAAAACZmYAAPKnAAANWQAAE9AAAApbAAAAAAAAAABtbHVjAAAAAAAAAAEAAAAMZW5VUwAAACAAAAAcAEcAbwBvAGcAbABlACAASQBuAGMALgAgADIAMAAxADb/2wBDABQODxIPDRQSEBIXFRQdHx0fHRsdHR0dHR0dHR0dHR0dHR0dHR0dHR0dHR0dHR0dHR0dHR0dHR0dHR0dHR0dHR3/2wBDAR0XFyAeIRshIR0dIiIdHR0dHR0dHR0dHR0dHR0dHR0dHR0dHR0dHR0dHR0dHR0dHR0dHR0dHR0dHR0dHR0dHR3/wAARCAAIAAoDASIAAhEBAxEB/8QAFQABAQAAAAAAAAAAAAAAAAAAAAb/xAAUEAEAAAAAAAAAAAAAAAAAAAAA/8QAFQEBAQAAAAAAAAAAAAAAAAAAAAX/xAAUEQEAAAAAAAAAAAAAAAAAAAAA/9oADAMBAAIRAxEAPwCdABmX/9k=";
@@ -37,6 +38,9 @@ const TeamMemberCard = memo(
 
     const imgSrc = resolveOptimizedImageUrl(imageUrl, "team");
 
+    const linkedinUrl =
+      "teacher" in member ? member.teacher.linkedinUrl : member.linkedinUrl;
+
     return (
       <div
         className={cn(
@@ -58,7 +62,20 @@ const TeamMemberCard = memo(
               : { loading: "lazy" as const, placeholder: "blur" as const, blurDataURL: BLUR })}
           />
         </div>
-        <div className="font-semibold [@media(min-width:2500px)]:!text-lg [@media(min-width:3500px)]:!text-3xl text-md text-jsblack text-center">{fullName}</div>
+        <div className="flex items-center justify-center gap-2">
+          <div className="font-semibold [@media(min-width:2500px)]:!text-lg [@media(min-width:3500px)]:!text-3xl text-md text-jsblack text-center">{fullName}</div>
+          {linkedinUrl && (
+            <a 
+              href={linkedinUrl} 
+              target="_blank" 
+              rel="noopener noreferrer" 
+              className="text-[#0A66C2] hover:text-blue-800 transition-colors"
+              onClick={(e) => e.stopPropagation()}
+            >
+              <FaLinkedin size={18} />
+            </a>
+          )}
+        </div>
         <p className="text-gray-600 [@media(min-width:2500px)]:!text-md [@media(min-width:3000px)]:text-2xl text-xs text-center mt-1 line-clamp-2 min-h-[2rem]">{description}</p>
 
         {isCoursePage && "position" in member && member.position && (
