@@ -4,6 +4,7 @@ export interface PageMetaResponse {
   locale: string;
   title: string;
   description: string | null;
+  keywords?: string | null;
   createdAt?: string;
   updatedAt?: string;
 }
