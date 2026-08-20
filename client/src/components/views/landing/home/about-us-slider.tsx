@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useRef } from "react";
+import React from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Autoplay, Navigation } from "swiper/modules";
 import "swiper/css";
@@ -13,8 +13,6 @@ interface AboutUsSliderProps {
 }
 
 export default function AboutUsSlider({ points }: AboutUsSliderProps) {
-  const prevRef = useRef<HTMLButtonElement>(null);
-  const nextRef = useRef<HTMLButtonElement>(null);
 
   const PointCard = ({ point, index }: { point: { title: string; description: string }; index: number }) => (
     <div
