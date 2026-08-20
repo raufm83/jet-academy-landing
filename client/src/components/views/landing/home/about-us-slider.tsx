@@ -64,14 +64,8 @@ export default function AboutUsSlider({ points }: AboutUsSliderProps) {
             disableOnInteraction: false,
           }}
           navigation={{
-            prevEl: prevRef.current,
-            nextEl: nextRef.current,
-          }}
-          onBeforeInit={(swiper) => {
-            if (typeof swiper.params.navigation !== "boolean" && swiper.params.navigation) {
-              swiper.params.navigation.prevEl = prevRef.current;
-              swiper.params.navigation.nextEl = nextRef.current;
-            }
+            prevEl: ".about-prev",
+            nextEl: ".about-next",
           }}
           spaceBetween={16}
           slidesPerView={1}
@@ -87,15 +81,13 @@ export default function AboutUsSlider({ points }: AboutUsSliderProps) {
         {/* Custom Navigation */}
         <div className="flex justify-center gap-4 mt-6">
           <button
-            ref={prevRef}
-            className="flex items-center justify-center w-10 h-10 rounded-full border border-gray-300 text-gray-500 hover:text-jsyellow hover:border-jsyellow transition-colors disabled:opacity-50"
+            className="about-prev flex items-center justify-center w-10 h-10 rounded-full border border-gray-300 text-gray-500 hover:text-jsyellow hover:border-jsyellow transition-colors disabled:opacity-50"
             aria-label="Previous"
           >
             <MdChevronLeft size={24} />
           </button>
           <button
-            ref={nextRef}
-            className="flex items-center justify-center w-10 h-10 rounded-full border border-gray-300 text-gray-500 hover:text-jsyellow hover:border-jsyellow transition-colors disabled:opacity-50"
+            className="about-next flex items-center justify-center w-10 h-10 rounded-full border border-gray-300 text-gray-500 hover:text-jsyellow hover:border-jsyellow transition-colors disabled:opacity-50"
             aria-label="Next"
           >
             <MdChevronRight size={24} />
