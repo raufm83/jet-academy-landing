@@ -84,7 +84,7 @@ export default function GlossaryDashboardPage() {
   const fetchCategories = useCallback(async () => {
     try {
       const { data } = await api.get("/glossary-categories");
-      setCategories(data.items || []);
+      setCategories(Array.isArray(data) ? data : (data.items || []));
     } catch (error) {
       console.error("Kateqoriyaları yükləmə xətası:", error);
     }
