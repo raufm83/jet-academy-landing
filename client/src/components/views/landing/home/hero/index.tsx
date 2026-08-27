@@ -66,7 +66,7 @@ export default async function Hero({ locale, cms }: HeroProps) {
             [&_p]:text-[#5c5c5c] [&_p]:font-medium [&_p]:leading-[1.7] [&_p]:text-[clamp(15px,1.5vw,18px)] [&_p]:mb-5 last:[&_p]:mb-0
             [@media(min-width:3500px)]:[&_p]:text-2xl
             [&_a]:text-jsyellow [&_a]:underline
-            [&_h1]:font-bold [&_h1]:text-jsblack [&_h1]:mb-5 [&_h1]:text-[clamp(28px,3vw,46px)] [&_h1]:leading-[1.25] [&_h1]:tracking-tight
+            [&_h1]:font-bold [&_h1]:text-jsblack [&_h1]:mb-5 [&_h1]:text-[clamp(24px,2.8vw,42px)] [&_h1]:leading-[1.25] [&_h1]:tracking-tight
             [@media(min-width:3500px)]:[&_h1]:text-6xl
           "
             dangerouslySetInnerHTML={{ __html: cmsBlockHtml }}
@@ -98,13 +98,13 @@ export default async function Hero({ locale, cms }: HeroProps) {
               className="
             font-bold text-jsblack
             mb-5
-            text-[clamp(28px,3vw,46px)]
+            text-[clamp(24px,2.8vw,42px)]
             leading-[1.25] tracking-tight
             [@media(min-width:3500px)]:!text-6xl
           "
             >
               {t("toJetAcademy")}{" "}
-              <span className="text-jsyellow text-[clamp(28px,3vw,46px)] [@media(min-width:3500px)]:!text-6xl">
+              <span className="text-jsyellow text-[clamp(24px,2.8vw,42px)] [@media(min-width:3500px)]:!text-6xl">
                 {t("welcome")}!
               </span>
             </h1>
