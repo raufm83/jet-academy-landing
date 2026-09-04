@@ -1,6 +1,6 @@
-import GlossaryAlphabetNav from "@/components/views/landing/glossary/glossary-alphabet-nav";
 import GlossaryPagination from "@/components/views/landing/glossary/glossary-pagination";
 import GlossaryTermList from "@/components/views/landing/glossary/glossary-term-list";
+import GlossaryTermFilter from "@/components/views/landing/glossary/glossary-term-filter";
 import { Metadata } from "next";
 import { getTranslations } from "next-intl/server";
 import { cookies } from "next/headers";
@@ -9,15 +9,10 @@ import { buildAlternates } from "@/utils/seo";
 import { collectionPageGraph, SITE } from "@/data/site-schema";
 import JsonLd from "@/components/seo/json-ld";
 
-const normalizeLetter = (letter?: string) =>
-  letter?.replace(/\/+$/, "") || undefined;
-
 export async function generateMetadata({
   params: { locale },
-  searchParams,
 }: {
   params: { locale: string };
-  searchParams: { letter?: string };
 }): Promise<Metadata> {
   const t = await getTranslations({ locale, namespace: "Metadata" });
   const glossaryT = await getTranslations({
@@ -26,22 +21,14 @@ export async function generateMetadata({
   });
 
   const baseUrl = (process.env.NEXT_PUBLIC_APP_URL || "https://jetacademy.az").replace(/\/$/, "");
-  const letter = normalizeLetter(searchParams.letter);
-
-  const qs = new URLSearchParams();
-  if (letter) qs.set("letter", letter);
-  const queryString = qs.toString() ? `?${qs}` : "";
 
   const alternates = buildAlternates(
-    `/glossary/terms${queryString}`,
+    `/glossary/terms`,
     locale,
     baseUrl
   );
 
-  const rawPageTitle = letter
-    ? t("glossaryTermsLetterPageTitle", { letter }) ||
-      `"${letter}" ilə başlayan terminlər | JET Academy`
-    : t("glossaryTermsPageTitle") || "Bütün Terminlər | JET Academy";
+  const rawPageTitle = t("glossaryTermsPageTitle") || "Bütün Terminlər | JET Academy";
 
   const rawDescription =
     glossaryT("description") ||
@@ -85,17 +72,21 @@ export async function generateMetadata({
 }
 
 interface SearchParams {
-  letter?: string;
+  search?: string;
+  categoryId?: string;
   page?: string;
 }
 
-async function getGlossaryTerms(letter?: string, page = 1, limit = 24) {
+async function getGlossaryTerms(search?: string, categoryId?: string, page = 1, limit = 24) {
   try {
     const params = new URLSearchParams();
     params.append("page", page.toString());
     params.append("limit", limit.toString());
+    params.append("sortBy", "createdAt");
+    params.append("order", "desc");
 
-    if (letter) params.append("letter", letter);
+    if (search) params.append("search", search);
+    if (categoryId && categoryId !== "all") params.append("categoryId", categoryId);
 
     const res = await fetch(
       `${process.env.NEXT_PUBLIC_API_URL}/glossary?${params.toString()}`,
@@ -115,6 +106,19 @@ async function getGlossaryTerms(letter?: string, page = 1, limit = 24) {
   }
 }
 
+async function getGlossaryCategories() {
+  try {
+    const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/glossary-categories`, {
+      cache: "no-store",
+    });
+    if (!res.ok) return [];
+    return res.json();
+  } catch (error) {
+    console.error("Error loading glossary categories:", error);
+    return [];
+  }
+}
+
 export default async function GlossaryTermsPage({
   params: { locale },
   searchParams,
@@ -125,10 +129,14 @@ export default async function GlossaryTermsPage({
   const cookieStore = cookies();
   const language = locale || cookieStore.get("NEXT_LOCALE")?.value || "az";
 
-  const letter = normalizeLetter(searchParams.letter);
+  const search = searchParams.search;
+  const categoryId = searchParams.categoryId;
   const page = parseInt(searchParams.page || "1", 10);
 
-  const { items: terms, meta } = await getGlossaryTerms(letter, page);
+  const [{ items: terms, meta }, categories] = await Promise.all([
+    getGlossaryTerms(search, categoryId, page),
+    getGlossaryCategories(),
+  ]);
 
   const glossaryT = await getTranslations({
     locale: language,
@@ -139,9 +147,9 @@ export default async function GlossaryTermsPage({
     namespace: "glossary.pagination",
   });
 
-  const title = letter
-    ? `"${letter}" ilə başlayan terminlər`
-    : glossaryT("title");
+  const title = glossaryT("title") || (locale === "az" ? "Terminlər" : "Terms");
+  const searchPlaceholder = glossaryT("searchPlaceholder") || (locale === "az" ? "Axtarış..." : "Search...");
+  const allCategoriesText = glossaryT("allCategories") || (locale === "az" ? "Bütün Kateqoriyalar" : "All Categories");
 
   const baseUrl = SITE.baseUrl;
   const base = locale === "az" ? baseUrl : `${baseUrl}/${locale}`;
@@ -161,7 +169,14 @@ export default async function GlossaryTermsPage({
     <div className="container mx-auto px-4 py-12">
       <JsonLd data={schema} />
 
-      <GlossaryAlphabetNav language={language} allText={glossaryT("allText")} />
+      <GlossaryTermFilter
+        categories={categories}
+        initialSearch={search}
+        initialCategoryId={categoryId}
+        searchPlaceholder={searchPlaceholder}
+        allCategoriesText={allCategoriesText}
+        language={language}
+      />
 
       <GlossaryTermList
         terms={terms}

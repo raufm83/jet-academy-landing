@@ -267,7 +267,17 @@ export default function GlossaryForm({
 
   const handleTermChange = (lang: string, value: string) => {
     if (!setValue) return;
-    const slugValue = slugifyText(value);
+    
+    let textToSlugify = value;
+    if (value.trim()) {
+      if (lang === "az") {
+        textToSlugify = `${value} nədir`;
+      } else if (lang === "en") {
+        textToSlugify = `what is ${value}`;
+      }
+    }
+    
+    const slugValue = slugifyText(textToSlugify);
     setValue(`slug.${lang}`, slugValue);
   };
 
