@@ -1,9 +1,8 @@
 "use client";
 
-import { useState, FormEvent, useEffect, useCallback, useMemo } from "react";
+import { useState, FormEvent, useEffect, useCallback, useRef } from "react";
 import { useRouter, usePathname, useSearchParams } from "next/navigation";
 import { FiSearch } from "react-icons/fi";
-import { debounce } from "lodash";
 
 interface Category {
   id: string;
@@ -36,6 +35,7 @@ export default function GlossaryTermFilter({
 
   const [searchQuery, setSearchQuery] = useState(initialSearch);
   const [selectedCategory, setSelectedCategory] = useState(initialCategoryId);
+  const timeoutRef = useRef<NodeJS.Timeout | null>(null);
 
   // Update URL parameters
   const updateQueryParams = useCallback(
@@ -62,14 +62,22 @@ export default function GlossaryTermFilter({
     [pathname, router, searchParams]
   );
 
-  const debouncedUpdate = useMemo(
-    () =>
-      debounce((search: string, catId: string) => {
-        updateQueryParams(search, catId);
-      }, 500),
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [updateQueryParams]
-  );
+  const debouncedUpdate = (search: string, catId: string) => {
+    if (timeoutRef.current) {
+      clearTimeout(timeoutRef.current);
+    }
+    timeoutRef.current = setTimeout(() => {
+      updateQueryParams(search, catId);
+    }, 500);
+  };
+
+  useEffect(() => {
+    return () => {
+      if (timeoutRef.current) {
+        clearTimeout(timeoutRef.current);
+      }
+    };
+  }, []);
 
   const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
@@ -88,12 +96,7 @@ export default function GlossaryTermFilter({
     updateQueryParams(searchQuery, selectedCategory);
   };
 
-  // Cleanup debounce on unmount
-  useEffect(() => {
-    return () => {
-      debouncedUpdate.cancel();
-    };
-  }, [debouncedUpdate]);
+
 
   return (
     <div className="w-full max-w-4xl mx-auto mb-8 flex flex-col md:flex-row gap-4">
