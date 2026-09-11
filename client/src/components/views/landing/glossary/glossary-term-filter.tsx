@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, FormEvent, useEffect, useCallback } from "react";
+import { useState, FormEvent, useEffect, useCallback, useMemo } from "react";
 import { useRouter, usePathname, useSearchParams } from "next/navigation";
 import { FiSearch } from "react-icons/fi";
 import { debounce } from "lodash";
@@ -62,10 +62,12 @@ export default function GlossaryTermFilter({
     [pathname, router, searchParams]
   );
 
-  const debouncedUpdate = useCallback(
-    debounce((search: string, catId: string) => {
-      updateQueryParams(search, catId);
-    }, 500),
+  const debouncedUpdate = useMemo(
+    () =>
+      debounce((search: string, catId: string) => {
+        updateQueryParams(search, catId);
+      }, 500),
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     [updateQueryParams]
   );
 

@@ -477,6 +477,7 @@
       "emptyText": "No matching terms found",
       "searchPlaceholder": "Search term...",
       "allText": "All",
+      "allCategories": "All Categories",
       "description": "All IT terms in the JET Academy technology glossary"
     },
     "term": {
