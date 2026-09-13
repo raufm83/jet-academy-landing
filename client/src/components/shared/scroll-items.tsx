@@ -35,9 +35,10 @@ function ScrollItems() {
         )}`}
         target="_blank"
         rel="noopener noreferrer"
+        aria-label="WhatsApp ilə əlaqə saxlayın"
         className="flex items-center justify-center  h-12 w-12 rounded-full bg-[#1560bd] hover:bg-[#1580cd] shadow-lg transition-all"
       >
-        <FaWhatsapp className="h-8 w-10 text-white" />
+        <FaWhatsapp className="h-8 w-10 text-white" aria-hidden="true" />
       </Link>
 
       <div className="relative">
@@ -74,9 +75,10 @@ function ScrollItems() {
 
         <button
           onClick={scrollToTop}
+          aria-label="Səhifənin başına qayıt"
           className="flex items-center relative z-40 justify-center h-12 w-12 rounded-full bg-[#1560bd] hover:bg-[#1580cd] shadow-lg transition-all"
         >
-          <FaArrowUp className="h-8 w-10 text-white" />
+          <FaArrowUp className="h-8 w-10 text-white" aria-hidden="true" />
         </button>
       </div>
     </motion.div>
