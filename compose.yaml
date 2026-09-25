@@ -15,7 +15,7 @@ services:
     container_name: next-app-acad
     restart: always
     ports:
-      - "3030:3000"
+      - "127.0.0.1:3030:3000"
     environment:
       - NEXTAUTH_SECRET=${NEXTAUTH_SECRET}
       - NEXTAUTH_URL=https://jetacademy.az
@@ -34,7 +34,7 @@ services:
     container_name: nest-app-acad
     restart: always
     ports:
-      - "3031:3002"
+      - "127.0.0.1:3031:3002"
     # env faylında PORT=3001 olarsa, mapping 3031:3002 pozulur və nginx 502 verir.
     environment:
       - PORT=3002
