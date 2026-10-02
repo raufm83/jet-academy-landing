@@ -19,6 +19,7 @@ import {
   MdHome,
   MdArticle,
   MdBookmarks,
+  MdOutlineStarOutline,
 } from "react-icons/md";
 
 export interface MenuItem {
@@ -134,6 +135,11 @@ export function getMenuItems(session: Session | null): MenuItem[] {
       path: "/dashboard/seo",
     },
     {
+      name: "Fərqimiz",
+      icon: <MdOutlineStarOutline size={24} />,
+      path: "/dashboard/advantages",
+    },
+    {
       name: "FAQ",
       icon: <MdHelpOutline size={24} />,
       path: "/dashboard/faq",
@@ -204,6 +210,11 @@ export function getMenuItems(session: Session | null): MenuItem[] {
       name: "SEO",
       icon: <MdSearch size={24} />,
       path: "/dashboard/seo",
+    },
+    {
+      name: "Fərqimiz",
+      icon: <MdOutlineStarOutline size={24} />,
+      path: "/dashboard/advantages",
     },
     {
       name: "FAQ",

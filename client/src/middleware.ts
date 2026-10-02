@@ -22,6 +22,9 @@ const ROUTE_PERMISSIONS = {
     "/dashboard/contact-info",
     "/dashboard/home-hero",
     "/dashboard/about-page",
+    "/dashboard/advantages",
+    "/dashboard/advantages/create",
+    "/dashboard/advantages/edit",
   ],
 
   STAFF: [
@@ -73,6 +76,9 @@ const ROUTE_PERMISSIONS = {
     "/dashboard/glossary/categories",
     "/dashboard/glossary/categories/create",
     "/dashboard/glossary/categories/edit",
+    "/dashboard/advantages",
+    "/dashboard/advantages/create",
+    "/dashboard/advantages/edit",
     "/dashboard/settings",
     "/dashboard/home-hero",
     "/dashboard/about-page",

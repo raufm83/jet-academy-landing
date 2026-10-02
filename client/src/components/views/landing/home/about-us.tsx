@@ -1,12 +1,14 @@
 // src/components/views/landing/home/about-us.tsx
 import SectionTitle from "@/components/shared/section-title";
-import { getAboutPoints } from "@/data/info";
-import { getTranslations } from "next-intl/server";
+import { getTranslations, getLocale } from "next-intl/server";
 import React from "react";
 import AboutUsSlider from "./about-us-slider";
+import { fetchAdvantages } from "@/utils/api/advantage";
+
 async function AboutUs() {
   const t = await getTranslations("about");
-  const aboutPoints = getAboutPoints(t);
+  const locale = await getLocale();
+  const aboutPoints = await fetchAdvantages(locale);
 
   return (
     <div

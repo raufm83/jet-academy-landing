@@ -25,6 +25,7 @@ import { GraduateModule } from './graduate/graduate.module';
 import { HomeHeroModule } from './home-hero/home-hero.module';
 import { AboutPageModule } from './about-page/about-page.module';
 import { BlogCategoryModule } from './blog-category/blog-category.module';
+import { AdvantageModule } from './advantage/advantage.module';
 
 @Module({
   imports: [
@@ -82,6 +83,7 @@ import { BlogCategoryModule } from './blog-category/blog-category.module';
     HomeHeroModule,
     AboutPageModule,
     BlogCategoryModule,
+    AdvantageModule,
   ],
   controllers: [AppController],
   providers: [AppService],
