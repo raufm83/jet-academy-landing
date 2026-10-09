@@ -15,7 +15,7 @@
     "vacancies": "Vacancies",
     "graduates": "Graduates",
     "contact": "Contact",
-    "contactus": "Request a Call",
+    "contactus": "Contact Form",
     "closeMenu": "Close menu"
   },
   "hero": {
@@ -268,10 +268,10 @@
       "title": "Get in Touch with Us",
       "description": "If you have any questions or suggestions, don’t hesitate to contact us."
     },
-    "title": "Fill Out the Call Request Form",
+    "title": "Contact Form",
     "description": "Fill out the form, and we will get back to you as soon as possible",
     "form": {
-      "title": "Fill Out the Call Request Form",
+      "title": "Contact Form",
       "copyright": "Copyright protected.",
       "contactTitle": "Register to learn more about our course fields",
       "description": "Fill out the form, and we will get back to you as soon as possible.",
@@ -293,13 +293,7 @@
         "minLength": "First name must be at least 2 characters",
         "invalid": "Only letters and spaces are allowed"
       },
-      "surname": {
-        "label": "Last Name",
-        "placeholder": "Enter your last name",
-        "required": "Last name is required",
-        "minLength": "Last name must be at least 2 characters",
-        "invalid": "Only letters and spaces are allowed"
-      },
+
       "phoneNumber": {
         "label": "Phone Number",
         "placeholder": "Enter your phone number",

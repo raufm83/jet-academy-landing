@@ -14,7 +14,12 @@ import Select from "../ui/select";
 import { Locale } from "@/i18n/request";
 
 type CourseItem = { id: string; title?: Record<string, string> };
-type FormValues = RequestFormInputs & { courseId?: string; website?: string; childAge?: number; childLanguage?: Language };
+type FormValues = RequestFormInputs & {
+  courseId?: string;
+  website?: string;
+  childAge?: number;
+  childLanguage?: Language;
+};
 
 const ADVICE_VALUE = "__advice__";
 
@@ -26,9 +31,12 @@ export default function ContactModal() {
 
   const [success, setSuccess] = useState(false);
 
-  const [courseOptions, setCourseOptions] = useState<{
-    value: string; label: string
-  }[]>([]);
+  const [courseOptions, setCourseOptions] = useState<
+    {
+      value: string;
+      label: string;
+    }[]
+  >([]);
 
   const {
     register,
@@ -48,10 +56,6 @@ export default function ContactModal() {
 
   const selectedCourseId = watch("courseId");
 
-
-
-
-
   useEffect(() => {
     let active = true;
     (async () => {
@@ -62,21 +66,33 @@ export default function ContactModal() {
         const items: CourseItem[] = res.data?.items ?? res.data ?? [];
         const opts = items.map((c) => ({
           value: String(c.id),
-          label: (
-            c.title?.[locale] ||
+          label: (c.title?.[locale] ||
             c.title?.az ||
             c.title?.en ||
-            "Adsız kurs"
-          ) as string,
+            "Adsız kurs") as string,
         }));
-        const withAdvice = [{ value: ADVICE_VALUE, label: t("adviceOption") ?? "Məsləhət almaq istəyirəm" }, ...opts];
+        const withAdvice = [
+          {
+            value: ADVICE_VALUE,
+            label: t("adviceOption") ?? "Məsləhət almaq istəyirəm",
+          },
+          ...opts,
+        ];
         if (active) setCourseOptions(withAdvice);
       } catch (e) {
         console.error("Kurs siyahısı alınmadı:", e);
-        if (active) setCourseOptions([{ value: ADVICE_VALUE, label: t("adviceOption") ?? "Məsləhət almaq istəyirəm" }]);
+        if (active)
+          setCourseOptions([
+            {
+              value: ADVICE_VALUE,
+              label: t("adviceOption") ?? "Məsləhət almaq istəyirəm",
+            },
+          ]);
       }
     })();
-    return () => { active = false; };
+    return () => {
+      active = false;
+    };
   }, [locale, t]);
 
   const selectedCourseTitle = useMemo(() => {
@@ -89,7 +105,12 @@ export default function ContactModal() {
   };
 
   const resetForm = () => {
-    reset({ childAge: 12, childLanguage: Language.AZ, courseId: ADVICE_VALUE, website: "" });
+    reset({
+      childAge: 12,
+      childLanguage: Language.AZ,
+      courseId: ADVICE_VALUE,
+      website: "",
+    });
   };
 
   const onSubmit: SubmitHandler<FormValues> = async (data) => {
@@ -103,17 +124,16 @@ export default function ContactModal() {
 
       const payload = {
         name: data.name?.trim(),
-        surname: data.surname?.trim(),
         number: data.number?.trim(),
         childAge: Number(data.childAge) || 12,
         childLanguage: data.childLanguage || Language.AZ,
         additionalInfo: isAdvice
           ? { kind: "advice" }
           : {
-            kind: "course",
-            courseId: data.courseId,
-            courseTitle: selectedCourseTitle,
-          },
+              kind: "course",
+              courseId: data.courseId,
+              courseTitle: selectedCourseTitle,
+            },
       };
 
       await toast.promise(api.post("/requests", payload), {
@@ -176,7 +196,12 @@ export default function ContactModal() {
               <motion.div
                 initial={{ scale: 0 }}
                 animate={{ scale: 1 }}
-                transition={{ type: "spring", stiffness: 260, damping: 20, delay: 0.2 }}
+                transition={{
+                  type: "spring",
+                  stiffness: 260,
+                  damping: 20,
+                  delay: 0.2,
+                }}
                 className="bg-green-100 rounded-full p-4"
               >
                 <MdOutlineCheck className="text-green-600 text-4xl" />
@@ -205,7 +230,7 @@ export default function ContactModal() {
                 </button>
               </div>
 
-              {["name", "surname", "number"].map((field) => (
+              {["name", "number"].map((field) => (
                 <div key={field} className="space-y-2">
                   <input
                     type={field === "number" ? "tel" : "text"}
@@ -220,34 +245,44 @@ export default function ContactModal() {
                       pattern:
                         field === "number"
                           ? {
-                            value: /^(\+994|0)(50|51|55|70|77|99|10)\d{7}$/,
-                            message: t("number.invalid"),
-                          }
-                          : field === "name" || field === "surname"
-                            ? {
-                              value: /^[a-zA-ZəğıöüçşƏĞIÖÜÇŞ\s]+$/,
-                              message: t(`${field}.invalid`) || "Yalnız hərf və boşluq qəbul edilir",
+                              value: /^(\+994|0)(50|51|55|70|77|99|10)\d{7}$/,
+                              message: t("number.invalid"),
                             }
+                          : field === "name"
+                            ? {
+                                value: /^[a-zA-ZəğıöüçşƏĞIÖÜÇŞ\s]+$/,
+                                message:
+                                  t(`${field}.invalid`) ||
+                                  "Yalnız hərf və boşluq qəbul edilir",
+                              }
                             : undefined,
                     })}
-                    onInput={field === "number"
-                      ? (e: React.ChangeEvent<HTMLInputElement>) => {
-                        const value = e.target.value;
-                        const filtered = value.replace(/[^0-9+\s]/g, "");
-                        if (value !== filtered) {
-                          e.target.value = filtered;
-                          setValue("number", filtered, { shouldValidate: true });
-                        }
-                      }
-                      : (e: React.ChangeEvent<HTMLInputElement>) => {
-                        const value = e.target.value;
-                        const filtered = value.replace(/[^a-zA-ZəğıöüçşƏĞIÖÜÇŞ\s]/g, "");
-                        if (value !== filtered) {
-                          e.target.value = filtered;
-                          const fieldName = e.target.name as "name" | "surname";
-                          setValue(fieldName, filtered, { shouldValidate: true });
-                        }
-                      }
+                    onInput={
+                      field === "number"
+                        ? (e: React.ChangeEvent<HTMLInputElement>) => {
+                            const value = e.target.value;
+                            const filtered = value.replace(/[^0-9+\s]/g, "");
+                            if (value !== filtered) {
+                              e.target.value = filtered;
+                              setValue("number", filtered, {
+                                shouldValidate: true,
+                              });
+                            }
+                          }
+                        : (e: React.ChangeEvent<HTMLInputElement>) => {
+                            const value = e.target.value;
+                            const filtered = value.replace(
+                              /[^a-zA-ZəğıöüçşƏĞIÖÜÇŞ\s]/g,
+                              "",
+                            );
+                            if (value !== filtered) {
+                              e.target.value = filtered;
+                              const fieldName = e.target.name as "name";
+                              setValue(fieldName, filtered, {
+                                shouldValidate: true,
+                              });
+                            }
+                          }
                     }
                   />
                   {errors[field as keyof FormValues] && (

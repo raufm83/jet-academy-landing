@@ -13,10 +13,8 @@ import Select from "@/components/ui/select";
 import { MdClose, MdOutlineCheck } from "react-icons/md";
 import { Locale } from "@/i18n/request";
 
-
 type CourseItem = { id: string; title?: Record<string, string> };
 const ADVICE_VALUE = "__advice__";
-
 
 type FormValues = RequestFormInputs & { website?: string };
 
@@ -25,13 +23,10 @@ const ContactForm = () => {
   const locale = useLocale() as Locale;
   const { isSpam, honeypotName } = useSpamProtection();
   const [success, setSuccess] = useState(false);
-  
-  
-  
+
   const [courseOptions, setCourseOptions] = useState<
     { value: string; label: string }[]
   >([]);
-
 
   const {
     register,
@@ -61,14 +56,16 @@ const ContactForm = () => {
         const items: CourseItem[] = res.data?.items ?? res.data ?? [];
         const opts = items.map((c) => ({
           value: String(c.id),
-          label:
-            (c.title?.[locale] ||
-              c.title?.az ||
-              c.title?.en ||
-              c.title?.en ||
-              "Adsız kurs") as string,
+          label: (c.title?.[locale] ||
+            c.title?.az ||
+            c.title?.en ||
+            c.title?.en ||
+            "Adsız kurs") as string,
         }));
-        const withAdvice = [{ value: ADVICE_VALUE, label: t("adviceOption") }, ...opts];
+        const withAdvice = [
+          { value: ADVICE_VALUE, label: t("adviceOption") },
+          ...opts,
+        ];
         if (active) setCourseOptions(withAdvice);
       } catch (e) {
         console.error("Kurs siyahısı alınmadı:", e);
@@ -89,7 +86,12 @@ const ContactForm = () => {
   const onSubmit: SubmitHandler<FormValues> = async (data) => {
     if (isSpam(data)) {
       setSuccess(true);
-      reset({ childAge: 17, childLanguage: Language.AZ, courseId: ADVICE_VALUE as any, website: "" });
+      reset({
+        childAge: 17,
+        childLanguage: Language.AZ,
+        courseId: ADVICE_VALUE as any,
+        website: "",
+      });
       return;
     }
     try {
@@ -97,7 +99,6 @@ const ContactForm = () => {
 
       const payload = {
         name: data.name?.trim(),
-        surname: data.surname?.trim(),
         number: data.number?.trim(),
         childAge: Number(data.childAge),
         childLanguage: data.childLanguage || Language.AZ,
@@ -111,7 +112,11 @@ const ContactForm = () => {
       };
 
       await api.post("/requests", payload);
-      reset({ childAge: 17, childLanguage: Language.AZ, courseId: ADVICE_VALUE as any });
+      reset({
+        childAge: 17,
+        childLanguage: Language.AZ,
+        courseId: ADVICE_VALUE as any,
+      });
       setSuccess(true);
     } catch (err) {
       console.error("Error sending message:", err);
@@ -128,13 +133,12 @@ const ContactForm = () => {
     setValue("courseId" as any, String(value), { shouldValidate: true });
   };
 
-  
   const handleNameInput = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
-    const filtered = value.replace(/[^a-zA-ZəğıöüçşƏĞIÖÜÇŞ\s]/g, '');
+    const filtered = value.replace(/[^a-zA-ZəğıöüçşƏĞIÖÜÇŞ\s]/g, "");
     if (value !== filtered) {
       e.target.value = filtered;
-      const fieldName = e.target.name as "name" | "surname";
+      const fieldName = e.target.name as "name";
       setValue(fieldName, filtered, { shouldValidate: true });
     }
   };
@@ -148,7 +152,6 @@ const ContactForm = () => {
         whileInView={{ opacity: 1 }}
         viewport={{ once: true }}
       >
-        
         <div className="space-y-2">
           <input
             type="text"
@@ -161,36 +164,17 @@ const ContactForm = () => {
               minLength: { value: 2, message: t("name.minLength") },
               pattern: {
                 value: /^[a-zA-ZəğıöüçşƏĞIÖÜÇŞ\s]+$/,
-                message: t("name.invalid") || "Yalnız hərf və boşluq qəbul edilir",
+                message:
+                  t("name.invalid") || "Yalnız hərf və boşluq qəbul edilir",
               },
             })}
             onInput={handleNameInput}
           />
-          {errors.name && <p className="text-red-500 text-sm pl-2">{errors.name.message}</p>}
+          {errors.name && (
+            <p className="text-red-500 text-sm pl-2">{errors.name.message}</p>
+          )}
         </div>
 
-        
-        <div className="space-y-2">
-          <input
-            type="text"
-            placeholder={t("surname.placeholder")}
-            className="w-full p-4 rounded-[32px] border border-jsyellow bg-[#fef7eb]
-              focus:outline-none focus:ring-2 focus:ring-jsyellow
-              shadow-sm transition-all duration-300 ease-in-out"
-            {...register("surname", {
-              required: t("surname.required"),
-              minLength: { value: 2, message: t("surname.minLength") },
-              pattern: {
-                value: /^[a-zA-ZəğıöüçşƏĞIÖÜÇŞ\s]+$/,
-                message: t("surname.invalid") || "Yalnız hərf və boşluq qəbul edilir",
-              },
-            })}
-            onInput={handleNameInput}
-          />
-          {errors.surname && <p className="text-red-500 text-sm pl-2">{errors.surname.message}</p>}
-        </div>
-
-        
         <div className="space-y-2">
           <input
             type="tel"
@@ -206,10 +190,11 @@ const ContactForm = () => {
               },
             })}
           />
-          {errors.number && <p className="text-red-500 text-sm pl-2">{errors.number.message}</p>}
+          {errors.number && (
+            <p className="text-red-500 text-sm pl-2">{errors.number.message}</p>
+          )}
         </div>
 
-        
         <Select
           options={courseOptions}
           error={errors.courseId as any}
@@ -242,7 +227,6 @@ const ContactForm = () => {
         </motion.button>
       </motion.form>
 
-      
       <AnimatePresence>
         {success && (
           <motion.div
@@ -275,7 +259,12 @@ const ContactForm = () => {
                 <motion.div
                   initial={{ scale: 0 }}
                   animate={{ scale: 1 }}
-                  transition={{ type: "spring", stiffness: 260, damping: 20, delay: 0.2 }}
+                  transition={{
+                    type: "spring",
+                    stiffness: 260,
+                    damping: 20,
+                    delay: 0.2,
+                  }}
                   className="bg-green-100 rounded-full p-3"
                 >
                   <MdOutlineCheck className="text-green-600 text-3xl" />

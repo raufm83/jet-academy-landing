@@ -15,7 +15,7 @@
     "vacancies": "Vakansiyalar",
     "graduates": "Məzunlar",
     "contact": "Əlaqə",
-    "contactus": "Zəng sifarişi",
+    "contactus": "Müraciət formu",
     "closeMenu": "Menyunu bağla"
   },
   "hero": {
@@ -200,7 +200,6 @@
     "send": "Göndər",
     "name": "Ad",
     "email": "E-poçt",
-    "surname": "Soyad",
     "number": "Nömrə",
     "message": "Mesaj",
     "sending": "Göndərilir...",
@@ -209,8 +208,6 @@
     "unexpectedError": "Gözlənilməz xəta baş verdi",
     "nameRequired": "Ad tələb olunur",
     "nameOnlyLetters": "Ad yalnız hərflərdən ibarət olmalıdır",
-    "surnameRequired": "Soyad tələb olunur",
-    "surnameOnlyLetters": "Soyad yalnız hərflərdən ibarət olmalıdır",
     "emailRequired": "Email tələb olunur",
     "invalidEmail": "Email formatı düzgün deyil",
     "numberRequired": "Nömrə tələb olunur",
@@ -293,13 +290,7 @@
         "minLength": "Ad ən azı 2 simvol olmalıdır",
         "invalid": "Yalnız hərf və boşluq qəbul edilir"
       },
-      "surname": {
-        "label": "Soyad",
-        "placeholder": "Soyadınızı daxil edin",
-        "required": "Soyad tələb olunur",
-        "minLength": "Soyad ən azı 2 simvol olmalıdır",
-        "invalid": "Yalnız hərf və boşluq qəbul edilir"
-      },
+  
       "phoneNumber": {
         "label": "Telefon nömrəsi",
         "placeholder": "Telefon nömrənizi daxil edin",

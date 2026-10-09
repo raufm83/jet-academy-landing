@@ -18,7 +18,9 @@ type CourseItem = { id: string; title?: Record<string, string> };
 type FormValues = RequestFormInputs & { website?: string };
 const ADVICE_VALUE = "__advice__";
 
-const ContactFormForSingle = ({ initialCourseId }: { initialCourseId?: string | number } = {}) => {
+const ContactFormForSingle = ({
+  initialCourseId,
+}: { initialCourseId?: string | number } = {}) => {
   const t = useTranslations("contact.form");
   const locale = useLocale() as Locale;
   const { isSpam, honeypotName } = useSpamProtection();
@@ -41,7 +43,9 @@ const ContactFormForSingle = ({ initialCourseId }: { initialCourseId?: string | 
       childAge: 12,
       childLanguage: Language.AZ,
       // courseId default olaraq verilən initialCourseId və ya “Məsləhət almaq istəyirəm”
-      courseId: (initialCourseId ? String(initialCourseId) : ADVICE_VALUE) as any,
+      courseId: (initialCourseId
+        ? String(initialCourseId)
+        : ADVICE_VALUE) as any,
       website: "",
     },
   });
@@ -58,18 +62,23 @@ const ContactFormForSingle = ({ initialCourseId }: { initialCourseId?: string | 
         const items: CourseItem[] = res.data?.items ?? res.data ?? [];
         const opts = items.map((c) => ({
           value: String(c.id),
-          label:
-            (c.title?.[locale] ||
-              c.title?.az ||
-              c.title?.en ||
-              c.title?.en ||
-              "Adsız kurs") as string,
+          label: (c.title?.[locale] ||
+            c.title?.az ||
+            c.title?.en ||
+            c.title?.en ||
+            "Adsız kurs") as string,
         }));
-        const withAdvice = [{ value: ADVICE_VALUE, label: "Məsləhət almaq istəyirəm" }, ...opts];
+        const withAdvice = [
+          { value: ADVICE_VALUE, label: "Məsləhət almaq istəyirəm" },
+          ...opts,
+        ];
         if (active) setCourseOptions(withAdvice);
       } catch (e) {
         console.error("Kurs siyahısı alınmadı:", e);
-        if (active) setCourseOptions([{ value: ADVICE_VALUE, label: "Məsləhət almaq istəyirəm" }]);
+        if (active)
+          setCourseOptions([
+            { value: ADVICE_VALUE, label: "Məsləhət almaq istəyirəm" },
+          ]);
       }
     })();
     return () => {
@@ -83,10 +92,16 @@ const ContactFormForSingle = ({ initialCourseId }: { initialCourseId?: string | 
   }, [courseOptions, selectedCourseId]);
 
   const onSubmit: SubmitHandler<FormValues> = async (data) => {
-
     if (isSpam(data)) {
       setSuccess(true);
-      reset({ childAge: 12, childLanguage: Language.AZ, courseId: (initialCourseId ? String(initialCourseId) : ADVICE_VALUE) as any, website: "" });
+      reset({
+        childAge: 12,
+        childLanguage: Language.AZ,
+        courseId: (initialCourseId
+          ? String(initialCourseId)
+          : ADVICE_VALUE) as any,
+        website: "",
+      });
       return;
     }
     try {
@@ -94,21 +109,26 @@ const ContactFormForSingle = ({ initialCourseId }: { initialCourseId?: string | 
 
       const payload = {
         name: data.name?.trim(),
-        surname: data.surname?.trim(),
         number: data.number?.trim(),
         childAge: Number(data.childAge) || 12,
         childLanguage: data.childLanguage || Language.AZ,
         additionalInfo: isAdvice
           ? { kind: "advice" }
           : {
-            kind: "course",
-            courseId: data.courseId,
-            courseTitle: selectedCourseTitle,
-          },
+              kind: "course",
+              courseId: data.courseId,
+              courseTitle: selectedCourseTitle,
+            },
       };
 
       await api.post("/requests", payload);
-      reset({ childAge: 12, childLanguage: Language.AZ, courseId: (initialCourseId ? String(initialCourseId) : ADVICE_VALUE) as any });
+      reset({
+        childAge: 12,
+        childLanguage: Language.AZ,
+        courseId: (initialCourseId
+          ? String(initialCourseId)
+          : ADVICE_VALUE) as any,
+      });
       setSuccess(true);
     } catch (err) {
       console.error("Error sending message:", err);
@@ -129,10 +149,10 @@ const ContactFormForSingle = ({ initialCourseId }: { initialCourseId?: string | 
   const handleNameInput = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
     // Sadece harf, boşluk ve Azerbaycan alfabesi karakterleri
-    const filtered = value.replace(/[^a-zA-ZəğıöüçşƏĞIÖÜÇŞ\s]/g, '');
+    const filtered = value.replace(/[^a-zA-ZəğıöüçşƏĞIÖÜÇŞ\s]/g, "");
     if (value !== filtered) {
       e.target.value = filtered;
-      const fieldName = e.target.name as "name" | "surname";
+      const fieldName = e.target.name as "name";
       setValue(fieldName, filtered, { shouldValidate: true });
     }
   };
@@ -141,7 +161,7 @@ const ContactFormForSingle = ({ initialCourseId }: { initialCourseId?: string | 
   const handlePhoneInput = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
     // Sadece rakam, + ve boşluk kabul et
-    const filtered = value.replace(/[^0-9+\s]/g, '');
+    const filtered = value.replace(/[^0-9+\s]/g, "");
     if (value !== filtered) {
       e.target.value = filtered;
       setValue("number", filtered, { shouldValidate: true });
@@ -171,36 +191,16 @@ const ContactFormForSingle = ({ initialCourseId }: { initialCourseId?: string | 
                 minLength: { value: 2, message: t("name.minLength") },
                 pattern: {
                   value: /^[a-zA-ZəğıöüçşƏĞIÖÜÇŞ\s]+$/,
-                  message: t("name.invalid") || "Yalnız hərf və boşluq qəbul edilir",
+                  message:
+                    t("name.invalid") || "Yalnız hərf və boşluq qəbul edilir",
                 },
               })}
               onInput={handleNameInput}
             />
             {errors.name && (
-              <p className="text-red-500 text-sm pl-2 mt-1">{errors.name.message}</p>
-            )}
-          </div>
-
-          {/* Soyad */}
-          <div>
-            <input
-              type="text"
-              placeholder={t("surname.placeholder")}
-              className="w-full p-4 rounded-[32px] border [@media(min-width:3500px)]:!text-3xl border-jsyellow bg-[#fef7eb]
-                focus:outline-none focus:ring-2 focus:ring-jsyellow
-                shadow-sm transition-all duration-300 ease-in-out"
-              {...register("surname", {
-                required: t("surname.required"),
-                minLength: { value: 2, message: t("surname.minLength") },
-                pattern: {
-                  value: /^[a-zA-ZəğıöüçşƏĞIÖÜÇŞ\s]+$/,
-                  message: t("surname.invalid") || "Yalnız hərf və boşluq qəbul edilir",
-                },
-              })}
-              onInput={handleNameInput}
-            />
-            {errors.surname && (
-              <p className="text-red-500 text-sm pl-2 mt-1">{errors.surname.message}</p>
+              <p className="text-red-500 text-sm pl-2 mt-1">
+                {errors.name.message}
+              </p>
             )}
           </div>
 
@@ -222,11 +222,13 @@ const ContactFormForSingle = ({ initialCourseId }: { initialCourseId?: string | 
               onInput={handlePhoneInput}
             />
             {errors.number && (
-              <p className="text-red-500 text-sm pl-2 mt-1">{errors.number.message}</p>
+              <p className="text-red-500 text-sm pl-2 mt-1">
+                {errors.number.message}
+              </p>
             )}
           </div>
 
-          {/* Kurs seçimi — siyahının ilkində “Məsləhət almaq istəyirəm” */}
+          {/* Kurs seçimi */}
           <div>
             <Select
               options={courseOptions}
@@ -300,7 +302,12 @@ const ContactFormForSingle = ({ initialCourseId }: { initialCourseId?: string | 
                 <motion.div
                   initial={{ scale: 0 }}
                   animate={{ scale: 1 }}
-                  transition={{ type: "spring", stiffness: 260, damping: 20, delay: 0.2 }}
+                  transition={{
+                    type: "spring",
+                    stiffness: 260,
+                    damping: 20,
+                    delay: 0.2,
+                  }}
                   className="bg-green-100 rounded-full p-3"
                 >
                   <MdOutlineCheck className="text-green-600 text-3xl" />
