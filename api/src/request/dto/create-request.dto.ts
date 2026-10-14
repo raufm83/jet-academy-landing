@@ -11,8 +11,9 @@ export class CreateRequestDto {
   name: string;
 
   @ApiProperty()
+  @IsOptional()
   @IsString()
-  surname: string;
+  surname?: string;
 
   @ApiProperty()
   @IsString()

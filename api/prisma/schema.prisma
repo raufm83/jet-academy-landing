@@ -47,7 +47,7 @@ model Session {
 model Request {
   id             String        @id @default(auto()) @map("_id") @db.ObjectId
   name           String
-  surname        String
+  surname        String?
   number         String
   childAge       Int
   childLanguage  Language      @default(AZ)
