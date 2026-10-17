@@ -42,58 +42,6 @@ const nextConfig = {
       config.optimization.splitChunks = false;
     }
 
-    // Production optimizations
-    if (!dev && !isServer) {
-      config.optimization.splitChunks = {
-        chunks: "all",
-        minSize: 20000,
-        maxSize: 244000,
-        minChunks: 1,
-        maxAsyncRequests: 30,
-        maxInitialRequests: 25,
-        cacheGroups: {
-          framework: {
-            test: /[\\/]node_modules[\\/](react|react-dom|scheduler)[\\/]/,
-            name: "framework",
-            priority: 50,
-            chunks: "all",
-            enforce: true,
-          },
-          framerMotion: {
-            test: /[\\/]node_modules[\\/]framer-motion[\\/]/,
-            name: "framer-motion",
-            priority: 40,
-            chunks: "async",
-            reuseExistingChunk: true,
-          },
-          nextui: {
-            test: /[\\/]node_modules[\\/]@nextui-org[\\/]/,
-            name: "nextui",
-            priority: 40,
-            chunks: "async",
-            reuseExistingChunk: true,
-          },
-          swiper: {
-            test: /[\\/]node_modules[\\/]swiper[\\/]/,
-            name: "swiper",
-            priority: 35,
-            chunks: "async",
-            reuseExistingChunk: true,
-          },
-          defaultVendors: {
-            test: /[\\/]node_modules[\\/]/,
-            priority: -10,
-            reuseExistingChunk: true,
-          },
-          default: {
-            minChunks: 2,
-            priority: -20,
-            reuseExistingChunk: true,
-          },
-        },
-      };
-    }
-
     // Optimize module resolution
     config.resolve.fallback = {
       ...config.resolve.fallback,
