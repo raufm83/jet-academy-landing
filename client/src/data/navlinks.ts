@@ -38,7 +38,7 @@ export const getNavLinks = (
           {
             title: t("feedbacks"),
             href: feedbacksPageHref(locale),
-            className: "text-red-500 font-semibold hover:text-red-600",
+            className: "text-[#17306B] font-semibold hover:text-[#2F5FB8]",
           },
         ]
       : []),
@@ -49,7 +49,7 @@ export const getNavLinks = (
     {
       title: t("offers"),
       href: "/offers",
-      className: "text-red-500 font-semibold hover:text-red-600",
+      className: "text-[#17306B] font-semibold hover:text-[#2F5FB8]",
     },
     {
       title: t("useful"),
