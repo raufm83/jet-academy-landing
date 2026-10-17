@@ -12,6 +12,7 @@ const CopyProtection = dynamic(
   { ssr: false }
 );
 
+import Preloader from "@/components/ui/preloader";
 
 export const viewport: Viewport = {
   themeColor: "#ffffff",
@@ -75,6 +76,7 @@ fbq('track', 'PageView');
       <body
         className={`${manrope.className} scroll-smooth antialiased overflow-x-clip`}
       >
+        <Preloader />
         {children}
         <CopyProtection />
         <Toaster />
