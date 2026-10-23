@@ -111,7 +111,7 @@ export default function RequestsPage() {
       case "fullName":
         return (
           <div>
-            <p className="font-medium">{`${request.name} ${request.surname}`}</p>
+            <p className="font-medium">{[request.name, request.surname].filter(Boolean).join(" ")}</p>
           </div>
         );
       case "contact":
