@@ -36,6 +36,7 @@ export default function Logo({ className = "", size = "md" }: LogoProps) {
         sizes="(max-width:640px) 96px, (max-width:768px) 128px, (max-width:1024px) 144px, 160px"
         className="object-contain"
         priority
+        unoptimized
         fetchPriority="high"
         onError={onError}
       />

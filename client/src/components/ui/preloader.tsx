@@ -38,6 +38,7 @@ export default function Preloader() {
                 fill
                 className="object-contain"
                 priority
+                unoptimized
               />
             </motion.div>
             
