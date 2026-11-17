@@ -162,6 +162,7 @@ model StudentProjects {
   categoryId  String                  @db.ObjectId
   category    StudentProjectsCategory @relation(fields: [categoryId], references: [id], onDelete: Cascade)
   order       Int
+  courseId    String?                 @db.ObjectId
 
   @@index([categoryId])
 }

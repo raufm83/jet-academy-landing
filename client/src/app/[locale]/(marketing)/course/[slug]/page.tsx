@@ -20,6 +20,7 @@ import JsonLd from "@/components/seo/json-ld";
 import Breadcrumbs from "@/components/views/landing/bread-crumbs/bread-crumbs";
 import { getPageMeta, resolvePageMeta } from "@/utils/api/page-meta";
 import FaqSection from "@/components/views/landing/faq/faq-section";
+import CourseReviews from "@/components/views/landing/single-course/course-reviews";
 import type { Course } from "@/types/course";
 import { courseDetailPath, coursesListingPath } from "@/utils/course-paths";
 
@@ -178,6 +179,7 @@ export default async function SingleCoursePage({
             data={{ teachers: courseTeachers }}
             locale={locale}
           />
+          <CourseReviews courseId={currentId} locale={locale} />
           <FaqSection
             locale={locale}
             items={mergedCourseFaq}

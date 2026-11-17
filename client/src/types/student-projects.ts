@@ -9,6 +9,7 @@ export interface ProjectFormInputs {
   categoryId: string;
   link: string;
   imageUrl?: string;
+  courseId?: string;
 }
 
 export interface Project {
@@ -25,6 +26,7 @@ export interface Project {
     name: string;
   };
   order: number;
+  courseId?: string | null;
 }
 
 export interface ProjectResponse {

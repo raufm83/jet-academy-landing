@@ -1,20 +1,43 @@
 "use client";
-import { motion, useScroll, useTransform } from "framer-motion";
 import Link from "next/link";
-import { useRef } from "react";
+import { useEffect, useState } from "react";
 import { FaArrowUp, FaWhatsapp } from "react-icons/fa";
 
 function ScrollItems() {
-  const ref = useRef(null);
-  const { scrollYProgress } = useScroll();
+  const [progress, setProgress] = useState(0);
+  const [visible, setVisible] = useState(false);
 
-  const opacity = useTransform(
-    scrollYProgress,
-    [0, 0.1, 0.2], // Input range
-    [0, 0, 1.1], // Output range
-  );
+  useEffect(() => {
+    let ticking = false;
 
-  const pathLength = useTransform(scrollYProgress, [0, 1], [0, 1]);
+    const updateScrollState = () => {
+      const scrollTop =
+        window.scrollY || document.documentElement.scrollTop || 0;
+      const scrollHeight =
+        document.documentElement.scrollHeight - window.innerHeight;
+      const nextProgress =
+        scrollHeight > 0 ? Math.min(scrollTop / scrollHeight, 1) : 0;
+
+      setProgress(nextProgress);
+      setVisible(nextProgress > 0.1);
+      ticking = false;
+    };
+
+    const onScroll = () => {
+      if (!ticking) {
+        ticking = true;
+        window.requestAnimationFrame(updateScrollState);
+      }
+    };
+
+    updateScrollState();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    window.addEventListener("resize", onScroll);
+    return () => {
+      window.removeEventListener("scroll", onScroll);
+      window.removeEventListener("resize", onScroll);
+    };
+  }, []);
 
   const scrollToTop = () => {
     window.scrollTo({
@@ -24,65 +47,70 @@ function ScrollItems() {
   };
 
   return (
-    <motion.div
-      ref={ref}
-      className="fixed flex gap-3 bottom-6 right-6 z-50 items-center"
-      style={{ opacity }}
+    <div
+      className="fixed flex gap-3 bottom-6 right-6 z-50 transition-opacity duration-300"
+      style={{
+        opacity: visible ? 1 : 0,
+        pointerEvents: visible ? "auto" : "none",
+      }}
     >
-      {/* WhatsApp düyməsi: Ölçüsü böyüdüldü (h-14 w-14) və əsl WhatsApp yaşılına (#25D366) boyandı */}
       <Link
         href={`https://wa.me/+994509836699?text=${encodeURIComponent("")}`}
         target="_blank"
         rel="noopener noreferrer"
         aria-label="WhatsApp ilə əlaqə saxlayın"
-        className="flex items-center justify-center h-14 w-14 rounded-full bg-[#25D366] hover:bg-[#20ba5a] shadow-lg transition-all"
+        title="WhatsApp ilə əlaqə saxlayın"
+        className="flex items-center justify-center h-16 w-16 lg:h-20 lg:w-20 rounded-full bg-[#25D366] hover:bg-[#20b858] shadow-lg transition-all"
       >
-        <FaWhatsapp className="h-7 w-7 text-white" aria-hidden="true" />
+        <span className="sr-only">WhatsApp ilə əlaqə saxlayın</span>
+        <FaWhatsapp
+          className="h-9 w-9 lg:h-11 lg:w-11 text-white"
+          aria-hidden="true"
+        />
       </Link>
 
-      <div className="relative flex items-center justify-center">
-        {/* SVG dairə ölçüsü proporsional olaraq artırıldı */}
+      <div className="relative">
         <svg
-          className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 -rotate-90"
-          width="52"
-          height="52"
-          viewBox="0 0 52 52"
+          className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 -rotate-90 w-[70px] h-[70px] lg:w-[86px] lg:h-[86px]"
+          viewBox="0 0 70 70"
         >
-          <motion.circle
-            cx="26"
-            cy="26"
-            r="24"
-            stroke="#FFE38B"
+          <circle
+            cx="35"
+            cy="35"
+            r="33"
+            stroke="#A8C5EC"
             strokeWidth="2"
             fill="none"
             strokeLinecap="round"
           />
-          <motion.circle
-            cx="26"
-            cy="26"
-            r="24"
-            stroke="#121212"
+          <circle
+            cx="35"
+            cy="35"
+            r="33"
+            stroke="#0B2D5B"
             strokeWidth="2"
             fill="none"
             strokeLinecap="round"
-            style={{
-              pathLength,
-              opacity: 0.4,
-            }}
-            strokeDasharray="0 1"
+            style={{ opacity: 0.55 }}
+            strokeDasharray={`${Math.max(progress, 0.0001)} 1`}
+            pathLength={1}
           />
         </svg>
 
-        {/* Scroll to top düyməsi: Ölçüsü böyüdüldü (h-14 w-14) */}
         <button
           onClick={scrollToTop}
           aria-label="Səhifənin başına qayıt"
-          className="flex items-center relative z-40 justify-center h-14 w-14 rounded-full bg-[#1560bd] hover:bg-[#1580cd] shadow-lg transition-all"
+          title="Səhifənin başına qayıt"
+          className="flex items-center relative z-40 justify-center h-16 w-16 lg:h-20 lg:w-20 rounded-full bg-[#1560bd] hover:bg-[#1a6fd4] shadow-lg transition-all"
         >
-          <FaArrowUp className="h-6 w-6 text-white" aria-hidden="true" />
+          <span className="sr-only">Səhifənin başına qayıt</span>
+          <FaArrowUp
+            className="h-7 w-7 lg:h-8 lg:w-8 text-white"
+            aria-hidden="true"
+          />
         </button>
       </div>
-    </motion.div>
+    </div>
   );
 }
 

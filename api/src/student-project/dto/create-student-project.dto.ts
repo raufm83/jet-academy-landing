@@ -86,4 +86,13 @@ export class CreateStudentProjectDto {
   @IsMongoId({ message: 'Category ID must be a valid MongoDB ObjectId' })
   @IsNotEmpty({ message: 'Category ID cannot be empty' })
   categoryId: string;
+
+  @ApiProperty({
+    example: '676353475146a7e83e13bc7b',
+    description: 'MongoDB ObjectId of the course this review belongs to',
+    required: false,
+  })
+  @IsOptional()
+  @IsMongoId({ message: 'Course ID must be a valid MongoDB ObjectId' })
+  courseId?: string;
 }
