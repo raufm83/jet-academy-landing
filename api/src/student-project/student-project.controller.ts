@@ -48,8 +48,9 @@ export class StudentProjectController {
     @Query('page') page = 1,
     @Query('limit') limit = 10,
     @Query('order') order = 'asc',
+    @Query('courseId') courseId?: string,
   ) {
-    return this.studentProjectService.findAll(+page, +limit, undefined, order);
+    return this.studentProjectService.findAll(+page, +limit, undefined, order, courseId);
   }
 
   @Get(':id')

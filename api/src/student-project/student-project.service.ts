@@ -109,10 +109,13 @@ export class StudentProjectService {
     }
   }
 
-  async findAll(page = 1, limit = 10, categoryId?: string, order = 'asc') {
+  async findAll(page = 1, limit = 10, categoryId?: string, order = 'asc', courseId?: string) {
     try {
       const skip = (page - 1) * limit;
-      const whereClause = categoryId ? { categoryId } : {};
+      const whereClause = {
+        ...(categoryId && { categoryId }),
+        ...(courseId && { courseId }),
+      };
 
       const [total, items] = await Promise.all([
         this.prisma.studentProjects.count({

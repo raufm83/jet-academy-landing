@@ -101,7 +101,13 @@ export default function CreateProjectPage() {
   const onSubmit = async (data: ProjectFormInputs) => {
     try {
       const realCategoryId = await ensureCategoryId(data.categoryId, dynamicCategoryNameMap);
-      const payload = { ...data, categoryId: realCategoryId };
+      const payload = {
+        ...data,
+        categoryId: realCategoryId,
+        ...(data.categoryId?.startsWith("local-") && {
+          courseId: data.categoryId.slice(6),
+        }),
+      };
 
       const res = await api.post("/student-projects", payload);
       if (res.status === 201) {
