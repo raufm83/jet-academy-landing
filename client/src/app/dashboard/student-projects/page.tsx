@@ -90,6 +90,18 @@ export default function StudentProjectsPage() {
     }
   };
 
+  const handleSetOrder = async (project: Project, display: number) => {
+    const newOrder = display - 1;
+    if (!Number.isInteger(display) || display < 1 || display > totalProjects || newOrder === project.order) return;
+    try {
+      await api.patch(`/student-projects/${project.id}`, { order: newOrder });
+      await fetchProjects();
+      toast.success("Sıralama uğurla yeniləndi");
+    } catch {
+      toast.error("Sıralama yenilənə bilmədi");
+    }
+  };
+
   const handleMove = async (project: Project, direction: "up" | "down") => {
     try {
       const newOrder =
@@ -155,9 +167,19 @@ export default function StudentProjectsPage() {
                 <MdArrowUpward className="text-default-400" size={20} />
               </Button>
             </Tooltip>
-            <span className="text-tiny text-default-400">
-              Sıra: {project.order + 1}
-            </span>
+            <input
+              key={`${project.id}-${project.order}`}
+              type="number"
+              min={1}
+              max={totalProjects}
+              defaultValue={project.order + 1}
+              aria-label="Sıra nömrəsi"
+              className="w-14 rounded-md border border-default-300 px-1 py-0.5 text-center text-tiny"
+              onKeyDown={(e) => {
+                if (e.key === "Enter") (e.target as HTMLInputElement).blur();
+              }}
+              onBlur={(e) => handleSetOrder(project, Number(e.target.value))}
+            />
             <Tooltip content="Aşağı">
               <Button
                 isIconOnly
