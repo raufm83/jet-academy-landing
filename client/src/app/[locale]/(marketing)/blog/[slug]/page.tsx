@@ -1,3 +1,4 @@
+import { autolinkGlossary } from "@/utils/api/glossary-links";
 import PostHero from "@/components/views/landing/post/hero";
 import RelatedPosts from "@/components/views/landing/post/related";
 import PostAuthorCard from "@/components/views/landing/post/author-card";
@@ -110,6 +111,11 @@ export default async function SinglePostPage({ params }: ISinglePostPageProps) {
       keywords: getLocalizedPostTags(data.tags, locale),
     });
 
+    const linkedContent = await autolinkGlossary(
+      data.content[locale] || "",
+      locale as "az" | "en"
+    );
+
     return (
       <BreadcrumbContextWrapper
         title={data.title[locale]}
@@ -134,7 +140,7 @@ export default async function SinglePostPage({ params }: ISinglePostPageProps) {
                   eventTime={formatTime(data.eventDate || data.createdAt)}
                   dateIcon={<MdCalendarMonth className="text-xl" />}
                   timeIcon={<MdAccessTime className="text-xl" />}
-                  content={data.content[locale]}
+                  content={linkedContent}
                   tags={data.tags || []}
                   imageUrl={data.imageUrl}
                   imageAlt={data.imageAlt?.[locale] || data.imageAlt?.az || data.title[locale]}

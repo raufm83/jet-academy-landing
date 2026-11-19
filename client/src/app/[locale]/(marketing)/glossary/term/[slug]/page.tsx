@@ -1,3 +1,4 @@
+import { autolinkGlossary } from "@/utils/api/glossary-links";
 import GlossaryTermDetail from "@/components/views/landing/glossary/glossary-term-detail";
 import PostAuthorCard from "@/components/views/landing/post/author-card";
 import CoursesSlider from "@/components/views/landing/home/courses";
@@ -110,6 +111,11 @@ export default async function GlossaryTermPage({ params }: PageProps) {
 
   const termContent = term.term[language];
   const definitionContent = term.definition[language];
+  const linkedDefinition = await autolinkGlossary(
+    definitionContent || "",
+    language as "az" | "en",
+    slug
+  );
   const categoryName = term.category?.name[language];
   const categorySlug = term.category?.slug[language];
 
@@ -170,7 +176,7 @@ export default async function GlossaryTermPage({ params }: PageProps) {
       <div className="container flex flex-col gap-8 lg:gap-4 mx-auto px-4 py-12">
         <GlossaryTermDetail
           term={termContent}
-          definition={definitionContent}
+          definition={linkedDefinition}
           categoryName={categoryName}
           categorySlug={categorySlug}
           relatedTerms={term.relatedTermsData || []}
