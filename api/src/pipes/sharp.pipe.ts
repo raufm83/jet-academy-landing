@@ -16,6 +16,7 @@ export class SharpPipe
     private maxSize = 1024,
     private webpQuality = 90,
     private keepAspectRatio = false,
+    private keepAlpha = false,
   ) {}
 
   async transform(image: Express.Multer.File): Promise<string> {
@@ -58,7 +59,10 @@ export class SharpPipe
             position: 'center',
           });
 
-      const pipeline = resizeOptions.flatten({ background: '#ffffff' }).webp({ quality });
+      const base = this.keepAlpha
+        ? resizeOptions
+        : resizeOptions.flatten({ background: '#ffffff' });
+      const pipeline = base.webp({ quality, alphaQuality: 100 });
 
       await pipeline.toFile(outputPath);
 
