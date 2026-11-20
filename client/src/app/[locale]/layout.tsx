@@ -4,6 +4,8 @@ import { setRequestLocale } from "next-intl/server";
 import React from "react";
 import { Metadata } from "next";
 import { headers } from "next/headers";
+import { notFound } from "next/navigation";
+import { routing } from "@/i18n/routing";
 import { addTrailingSlash, truncateTitle, truncateDescription, buildAlternates } from "@/utils/seo";
 
 export async function generateMetadata({
@@ -11,6 +13,9 @@ export async function generateMetadata({
 }: {
   params: { locale: string };
 }): Promise<Metadata> {
+  if (!(routing.locales as readonly string[]).includes(locale)) {
+    notFound();
+  }
   setRequestLocale(locale);
 
   const t = await getTranslations({ locale, namespace: "Metadata" });
@@ -84,6 +89,9 @@ export default async function WebsiteLayout({
   children: React.ReactNode;
   params: { locale: string };
 }) {
+  if (!(routing.locales as readonly string[]).includes(locale)) {
+    notFound();
+  }
   setRequestLocale(locale);
 
   const messages = await getMessages();
