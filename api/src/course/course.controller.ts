@@ -92,7 +92,7 @@ export class CourseController {
   })
   create(
     @Body() createCourseDto: CreateCourseDto,
-    @UploadedFile(new SharpPipe('courses', 1200, 85, true)) imageFilename?: string,
+    @UploadedFile(new SharpPipe('courses', 1200, 85, true, true)) imageFilename?: string,
     @Req() request?: Request,
   ) {
     if (imageFilename) {
@@ -223,7 +223,7 @@ export class CourseController {
   update(
     @Param('id') id: string,
     @Body() updateCourseDto: UpdateCourseDto,
-    @UploadedFile(new SharpPipe('courses', 1200, 85, true)) imageFilename?: string,
+    @UploadedFile(new SharpPipe('courses', 1200, 85, true, true)) imageFilename?: string,
     @Req() request?: Request,
   ) {
     if (imageFilename) {
