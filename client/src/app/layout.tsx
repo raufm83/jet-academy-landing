@@ -2,8 +2,7 @@ import type { Viewport } from "next";
 import { Manrope } from "next/font/google";
 import { Toaster } from "sonner";
 import "./globals.css";
-import { GoogleAnalytics } from "@next/third-parties/google";
-import Script from "next/script";
+import { GoogleTagManager } from "@next/third-parties/google";
 import { cookies } from "next/headers";
 import dynamic from "next/dynamic";
 
@@ -41,38 +40,9 @@ export default async function RootLayout({
         <link rel="dns-prefetch" href="https://api.jetacademy.az" />
         <link rel="preconnect" href="https://www.googletagmanager.com" crossOrigin="anonymous" />
         <link rel="dns-prefetch" href="https://connect.facebook.net" />
-        {/* Meta Pixel Code */}
-        <Script
-          id="meta-pixel"
-          strategy="lazyOnload"
-          dangerouslySetInnerHTML={{
-            __html: `
-              !function(f,b,e,v,n,t,s)
-{if(f.fbq)return;n=f.fbq=function(){n.callMethod?
-n.callMethod.apply(n,arguments):n.queue.push(arguments)};
-if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
-n.queue=[];t=b.createElement(e);t.async=!0;
-t.src=v;s=b.getElementsByTagName(e)[0];
-s.parentNode.insertBefore(t,s)}(window, document,'script',
-'https://connect.facebook.net/en_US/fbevents.js');
-fbq('init', '776740991610419');
-fbq('track', 'PageView');
-
-            `,
-          }}
-        />
-        <noscript>
-          {/* eslint-disable-next-line @next/next/no-img-element, jsx-a11y/alt-text */}
-          <img
-            height="1"
-            width="1"
-            alt=""
-            style={{ display: 'none' }}
-            src="https://www.facebook.com/tr?id=24501015369551397&ev=PageView&noscript=1"
-          />
-        </noscript>
       </head>
       
+      <GoogleTagManager gtmId="GTM-NCM3LML8" />
       <body
         className={`${manrope.className} scroll-smooth antialiased overflow-x-clip`}
       >
@@ -80,7 +50,6 @@ fbq('track', 'PageView');
         {children}
         <CopyProtection />
         <Toaster />
-        <GoogleAnalytics gaId="G-Z9R55K1YB9" />
       </body>
     </html>
   );
