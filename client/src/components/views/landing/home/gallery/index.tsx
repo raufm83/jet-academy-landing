@@ -11,11 +11,11 @@ import GalleryClient from "../../gallery/gallery-client";
  * Əsas səhifə qalereyası: performans üçün slayder əvəzinə sadəcə bir neçə şəkil göstərilir.
  * Bütün şəkilləri görmək üçün dilə uyğun qalereya səhifəsinə keçid.
  */
-const HOMEPAGE_LIMIT = 8;
+const HOMEPAGE_LIMIT = 4;
 
 const fetchGallery = async () => {
   try {
-    const response = await api.get(`/gallery?limit=${HOMEPAGE_LIMIT}`);
+    const response = await api.get(`/gallery?limit=${HOMEPAGE_LIMIT}&home=true`);
     return response.data;
   } catch (error) {
     console.error("Failed to fetch gallery:", error);

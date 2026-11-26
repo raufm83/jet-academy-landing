@@ -1,4 +1,8 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { Prisma } from '@prisma/client';
 import * as fs from 'fs/promises';
 import * as path from 'path';
@@ -10,6 +14,7 @@ import { UpdateGalleryDto } from './dto/update-gallery.dto';
 export class GalleryService {
   private readonly uploadDir = 'uploads-acad';
   private readonly galleryImageDir = 'gallery';
+  private readonly homeLimit = 4;
 
   constructor(private prisma: PrismaService) {}
 
@@ -50,8 +55,27 @@ export class GalleryService {
     }
   }
 
-  async findAll(page = 1, limit = 10) {
+  async findAll(page = 1, limit = 10, home = false) {
     try {
+      if (home) {
+        const featured = await this.prisma.gallery.findMany({
+          where: { showOnHome: true },
+          orderBy: { order: 'asc' },
+          take: this.homeLimit,
+        });
+        if (featured.length > 0) {
+          return {
+            items: featured,
+            meta: {
+              total: featured.length,
+              page: 1,
+              limit: this.homeLimit,
+              totalPages: 1,
+            },
+          };
+        }
+      }
+
       const skip = (page - 1) * limit;
 
       const [total, items] = await Promise.all([
@@ -104,7 +128,11 @@ export class GalleryService {
 
   async update(
     id: string,
-    updateGalleryDto: UpdateGalleryDto & { imageUrl?: string; order?: number },
+    updateGalleryDto: UpdateGalleryDto & {
+      imageUrl?: string;
+      order?: number;
+      showOnHome?: boolean | string;
+    },
   ) {
     console.log(
       'Service Update payload:',
@@ -112,13 +140,28 @@ export class GalleryService {
     );
     const existingGallery = await this.findOne(id);
     const oldImageUrl = existingGallery.imageUrl;
-    const { imageUrl, order, ...rest } = updateGalleryDto;
+    const { imageUrl, order, showOnHome, ...rest } = updateGalleryDto;
 
     try {
       const updateData: any = {
         ...rest,
         ...(imageUrl && { imageUrl: this.getRelativeImagePath(imageUrl) }),
       };
+
+      if (showOnHome !== undefined) {
+        const flag = showOnHome === true || showOnHome === 'true';
+        if (flag && existingGallery.showOnHome !== true) {
+          const selected = await this.prisma.gallery.count({
+            where: { showOnHome: true },
+          });
+          if (selected >= this.homeLimit) {
+            throw new BadRequestException(
+              `Ana səhifə üçün maksimum ${this.homeLimit} şəkil seçilə bilər`,
+            );
+          }
+        }
+        updateData.showOnHome = flag;
+      }
 
       if (rest.title) {
         updateData.title = {
