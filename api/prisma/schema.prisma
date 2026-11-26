@@ -188,7 +188,8 @@ model Gallery {
   imageAlt  MultilingualText?
   title     Json?
   createdAt DateTime @default(now())
-  order     Int      @default(0)
+  order     Int      @default(0)
+  showOnHome Boolean?
 }
 
 model ContactInfo {

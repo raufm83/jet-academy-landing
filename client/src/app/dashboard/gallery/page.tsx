@@ -9,6 +9,7 @@ import {
   ModalFooter,
   ModalHeader,
   Pagination,
+  Switch,
   Table,
   TableBody,
   TableCell,
@@ -33,6 +34,7 @@ interface GalleryImage {
   imageUrl: string;
   createdAt: string;
   order: number;
+  showOnHome?: boolean | null;
 }
 
 interface GalleryResponse {
@@ -74,6 +76,7 @@ export default function GalleryPage() {
   }, [fetchImages]);
 
   const totalImages = allImages.length;
+  const homeCount = allImages.filter((i) => i.showOnHome).length;
   const pageImages = allImages.slice((page - 1) * rowsPerPage, page * rowsPerPage);
 
 
@@ -115,11 +118,27 @@ export default function GalleryPage() {
     }
   };
 
+  const handleToggleHome = async (image: GalleryImage, value: boolean) => {
+    try {
+      await api.patch(`/gallery/${image.id}`, { showOnHome: value });
+      toast.success(
+        value ? "Ana səhifəyə əlavə olundu" : "Ana səhifədən çıxarıldı"
+      );
+      await fetchImages();
+    } catch (error) {
+      const msg = (
+        error as { response?: { data?: { message?: string } } }
+      )?.response?.data?.message;
+      toast.error(msg || "Dəyişiklik alınmadı");
+    }
+  };
+
   const columns = [
     { name: "SIRA", uid: "order" },
     { name: "ŞƏKİL", uid: "image" },
     { name: "BAŞLIQ", uid: "title" },
     { name: "YARADILMA TARİXİ", uid: "createdAt" },
+    { name: "ANA SƏHİFƏ", uid: "home" },
     { name: "ƏMƏLİYYATLAR", uid: "actions" },
   ];
 
@@ -186,6 +205,18 @@ export default function GalleryPage() {
             </p>
           </div>
         );
+      case "home":
+        return (
+          <div className="flex justify-center">
+            <Switch
+              size="sm"
+              color="warning"
+              isSelected={!!image.showOnHome}
+              onValueChange={(v) => handleToggleHome(image, v)}
+              aria-label="Ana səhifədə göstər"
+            />
+          </div>
+        );
       case "actions":
         return (
           <div className="flex justify-center items-center gap-2">
@@ -226,7 +257,10 @@ export default function GalleryPage() {
         <div className="flex justify-between items-center mb-6">
           <div>
             <h1 className="text-2xl font-bold">Qalereya</h1>
-            <p className="text-gray-500">Qalereya şəkillərini idarə edin</p>
+            <p className="text-gray-500">
+              Qalereya şəkillərini idarə edin. Ana səhifədə seçilmiş: {homeCount}/4
+              {homeCount === 0 && " (seçim yoxdursa, ilk 4 şəkil görünür)"}
+            </p>
           </div>
           <Button
             color="primary"

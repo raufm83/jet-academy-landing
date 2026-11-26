@@ -74,8 +74,9 @@ export class GalleryController {
   findAll(
     @Query('page') page: string = '1',
     @Query('limit') limit: string = '10',
+    @Query('home') home?: string,
   ) {
-    return this.galleryService.findAll(+page, +limit);
+    return this.galleryService.findAll(+page, +limit, home === 'true');
   }
 
   @Get(':id')
