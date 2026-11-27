@@ -8,11 +8,10 @@ export default function Preloader() {
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    // Hide the preloader after a set duration
     const timer = setTimeout(() => {
       setIsLoading(false);
     }, 2200);
-    
+
     return () => clearTimeout(timer);
   }, []);
 
@@ -25,24 +24,22 @@ export default function Preloader() {
           exit={{ opacity: 0, transition: { duration: 0.6, ease: "easeInOut" } }}
         >
           <div className="relative flex flex-col items-center justify-center w-full max-w-xl px-8">
-            {/* Logo Animation */}
             <motion.div
               initial={{ opacity: 1, scale: 0.95 }}
               animate={{ opacity: 1, scale: 1 }}
               transition={{ duration: 0.8, ease: "easeOut" }}
-              className="relative w-[300px] sm:w-[380px] md:w-[460px] aspect-[1280/735] mb-2"
+              className="relative w-full max-w-[300px] sm:max-w-[380px] md:max-w-[460px] aspect-[1280/720] mb-2"
             >
               <Image
-                src="/logos/jet-preloader.webp"
-                alt="Jet Academy Logo"
+                src="/logos/jet-loading-v2.png"
+                alt="Jet Academy Loading"
                 fill
                 className="object-contain"
                 priority
                 unoptimized
               />
             </motion.div>
-            
-            {/* Loading Line */}
+
             <div className="relative w-[220px] sm:w-[260px] md:w-[290px] mx-auto h-[2px] bg-gray-100 overflow-hidden mt-2">
               <motion.div
                 className="absolute top-0 left-0 h-full bg-[#1560bd]"
@@ -51,7 +48,6 @@ export default function Preloader() {
                 transition={{ duration: 1.8, ease: "easeInOut" }}
               />
             </div>
-            
           </div>
         </motion.div>
       )}
